@@ -16,7 +16,8 @@
     "@fortawesome/react-fontawesome": "^0.1.18",
     "next": "12.1.5",
     "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react-dom": "18.0.0",
+    "react-icons": "^4.3.1"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.0",
