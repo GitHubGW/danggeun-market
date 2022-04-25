@@ -5,11 +5,12 @@ import Region from "../../components/region";
 import Username from "../../components/username";
 import { AiOutlineHeart } from "react-icons/ai";
 import Button from "../../components/button";
+import Separator from "../../components/separator";
 
 const ProductDetail = () => {
   return (
     <div className="wrapper">
-      <div className="content-sub mt-8">
+      <div className="content-sub">
         {/* 상품 상세 정보 */}
         <div>
           <div className="cursor-pointer">
@@ -28,7 +29,7 @@ const ProductDetail = () => {
             <h1 className="text-xl font-semibold">포켓몬빵 싸게 팔아요!</h1>
             <p className="text-xs text-gray-400 mt-2 mb-1.5 space-x-1">
               <span>게임/취미</span>
-              <span>∙</span>
+              <Separator />
               <time>1일 전</time>
             </p>
             <p className="font-bold text-[18px]">1,000원</p>
@@ -43,12 +44,12 @@ const ProductDetail = () => {
             </p>
             <p className="text-xs text-gray-400 space-x-1">
               <span>관심 7</span>
-              <span>∙</span>
+              <Separator />
               <span>채팅 17</span>
             </p>
           </div>
           <div className="flex items-center justify-between py-4 border-t border-b">
-            <Button text="채팅으로 거래하기" size="w-full" />
+            <Button type="button" text="채팅으로 거래하기" size="w-full" />
             <AiOutlineHeart className="text-gray-300 text-[44px] p-2 ml-2 cursor-pointer rounded-full hover:bg-gray-100" />
           </div>
         </div>
@@ -61,7 +62,7 @@ const ProductDetail = () => {
               <a className="text-orange-400 hover:text-orange-500 text-[15px]">더 구경하기</a>
             </Link>
           </div>
-          <section className="pb-16">
+          <section>
             <div>
               <div className="content">
                 <div className="grid grid-cols-3 gap-x-10 gap-y-12">

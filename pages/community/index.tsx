@@ -1,16 +1,19 @@
+import Link from "next/link";
 import { AiOutlineHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
+import { RiPencilFill } from "react-icons/ri";
 import CreatedAt from "../../components/created-at";
+import FloatingButton from "../../components/floating-button";
 import Region from "../../components/region";
 import Separator from "../../components/separator";
 import Username from "../../components/username";
 
 const Community = () => {
   return (
-    <div className="wrapper bg-[#F8F9FA]">
+    <div className="wrapper bg-[#F8F9FA] relative">
       <div className="content-community">
         <div className="border rounded-lg bg-white px-8 py-4">
-          <h1 className="text-lg font-medium">동네정보</h1>
+          <h1 className="text-lg font-medium">동네생활</h1>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
             <div key={i} className="py-6 border-b border-gray-200 last-of-type:border-none">
               <h2>안녕하세요 cgv 아르바이트 해보신분 있으신가요?? 영화 포스터 구할 수 있는 곳 있을까요?</h2>
@@ -38,6 +41,9 @@ const Community = () => {
           <span className="text-center block text-gray-600 mt-6 cursor-pointer">더보기</span>
         </div>
       </div>
+      <FloatingButton href="/community/write">
+        <RiPencilFill size={30} />
+      </FloatingButton>
     </div>
   );
 };

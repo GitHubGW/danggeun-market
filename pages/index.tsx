@@ -1,8 +1,9 @@
 import { NextPage } from "next";
 import { useState } from "react";
-import Header from "../components/header";
-import Footer from "../components/footer";
 import Link from "next/link";
+import ProductItem from "../components/product-item";
+import FloatingButton from "../components/floating-button";
+import { BsBagPlus, BsCartPlus } from "react-icons/bs";
 
 const Home: NextPage = () => {
   const [dark, setDark] = useState(false);
@@ -19,11 +20,8 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className="wrapper">
-      {/* Header */}
-      <Header />
-
-      <div className="">
+    <div className="wrapper relative">
+      <div>
         {/* 당신 근처의 당근마켓 */}
         <section>
           <div className="bg-[#FBF7F2] h-[700px]">
@@ -163,62 +161,9 @@ const Home: NextPage = () => {
             <div className="content py-20">
               <h2 className="font-semibold text-4xl leading-tight text-center">중고거래 인기매물</h2>
               <div className="grid grid-cols-4 mt-14 gap-x-10 gap-y-12">
-                <div>
-                  <img src="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" alt="" className="border border-gray-50 w-56 h-56 rounded-2xl" />
-                  <h3 className="mt-3 mb-0.5">포켓몬빵</h3>
-                  <span className="font-semibold">2,000원</span>
-                  <p className="text-[13px] mt-1">서울 강남구 신사동</p>
-                  <p className="text-[13px] text-gray-400">관심 10 ∙ 채팅 150</p>
-                </div>
-                <div>
-                  <img src="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" alt="" className="border border-gray-50 w-56 h-56 rounded-2xl" />
-                  <h3 className="mt-3 mb-0.5">포켓몬빵</h3>
-                  <span className="font-semibold">2,000원</span>
-                  <p className="text-[13px] mt-1">서울 강남구 신사동</p>
-                  <p className="text-[13px] text-gray-400">관심 10 ∙ 채팅 150</p>
-                </div>
-                <div>
-                  <img src="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" alt="" className="border border-gray-50 w-56 h-56 rounded-2xl" />
-                  <h3 className="mt-3 mb-0.5">포켓몬빵</h3>
-                  <span className="font-semibold">2,000원</span>
-                  <p className="text-[13px] mt-1">서울 강남구 신사동</p>
-                  <p className="text-[13px] text-gray-400">관심 10 ∙ 채팅 150</p>
-                </div>
-                <div>
-                  <img src="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" alt="" className="border border-gray-50 w-56 h-56 rounded-2xl" />
-                  <h3 className="mt-3 mb-0.5">포켓몬빵</h3>
-                  <span className="font-semibold">2,000원</span>
-                  <p className="text-[13px] mt-1">서울 강남구 신사동</p>
-                  <p className="text-[13px] text-gray-400">관심 10 ∙ 채팅 150</p>
-                </div>
-                <div>
-                  <img src="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" alt="" className="border border-gray-50 w-56 h-56 rounded-2xl" />
-                  <h3 className="mt-3 mb-0.5">포켓몬빵</h3>
-                  <span className="font-semibold">2,000원</span>
-                  <p className="text-[13px] mt-1">서울 강남구 신사동</p>
-                  <p className="text-[13px] text-gray-400">관심 10 ∙ 채팅 150</p>
-                </div>
-                <div>
-                  <img src="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" alt="" className="border border-gray-50 w-52 h-52 rounded-2xl" />
-                  <h3 className="mt-3 mb-0.5">포켓몬빵</h3>
-                  <span className="font-semibold">2,000원</span>
-                  <p className="text-[13px] mt-1">서울 강남구 신사동</p>
-                  <p className="text-[13px] text-gray-400">관심 10 ∙ 채팅 150</p>
-                </div>
-                <div>
-                  <img src="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" alt="" className="border border-gray-50 w-52 h-52 rounded-2xl" />
-                  <h3 className="mt-3 mb-0.5">포켓몬빵</h3>
-                  <span className="font-semibold">2,000원</span>
-                  <p className="text-[13px] mt-1">서울 강남구 신사동</p>
-                  <p className="text-[13px] text-gray-400">관심 10 ∙ 채팅 150</p>
-                </div>
-                <div>
-                  <img src="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" alt="" className="border border-gray-50 w-52 h-52 rounded-2xl" />
-                  <h3 className="mt-3 mb-0.5">포켓몬빵</h3>
-                  <span className="font-semibold">2,000원</span>
-                  <p className="text-[13px] mt-1">서울 강남구 신사동</p>
-                  <p className="text-[13px] text-gray-400">관심 10 ∙ 채팅 150</p>
-                </div>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                  <ProductItem key={i} productUrl="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" />
+                ))}
               </div>
               <Link href="/">
                 <a className="underline mt-14 text-center font-semibold block">인기매물 더 보기</a>
@@ -256,9 +201,9 @@ const Home: NextPage = () => {
           </div>
         </section>
       </div>
-
-      {/* Footer */}
-      <Footer />
+      <FloatingButton href="/products/upload">
+        <BsBagPlus size={30} />
+      </FloatingButton>
     </div>
   );
 };
