@@ -10,7 +10,7 @@ interface ChatLayoutProps {
 
 const ChatLayout = ({ children }: ChatLayoutProps) => {
   return (
-    <div className="wrapper wrapper-content">
+    <div className="wrapper without-header">
       <div className="content">
         <div className="flex h-full">
           <div className="flex-1 border-l">

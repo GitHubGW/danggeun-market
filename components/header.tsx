@@ -4,12 +4,12 @@ import { BiSearch } from "react-icons/bi";
 
 const Header = () => {
   return (
-    <header className="py-4 border-b border-gray-200">
+    <header className="py-3 border-b border-gray-200 h-[63px] max-h-[63px]">
       <nav className="content flex justify-between items-center">
         <div className="flex items-center">
           <Link href="/">
             <a>
-              <LogoRow size="w-28" />
+              <LogoRow size="w-32" />
             </a>
           </Link>
           <form className="ml-7 relative">
@@ -24,20 +24,29 @@ const Header = () => {
           </form>
         </div>
         <div>
+          <Link href="/streams">
+            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 text-white rounded-md">실시간 방송</a>
+          </Link>
+          <Link href="/streams/1">
+            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 text-white rounded-md">실시간 방송 디테일</a>
+          </Link>
+          <Link href="/streams/create">
+            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 text-white rounded-md">실시간 방송 생성</a>
+          </Link>
           <Link href="/community/write">
-            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 px-2 text-white rounded-md">동네생활 글쓰기</a>
+            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 text-white rounded-md">동네생활 글쓰기</a>
           </Link>
           <Link href="/community">
-            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 px-2 text-white rounded-md">동네생활</a>
+            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 text-white rounded-md">동네생활</a>
           </Link>
           <Link href="/products/1">
-            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 px-2 text-white rounded-md">상품 디테일</a>
+            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 text-white rounded-md">상품 디테일</a>
           </Link>
           <Link href="/chats">
-            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 px-2 text-white rounded-md">채팅</a>
+            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 text-white rounded-md">채팅</a>
           </Link>
           <Link href="/profile">
-            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 px-2 text-white rounded-md">나의 당근</a>
+            <a className="bg-orange-400 hover:bg-orange-500 py-2.5 text-white rounded-md">나의 당근</a>
           </Link>
           <Link href="/login">
             <a className="bg-orange-400 hover:bg-orange-500 py-2.5 px-5 text-white rounded-md">로그인</a>
