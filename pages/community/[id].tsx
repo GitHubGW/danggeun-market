@@ -17,11 +17,17 @@ const CommunityDetail = () => {
               <img src="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" alt="" className="border border-gray-100 rounded-xl w-full h-[500px]" />
             </div>
             <div className="border-b pt-6 pb-5 flex items-center">
-              <div>
-                <Avatar avatarUrl="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" size="w-10" />
-              </div>
+              <Link href="/">
+                <a>
+                  <Avatar avatarUrl="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" size="w-10" />
+                </a>
+              </Link>
               <div className="flex flex-col ml-2">
-                <Username text="포켓몬" size="text-[15px]" />
+                <Link href="/">
+                  <a>
+                    <Username text="포켓몬" size="text-[15px]" textDecoration={true} />
+                  </a>
+                </Link>
                 <Region text="서울 강남구" size="text-[13px]" />
               </div>
             </div>
@@ -50,8 +56,16 @@ const CommunityDetail = () => {
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="border-b border-b-gray-200 py-5 last-of-type:border-none">
                   <div className="flex items-center space-x-2">
-                    <Avatar avatarUrl="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" size="w-6" />
-                    <Username text="포켓몬" size="text-[15px]" />
+                    <Link href="/">
+                      <a>
+                        <Avatar avatarUrl="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" size="w-6" />
+                      </a>
+                    </Link>
+                    <Link href="/">
+                      <a>
+                        <Username text="포켓몬" size="text-[15px]" textDecoration={true} />
+                      </a>
+                    </Link>
                     <Region text="서울시 강남구" size="text-[13px]" />
                   </div>
                   <div className="mt-2 text-[15px]">월요일에 금,토,일 분 순차적으로 입금되는거라 다른 평일에 비해 좀 늦으실 수 있어요</div>

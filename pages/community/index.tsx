@@ -21,7 +21,11 @@ const Community = () => {
                 <h2>안녕하세요 cgv 아르바이트 해보신분 있으신가요?? 영화 포스터 구할 수 있는 곳 있을까요?</h2>
                 <div className="flex justify-between mt-1">
                   <div className="space-x-[1px]">
-                    <Username text="포켓몬" size="text-[14px]" />
+                    <Link href="/">
+                      <a>
+                        <Username text="포켓몬" size="text-[14px]" textDecoration={true} />
+                      </a>
+                    </Link>
                     <Separator />
                     <Region text="서울 강남구" size="text-[14px]" />
                     <Separator />

@@ -16,13 +16,15 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
           <div className="flex-1 border-l">
             <nav className="h-full">
               <div className="py-2 px-3 max-h-[60px] h-[60px]">
-                <div className="flex items-center space-x-2.5">
-                  <Avatar
-                    avatarUrl="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_256_disabled-97ac2510cb2860b9e37caf23beb1e8e0ca130152a119b65402c4673af18bf2a1.png"
-                    size="w-11"
-                  />
-                  <Username text="슈가" size="text-base" />
-                </div>
+                <Link href="/">
+                  <a className="flex items-center space-x-2.5">
+                    <Avatar
+                      avatarUrl="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_256_disabled-97ac2510cb2860b9e37caf23beb1e8e0ca130152a119b65402c4673af18bf2a1.png"
+                      size="w-11"
+                    />
+                    <Username text="슈가" size="text-base" textDecoration={false} />
+                  </a>
+                </Link>
               </div>
               <ul className="border-t border-b h-[calc(100%_-_120px)] overflow-auto">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
@@ -37,7 +39,7 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
                         </div>
                         <div>
                           <div className="space-x-1.5">
-                            <Username text="슈가" size="text-[14px]" />
+                            <Username text="슈가" size="text-[14px]" textDecoration={false} />
                             <Region text="서울 강남구" size="text-[12px]" />
                           </div>
                           <div className="text-[12px]">

@@ -7,8 +7,8 @@ const Stream = () => {
   return (
     <MainLayout pageTitle="스트림" hasFooter={true}>
       <div className="wrapper relative">
-        <div className="content mt-8">
-          <div className="grid grid-cols-3 gap-4">
+        <div className="content mt-8 mb-16">
+          <div className="grid grid-cols-3 gap-x-4 gap-y-20">
             {[...new Array(17)].map((i) => (
               <StreamItem key={i} title={"[생방송]🥕 실시간 스트리밍 방송"} />
             ))}

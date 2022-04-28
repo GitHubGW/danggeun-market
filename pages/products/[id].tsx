@@ -23,7 +23,11 @@ const ProductDetail = () => {
                 <Avatar avatarUrl="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" size="w-10" />
               </div>
               <div className="flex flex-col ml-2">
-                <Username text="포켓몬" size="text-[15px]" />
+                <Link href="/">
+                  <a>
+                    <Username text="포켓몬" size="text-[15px]" textDecoration={true} />
+                  </a>
+                </Link>
                 <Region text="서울 강남구" size="text-[13px]" />
               </div>
             </div>

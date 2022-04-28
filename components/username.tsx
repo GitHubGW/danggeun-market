@@ -1,10 +1,11 @@
 interface UsernameProps {
   text: string;
   size: string;
+  textDecoration: boolean;
 }
 
-const Username = ({ text, size }: UsernameProps) => {
-  return <span className={`${size} font-medium hover:underline cursor-pointer`}>{text}</span>;
+const Username = ({ text, size, textDecoration }: UsernameProps) => {
+  return <span className={`${size} ${textDecoration === true ? "hover:underline" : ""} font-medium cursor-pointer`}>{text}</span>;
 };
 
 export default Username;
