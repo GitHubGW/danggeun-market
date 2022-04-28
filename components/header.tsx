@@ -34,7 +34,7 @@ const Header = () => {
           <Link href="/chats">
             <a>당근채팅</a>
           </Link>
-          <Link href="/profile/community">
+          <Link href="/users/community">
             <a>
               <Avatar
                 avatarUrl="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_256_disabled-97ac2510cb2860b9e37caf23beb1e8e0ca130152a119b65402c4673af18bf2a1.png"

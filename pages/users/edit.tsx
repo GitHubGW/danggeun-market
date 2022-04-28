@@ -2,7 +2,7 @@ import Button from "../../components/button";
 import LabelTitle from "../../components/label-title";
 import MainLayout from "../../components/layouts/main-layout";
 
-const ProfileEdit = () => {
+const UserEdit = () => {
   return (
     <MainLayout pageTitle="프로필 수정" hasFooter={true}>
       <div className="wrapper without-header-footer">
@@ -39,4 +39,4 @@ const ProfileEdit = () => {
   );
 };
 
-export default ProfileEdit;
+export default UserEdit;
