@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Avatar from "../../components/avatar";
-import Region from "../../components/region";
-import Username from "../../components/username";
+import Avatar from "components/avatar";
+import Region from "components/region";
+import Username from "components/username";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 
 interface ChatLayoutProps {

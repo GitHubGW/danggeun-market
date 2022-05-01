@@ -1,8 +1,8 @@
 import Link from "next/link";
+import Avatar from "components/avatar";
+import Region from "components/region";
+import Username from "components/username";
 import { NextRouter, useRouter } from "next/router";
-import Avatar from "../avatar";
-import Region from "../region";
-import Username from "../username";
 
 interface UserLayoutProps {
   children: React.ReactNode;
