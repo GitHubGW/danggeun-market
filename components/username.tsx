@@ -1,5 +1,5 @@
 interface UsernameProps {
-  text: string;
+  text?: string;
   size: string;
   textDecoration: boolean;
 }
