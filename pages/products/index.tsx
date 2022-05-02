@@ -5,8 +5,12 @@ import { Product } from ".prisma/client";
 import Link from "next/link";
 import ProductItem from "components/items/product-item";
 
+interface ProductsWithLikes extends Product {
+  _count: { likes: number };
+}
+
 interface ProductsResult extends CommonResult {
-  products?: Product[] | undefined;
+  products?: ProductsWithLikes[] | undefined;
 }
 
 const Products = () => {
@@ -20,7 +24,7 @@ const Products = () => {
           <div className="content py-20">
             <h2 className="font-medium text-3xl leading-tight text-center">중고거래 인기매물</h2>
             <div className="grid grid-cols-4 mt-14 gap-x-10 gap-y-12">
-              {data?.products?.map((product: Product) => (
+              {data?.products?.map((product) => (
                 <ProductItem key={product.id} {...product} />
               ))}
             </div>
