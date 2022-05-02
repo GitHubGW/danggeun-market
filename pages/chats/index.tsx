@@ -1,8 +1,8 @@
-import ChatLayout from "../../components/layouts/chat-layout";
+import ChatLayout from "components/layouts/chat-layout";
 import { IoChatbubblesOutline } from "react-icons/io5";
-import MainLayout from "../../components/layouts/main-layout";
+import MainLayout from "components/layouts/main-layout";
 
-const Chat = () => {
+const Chats = () => {
   return (
     <MainLayout pageTitle="채팅" hasFooter={false}>
       <ChatLayout>
@@ -15,4 +15,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default Chats;

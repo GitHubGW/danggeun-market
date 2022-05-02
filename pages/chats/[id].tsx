@@ -1,9 +1,10 @@
 import Link from "next/link";
-import Avatar from "../../components/avatar";
-import ChatLayout from "../../components/layouts/chat-layout";
-import MainLayout from "../../components/layouts/main-layout";
-import Message from "../../components/message";
-import Username from "../../components/username";
+import Avatar from "components/avatar";
+import ChatLayout from "components/layouts/chat-layout";
+import MainLayout from "components/layouts/main-layout";
+import Message from "components/message";
+import Username from "components/username";
+import Textarea from "components/textarea";
 
 const ChatDetail = () => {
   return (
@@ -35,6 +36,7 @@ const ChatDetail = () => {
           <form className="px-3">
             <div className="relative w-full border px-2.5 py-2 rounded-md outline-none h-[110px] max-h-28 bg-white">
               <textarea rows={2} maxLength={190} placeholder="메세지를 입력해주세요." className="resize-none text-[15px] outline-none w-full placeholder:text-gray-300" />
+              {/* <Textarea register={register("description")} rows={2} maxLength={190} placeholder="메세지를 입력해주세요." /> */}
               <div className="absolute right-2 bottom-2 flex items-end">
                 <div className="text-sm text-gray-300 mr-3 mb-1">
                   <span>0</span>/190

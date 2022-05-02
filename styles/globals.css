@@ -3,3 +3,61 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Tailwind style */
+.border-red{
+  @apply border-red-500 border-4
+}
+.border-blue{
+  @apply border-blue-500 border-4
+}
+.border-green{
+  @apply border-green-500 border-4
+}
+.border-orange{
+  @apply border-orange-500 border-4
+}
+.border-purple{
+  @apply border-purple-500 border-4
+}
+
+.wrapper{
+  @apply box-border
+}
+.without-header{
+  @apply h-[calc(100vh_-_63px)]
+}
+.without-header-footer{
+  @apply h-[calc(100vh_-_484px)]
+}
+.content{
+  @apply max-w-5xl mx-auto h-full
+}
+.content-sub{
+  @apply max-w-[700px] mx-auto h-full pt-8 pb-16
+}
+.content-community{
+  @apply max-w-[800px] mx-auto h-full pt-8 pb-16
+}
+.input {
+  @apply w-full border px-2.5 py-2 rounded-md outline-none placeholder:text-gray-300
+}
+.input-space {
+  @apply w-full border py-2 rounded-md outline-none placeholder:text-gray-300
+}
+.label-title{
+  @apply font-medium cursor-pointer mb-1 text-[15px]
+}
+.ring-normal{
+  @apply ring-offset-0 focus:ring-1 focus:ring-orange-400 focus:border-orange-400
+}
+
+/* Global style */
+*{
+  box-sizing: border-box;
+}
+*::selection{
+  background-color:#FFB98B;
+}
+body{
+  box-sizing: border-box;;
+}

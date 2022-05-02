@@ -1,9 +1,10 @@
-import MainLayout from "../../components/layouts/main-layout";
-import StreamItem from "../../components/items/stream-item";
-import FloatingButton from "../../components/floating-button";
+import { NextPage } from "next";
+import MainLayout from "components/layouts/main-layout";
+import StreamItem from "components/items/stream-item";
+import FloatingButton from "components/floating-button";
 import { RiVideoAddFill } from "react-icons/ri";
 
-const Stream = () => {
+const Streams: NextPage = () => {
   return (
     <MainLayout pageTitle="스트림" hasFooter={true}>
       <div className="wrapper relative">
@@ -22,4 +23,4 @@ const Stream = () => {
   );
 };
 
-export default Stream;
+export default Streams;

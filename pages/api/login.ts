@@ -26,19 +26,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
       return res.status(200).json({ ok: true, message: "로그인에 성공하였습니다.", token });
     }
 
-    let createdRandomPayload: string = "";
-    const foundOrCreatedUser: User = await prisma.user.upsert({
+    let foundOrCreatedUser: User | null = null;
+    foundOrCreatedUser = await prisma.user.findFirst({
       where: {
         ...(email && { email }),
         ...(phone && { phone }),
       },
-      create: {
-        ...(email && { email }),
-        ...(phone && { phone }),
-        username: email ? email.split("@")[0] : phone,
-      },
-      update: {},
     });
+    if (foundOrCreatedUser === null) {
+      foundOrCreatedUser = await prisma.user.create({
+        data: {
+          ...(email && { email }),
+          ...(phone && { phone }),
+          username: email ? email.split("@")[0] : phone,
+        },
+      });
+    }
+
+    let createdRandomPayload: string = "";
     const foundToken: Token | null = await prisma.token.findFirst({ where: { userId: foundOrCreatedUser.id } });
     if (foundToken === null) {
       createdRandomPayload = String(Math.random()).substring(2, 8);
@@ -73,4 +78,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
   }
 };
 
-export default withSessionRoute(withHandler({ method: "POST", handler, isPrivate: false }));
+export default withSessionRoute(withHandler({ methods: ["POST"], handler, isPrivate: false }));

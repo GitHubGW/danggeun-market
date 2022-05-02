@@ -2,16 +2,16 @@ import { useState } from "react";
 
 type MutationFunction = (data?: any) => Promise<void>;
 
-interface MutationState {
-  data?: object;
+interface MutationState<T> {
+  data?: T;
   loading: boolean;
   error?: string;
 }
 
-type MutationResult = [MutationFunction, MutationState];
+type MutationResult<T> = [MutationFunction, MutationState<T>];
 
-const useMutation = (url: string): MutationResult => {
-  const [state, setState] = useState<MutationState>({ data: undefined, loading: false, error: undefined });
+const useMutation = <T extends {}>(url: string): MutationResult<T> => {
+  const [state, setState] = useState<MutationState<T>>({ data: undefined, loading: false, error: undefined });
 
   const mutationFunction = async (data?: any): Promise<void> => {
     try {

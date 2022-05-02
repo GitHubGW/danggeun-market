@@ -6,9 +6,10 @@ interface ProductItemProps {
   name: string;
   price: number;
   imageUrl: string;
+  _count: { likes: number };
 }
 
-const ProductItem = ({ id, name, price, imageUrl }: ProductItemProps) => {
+const ProductItem = ({ id, name, price, imageUrl, _count }: ProductItemProps) => {
   return (
     <Link href={`/products/${id}`}>
       <a>
@@ -17,7 +18,7 @@ const ProductItem = ({ id, name, price, imageUrl }: ProductItemProps) => {
         <span className="font-semibold">{price}원</span>
         <p className="text-[13px] mt-1">서울 강남구 신사동</p>
         <p className="text-[13px] text-gray-400">
-          관심 10 <Separator /> 채팅 150
+          관심 {_count?.likes} <Separator /> 채팅 150
         </p>
       </a>
     </Link>

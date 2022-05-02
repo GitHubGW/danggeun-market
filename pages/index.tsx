@@ -1,24 +1,15 @@
 import { NextPage } from "next";
-import { useState } from "react";
 import Link from "next/link";
-import ProductItem from "../components/items/product-item";
-import FloatingButton from "../components/floating-button";
+import ProductItem from "components/items/product-item";
+import FloatingButton from "components/floating-button";
 import { BsBagPlusFill } from "react-icons/bs";
-import MainLayout from "../components/layouts/main-layout";
+import MainLayout from "components/layouts/main-layout";
+import useMe from "libs/client/useMe";
 
 const Home: NextPage = () => {
-  const [dark, setDark] = useState(false);
+  const me = useMe();
 
-  const handleSwitchDarkMode = () => {
-    const html: HTMLHtmlElement | null = document.querySelector("html");
-    if (dark === true) {
-      setDark(false);
-      html?.classList.remove("dark");
-    } else if (dark === false) {
-      setDark(true);
-      html?.classList.add("dark");
-    }
-  };
+  console.log("me", me);
 
   return (
     <MainLayout pageTitle="홈" hasFooter={true}>
@@ -167,7 +158,7 @@ const Home: NextPage = () => {
                     <ProductItem key={i} productUrl="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" />
                   ))}
                 </div>
-                <Link href="/">
+                <Link href="/products">
                   <a className="underline mt-14 text-center font-semibold block">인기매물 더 보기</a>
                 </Link>
               </div>

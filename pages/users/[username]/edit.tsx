@@ -1,8 +1,15 @@
-import Button from "../../components/button";
-import LabelTitle from "../../components/label-title";
-import MainLayout from "../../components/layouts/main-layout";
+import { NextPage } from "next";
+import Button from "components/button";
+import LabelTitle from "components/label-title";
+import MainLayout from "components/layouts/main-layout";
+import PhoneInput from "components/phone-input";
+import FileInput from "components/file-input";
+import { useForm } from "react-hook-form";
+import Input from "components/input";
 
-const UserEdit = () => {
+const UserEdit: NextPage = () => {
+  const { register } = useForm();
+
   return (
     <MainLayout pageTitle="프로필 수정" hasFooter={true}>
       <div className="wrapper without-header-footer">
@@ -14,21 +21,21 @@ const UserEdit = () => {
                 alt=""
                 className="border border-gray-200 rounded-full w-56 h-56"
               />
-              <input type="file" required accept="image/*" className="hidden" />
+              <FileInput register={register("file")} required={false} />
             </label>
             <label className="mt-4">
               <LabelTitle text="유저 이름" />
-              <input type="text" placeholder="유저 이름을 입력해주세요." className="input ring-normal" />
+              <Input register={register("username")} type="text" placeholder="유저 이름을 입력해주세요." required={false} />
             </label>
             <label className="mt-4">
               <LabelTitle text="이메일" />
-              <input type="email" placeholder="이메일을 입력해주세요." required className="input ring-normal" />
+              <Input register={register("email")} type="email" placeholder="이메일을 입력해주세요." required={false} />
             </label>
             <label className="mt-4 mb-4">
               <LabelTitle text="휴대폰 번호" />
               <div className="relative">
                 <span className="absolute top-1/2 left-2.5 -translate-y-1/2 text-gray-300 select-none">+82</span>
-                <input type="number" placeholder="휴대폰 번호를 입력해주세요." required className="input-space pl-12 pr-2 ring-normal" />
+                {/* <PhoneInput register={register("phone")} required={true} /> */}
               </div>
             </label>
             <Button type="submit" text="프로필 업데이트" size="w-full" />

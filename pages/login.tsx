@@ -8,8 +8,7 @@ import MainLayout from "components/layouts/main-layout";
 import LogoColumn from "components/logo-column";
 import PhoneInput from "components/phone-input";
 import useMutation from "libs/client/useMutation";
-import { CommonMutationResult } from "libs/server/withHandler";
-import Loading from "components/loading";
+import { CommonResult } from "libs/server/withHandler";
 import { NextRouter, useRouter } from "next/router";
 
 interface LoginFormData {
@@ -20,7 +19,7 @@ interface LoginFormData {
 
 const Login: NextPage = () => {
   const router: NextRouter = useRouter();
-  const [loginMutation, { data, loading }] = useMutation<CommonMutationResult>("/api/login");
+  const [loginMutation, { data, loading }] = useMutation<CommonResult>("/api/login");
   const [type, setType] = useState<"email" | "phone">("email");
   const {
     register,
@@ -30,12 +29,12 @@ const Login: NextPage = () => {
     formState: { errors },
   } = useForm<LoginFormData>({ mode: "onChange", defaultValues: { phone: "", email: "" } });
 
-  const handleSwitchType = (type: "email" | "phone"): void => {
+  const handleSwitchType = (type: "email" | "phone") => {
     reset();
     setType(type);
   };
 
-  const onValid = async (): Promise<void> => {
+  const onValid = async () => {
     const { email, phone, token } = getValues();
 
     if (token) {
@@ -43,6 +42,7 @@ const Login: NextPage = () => {
     } else {
       await loginMutation({ email, phone });
     }
+    reset();
   };
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const Login: NextPage = () => {
                     required={true}
                   />
                 </div>
-                <Button type="submit" text="확인" size="w-full" />
+                <Button loading={loading} type="submit" text="확인" size="w-full" />
               </form>
             ) : (
               <>
@@ -89,20 +89,14 @@ const Login: NextPage = () => {
                   )}
                   {errors.email?.message ? <FormError text={errors.email?.message || ""} /> : null}
                   {errors.phone?.message ? <FormError text={errors.phone?.message || ""} /> : null}
-                  {loading === true ? (
-                    <Button type="submit" size="w-full">
-                      <Loading color="white" />
-                    </Button>
-                  ) : (
-                    <Button type="submit" text="인증코드 받기" size="w-full" />
-                  )}
+                  <Button loading={loading} type="submit" text="인증코드 받기" size="w-full" />
                 </form>
                 {type === "email" ? (
-                  <span onClick={() => handleSwitchType("email")} className="text-orange-400 cursor-pointer hover:underline font-semibold mt-3 text-sm">
+                  <span onClick={() => handleSwitchType("phone")} className="text-orange-400 cursor-pointer hover:underline font-semibold mt-3 text-sm">
                     휴대폰으로 로그인
                   </span>
                 ) : (
-                  <span onClick={() => handleSwitchType("phone")} className="text-orange-400 cursor-pointer hover:underline font-semibold mt-3 text-sm">
+                  <span onClick={() => handleSwitchType("email")} className="text-orange-400 cursor-pointer hover:underline font-semibold mt-3 text-sm">
                     이메일로 로그인
                   </span>
                 )}

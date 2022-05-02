@@ -1,7 +1,8 @@
-import MainLayout from "../../components/layouts/main-layout";
-import StreamMessage from "../../components/stream-message";
+import { NextPage } from "next";
+import MainLayout from "components/layouts/main-layout";
+import StreamMessage from "components/stream-message";
 
-const StreamDetail = () => {
+const StreamDetail: NextPage = () => {
   return (
     <MainLayout pageTitle="스트림" hasFooter={false}>
       <div className="wrapper">

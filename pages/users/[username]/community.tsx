@@ -1,8 +1,9 @@
-import ProductItem from "../../components/items/product-item";
-import MainLayout from "../../components/layouts/main-layout";
-import UserLayout from "../../components/layouts/user-layout";
+import { NextPage } from "next";
+import ProductItem from "components/items/product-item";
+import MainLayout from "components/layouts/main-layout";
+import UserLayout from "components/layouts/user-layout";
 
-const UserCommunity = () => {
+const UserCommunity: NextPage = () => {
   return (
     <MainLayout pageTitle="동네생활" hasFooter={true}>
       <UserLayout>
