@@ -14,29 +14,68 @@ import { Product } from ".prisma/client";
 import { CommonResult } from "libs/server/withHandler";
 import CreatedAt from "components/created-at";
 import useMutation from "libs/client/useMutation";
+import { useEffect } from "react";
+import DetailImage from "components/detail-image";
+import DeleteButton from "components/delete-button";
+import useMe from "libs/client/useMe";
 
-interface ProductDetailWithUser extends Product {
+interface ProductDetailWithUserAndCount extends Product {
   user: { id: number; username: string; avatarUrl: string | null };
+  _count: { productLikes: number };
+}
+
+interface SimilarProductWithCount extends Product {
+  _count: { productLikes: number };
 }
 
 interface ProductDetailResult extends CommonResult {
-  product?: ProductDetailWithUser | null;
-  similarProducts?: Product[];
+  product?: ProductDetailWithUserAndCount;
+  similarProducts?: SimilarProductWithCount[];
   isLiked: boolean;
 }
 
 const ProductDetail: NextPage = () => {
+  const me = useMe();
   const router: NextRouter = useRouter();
   const { data, mutate } = useSWR<ProductDetailResult>(router.query.id && `/api/products/${router.query.id}`);
   const [productLikeMutation] = useMutation<CommonResult>(`/api/products/${router.query.id}/like`);
+  const [productDeleteMutation, { data: productDeleteData, loading: productDeleteLoading }] = useMutation<CommonResult>(`/api/products/${router.query.id}/delete`);
 
   const handleToggleProductLike = async () => {
     if (data === undefined) {
       return;
     }
-    mutate((prev: ProductDetailResult | undefined) => prev && { ...prev, isLiked: !prev.isLiked }, false);
+    mutate(
+      (prev: ProductDetailResult | undefined) =>
+        prev &&
+        prev.product && {
+          ...prev,
+          isLiked: !prev.isLiked,
+          product: { ...prev.product, _count: { productLikes: prev.isLiked === true ? prev.product?._count.productLikes - 1 : prev.product?._count.productLikes + 1 } },
+        },
+      false
+    );
     productLikeMutation();
   };
+
+  const handleDeleteProduct = async () => {
+    if (productDeleteLoading === true) {
+      return;
+    }
+    await productDeleteMutation();
+  };
+
+  useEffect(() => {
+    if (productDeleteData?.ok === true) {
+      router.push("/products");
+    }
+  }, [productDeleteData, router]);
+
+  useEffect(() => {
+    if (data?.ok === false) {
+      router.push("/products");
+    }
+  }, [data, router]);
 
   return (
     <MainLayout pageTitle="상품 상세정보" hasFooter={true}>
@@ -45,24 +84,25 @@ const ProductDetail: NextPage = () => {
           {/* 상품 상세 정보 */}
           <div>
             <div className="cursor-pointer">
-              <img src={data?.product?.imageUrl} alt="" className="border border-gray-100 rounded-xl w-full h-[500px]" />
+              <DetailImage imageUrl={data?.product?.imageUrl} />
             </div>
-            <div className="border-b pt-6 pb-5 flex items-center">
+            <div className="border-b pt-6 pb-5 flex items-center relative">
               <div>
-                <Link href={`/users/${data?.product?.user?.username}/community`}>
+                <Link href={`/users/${data?.product?.user?.username}/posts`}>
                   <a>
                     <Avatar avatarUrl={data?.product?.user?.avatarUrl} size="w-10" />
                   </a>
                 </Link>
               </div>
               <div className="flex flex-col ml-2">
-                <Link href={`/users/${data?.product?.user?.username}/community`}>
+                <Link href={`/users/${data?.product?.user?.username}/posts`}>
                   <a>
                     <Username text={data?.product?.user?.username} size="text-[15px]" textDecoration={true} />
                   </a>
                 </Link>
                 <Region text="서울 강남구" size="text-[13px]" />
               </div>
+              {data?.product?.userId === me?.id ? <DeleteButton onClick={handleDeleteProduct} text="게시글 삭제" /> : null}
             </div>
             <div className="py-8">
               <h1 className="text-xl font-semibold">{data?.product?.name}</h1>
@@ -74,7 +114,7 @@ const ProductDetail: NextPage = () => {
               <p className="font-bold text-[18px]">{data?.product?.price}원</p>
               <p className="font-normal my-5 leading-7 text-[17px]">{data?.product?.description}</p>
               <p className="text-xs text-gray-400 space-x-1">
-                <span>관심 7</span>
+                <span>관심 {data?.product?._count.productLikes}</span>
                 <Separator />
                 <span>채팅 17</span>
               </p>
