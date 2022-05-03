@@ -2,7 +2,7 @@ import "moment/locale/ko";
 import moment from "moment";
 
 interface CreatedAtProps {
-  date?: Date;
+  date?: Date | string;
   size: string;
 }
 

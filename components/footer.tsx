@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#495057] py-20">
+    <footer className="bg-[#495057] py-16 h-[389px] max-h-[389px]">
       <nav className="content">
         <div className="flex justify-between pb-14 border-b border-gray-500">
           <div>

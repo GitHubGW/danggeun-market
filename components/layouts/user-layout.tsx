@@ -34,9 +34,9 @@ const UserLayout = ({ children }: UserLayoutProps) => {
           <div>
             <div>
               <ul className="flex border-b border-gray-300 pb-2">
-                <li className={`text-[17px] ${router.pathname === "/users/community" ? "text-orange-400 font-normal" : "font-normal"}`}>
-                  <Link href="/users/community">
-                    <a className={`py-2.5 px-7 ${router.pathname === "/users/community" ? "border-b-[3px] border-orange-400" : ""}`}>동네생활 (0)</a>
+                <li className={`text-[17px] ${router.pathname === "/users/posts" ? "text-orange-400 font-normal" : "font-normal"}`}>
+                  <Link href="/users/posts">
+                    <a className={`py-2.5 px-7 ${router.pathname === "/users/posts" ? "border-b-[3px] border-orange-400" : ""}`}>동네생활 (0)</a>
                   </Link>
                 </li>
                 <li className={`text-[17px] ${router.pathname === "/users/sell" ? "text-orange-400 font-normal" : "font-normal"}`}>
@@ -49,9 +49,9 @@ const UserLayout = ({ children }: UserLayoutProps) => {
                     <a className={`py-2.5 px-7 ${router.pathname === "/users/buy" ? "border-b-[3px] border-orange-400" : ""}`}>구매 물품 (0)</a>
                   </Link>
                 </li>
-                <li className={`text-[17px] ${router.pathname === "/users/like" ? "text-orange-400 font-normal" : "font-normal"}`}>
-                  <Link href="/users/like">
-                    <a className={`py-2.5 px-7 ${router.pathname === "/users/like" ? "border-b-[3px] border-orange-400" : ""}`}>관심 물품 (0)</a>
+                <li className={`text-[17px] ${router.pathname === "/users/likes" ? "text-orange-400 font-normal" : "font-normal"}`}>
+                  <Link href="/users/likes">
+                    <a className={`py-2.5 px-7 ${router.pathname === "/users/likes" ? "border-b-[3px] border-orange-400" : ""}`}>관심 물품 (0)</a>
                   </Link>
                 </li>
               </ul>

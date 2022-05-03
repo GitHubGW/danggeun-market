@@ -31,7 +31,7 @@ const Header = () => {
           <Link href="/products">
             <a>중고거래</a>
           </Link>
-          <Link href="/community">
+          <Link href="/posts">
             <a>동네생활</a>
           </Link>
           <Link href="/streams">
@@ -43,7 +43,7 @@ const Header = () => {
             </Link>
           )}
           {me && (
-            <Link href={`/users/${me.username}/community`}>
+            <Link href={`/users/${me.username}/posts`}>
               <a>
                 <Avatar avatarUrl={me.avatarUrl} size="w-10" />
               </a>
