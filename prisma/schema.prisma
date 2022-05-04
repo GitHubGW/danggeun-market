@@ -10,21 +10,24 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  phone        String?       @unique
-  email        String?       @unique
-  username     String        @unique
-  avatarUrl    String?
-  latitude     Float?
-  longitude    Float?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt()
-  tokens       Token[]
-  products     Product[]
-  posts        Post[]
-  productLikes ProductLike[]
-  postLikes    PostLike[]
-  postComments PostComment[]
+  id              Int           @id @default(autoincrement())
+  phone           String?       @unique
+  email           String?       @unique
+  username        String        @unique
+  avatarUrl       String?
+  address         String?
+  tokens          Token[]
+  products        Product[]
+  productLikes    ProductLike[]
+  posts           Post[]
+  postLikes       PostLike[]
+  postComments    PostComment[]
+  writtenReviews  Review[]      @relation(name: "WrittenReviews")
+  receivedReviews Review[]      @relation(name: "ReceivedReviews")
+  purchases       Purchase[]
+  sales           Sale[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt()
 }
 
 model Token {
@@ -45,6 +48,8 @@ model Product {
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       Int
   productLikes ProductLike[]
+  purchases    Purchase[]
+  sales        Sale[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt()
 }
@@ -88,6 +93,38 @@ model PostComment {
   userId    Int
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  text      String   @db.MediumText
+  rating    Int      @default(3)
+  from      User     @relation(name: "WrittenReviews", fields: [fromId], references: [id], onDelete: Cascade)
+  fromId    Int
+  to        User     @relation(name: "ReceivedReviews", fields: [toId], references: [id], onDelete: Cascade)
+  toId      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model Purchase {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model Sale {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 }
