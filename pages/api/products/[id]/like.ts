@@ -1,4 +1,3 @@
-import { Like } from ".prisma/client";
 import withHandler, { ResponseData } from "libs/server/withHandler";
 import { withSessionRoute } from "libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -10,21 +9,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
       session: { loggedInUser },
     } = req;
 
-    const foundLike: Like | null | undefined = await prisma?.like.findFirst({
+    const countedProduct = await prisma?.product.count({ where: { id: +id } });
+    if (!countedProduct) {
+      return res.status(404).json({ ok: false, message: "존재하지 않는 상품입니다." });
+    }
+
+    const foundProductLike = await prisma?.productLike.findFirst({
       where: { productId: +id, userId: loggedInUser?.id },
     });
-
-    if (foundLike) {
-      await prisma?.like.delete({ where: { id: foundLike?.id } });
+    if (foundProductLike) {
+      await prisma?.productLike.delete({ where: { id: foundProductLike?.id } });
     } else {
-      await prisma?.like.create({
+      await prisma?.productLike.create({
         data: { product: { connect: { id: +id } }, user: { connect: { id: loggedInUser?.id } } },
       });
     }
 
     return res.status(200).json({ ok: true, message: "상품 좋아요 또는 좋아요 취소에 성공하였습니다." });
   } catch (error) {
-    console.log();
+    console.log("product detail like error");
     return res.status(400).json({ ok: false, message: "상품 좋아요 또는 좋아요 취소에 실패하였습니다." });
   }
 };

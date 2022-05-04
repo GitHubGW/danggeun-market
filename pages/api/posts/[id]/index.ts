@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
           select: { id: true, username: true, avatarUrl: true },
         },
         postComments: {
-          select: { id: true, text: true, createdAt: true, user: { select: { id: true, username: true, avatarUrl: true } } },
+          select: { id: true, text: true, createdAt: true, user: { select: { id: true, username: true, avatarUrl: true, address: true } } },
         },
         _count: {
           select: { postComments: true, postLikes: true },

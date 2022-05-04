@@ -4,7 +4,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
   try {
-    const foundProducts = await prisma?.product.findMany({ include: { _count: { select: { likes: true } } } });
+    const foundProducts = await prisma?.product.findMany({
+      include: {
+        user: { select: { id: true, username: true, avatarUrl: true, address: true } },
+        _count: { select: { productLikes: true } },
+      },
+    });
     return res.status(200).json({ ok: true, message: "전체 상품 보기에 성공하였습니다.", products: foundProducts });
   } catch (error) {
     console.log("products handler error");
