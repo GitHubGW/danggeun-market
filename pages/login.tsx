@@ -10,6 +10,7 @@ import PhoneInput from "components/phone-input";
 import useMutation from "libs/client/useMutation";
 import { CommonResult } from "libs/server/withHandler";
 import { NextRouter, useRouter } from "next/router";
+import useAddress, { Address } from "libs/client/useAddress";
 
 interface LoginFormData {
   phone?: string;
@@ -19,6 +20,7 @@ interface LoginFormData {
 
 const Login: NextPage = () => {
   const router: NextRouter = useRouter();
+  const address: Address = useAddress();
   const [loginMutation, { data, loading }] = useMutation<CommonResult>("/api/login");
   const [type, setType] = useState<"email" | "phone">("email");
   const {
@@ -40,7 +42,7 @@ const Login: NextPage = () => {
     if (token) {
       await loginMutation({ token });
     } else {
-      await loginMutation({ email, phone });
+      await loginMutation({ email, phone, address });
     }
     reset();
   };

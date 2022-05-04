@@ -13,7 +13,7 @@ const twilioClient: twilio.Twilio = twilio(process.env.TWILIO_ACCOUNT_SID, proce
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
   try {
-    const { email, phone, token } = req.body;
+    const { email, phone, token, address } = req.body;
 
     if (token) {
       const foundToken: Token | null = await prisma.token.findUnique({ where: { payload: token } });
@@ -39,6 +39,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
           ...(email && { email }),
           ...(phone && { phone }),
           username: email ? email.split("@")[0] : phone,
+          address,
         },
       });
     }
