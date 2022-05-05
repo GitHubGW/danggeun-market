@@ -27,15 +27,15 @@
   @apply h-[calc(100vh_-_63px)]
 }
 .without-header-footer{
-  @apply h-[calc(100vh_-_484px)]
+  @apply h-[calc(100vh_-_452px)]
 }
 .content{
   @apply max-w-5xl mx-auto h-full
 }
 .content-sub{
-  @apply max-w-[700px] mx-auto h-full pt-8 pb-16
+  @apply max-w-[700px] mx-auto pt-8 pb-16
 }
-.content-community{
+.content-post{
   @apply max-w-[800px] mx-auto h-full pt-8 pb-16
 }
 .input {
@@ -60,4 +60,13 @@
 }
 body{
   box-sizing: border-box;;
+}
+
+/* 평점 */
+.rating-container fieldset{
+  display: inline-block;
+  direction: rtl;
+}
+.rating-container input[type=radio]:checked ~ label{
+  color:gold;
 }

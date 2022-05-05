@@ -41,7 +41,7 @@ const UserLikes: NextPage = () => {
         <div className="w-[700px] max-w-[700px]">
           {/* 관심 상품 */}
           <div>
-            <h2 className="font-medium text-lg mb-3">관심 상품 ({data?.productLikes?.length})</h2>
+            {Number(data?.productLikes?.length) > 0 && <h2 className="font-medium text-lg mb-3">관심 상품 ({data?.productLikes?.length})</h2>}
             <div className="grid grid-cols-3 gap-x-9 gap-y-12">
               {data?.productLikes?.map((productLike) => (
                 <ProductItem key={productLike.product.id} {...productLike.product} />
@@ -50,8 +50,8 @@ const UserLikes: NextPage = () => {
           </div>
 
           {/* 관심 게시글 */}
-          <div className="mt-24">
-            <h2 className="font-medium text-lg mb-1">관심 게시물 ({data?.postLikes?.length})</h2>
+          <div className={`${Number(data?.postLikes?.length) > 0 ? "mt-24" : ""}`}>
+            {Number(data?.postLikes?.length) > 0 && <h2 className="font-medium text-lg mb-1">관심 게시물 ({data?.postLikes?.length})</h2>}
             <div className="">
               {data?.postLikes?.map((postLike) => (
                 <PostItem key={postLike.post.id} {...postLike.post} />

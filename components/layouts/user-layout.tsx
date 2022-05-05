@@ -83,7 +83,15 @@ const UserLayout = ({ children }: UserLayoutProps) => {
                 </li>
               </ul>
             </div>
+
             <div className="mt-8">
+              {router.pathname === "/users/[username]/posts" && data?.user?._count.posts === 0 && <p className="text-center mt-20">동네생활 게시글이 없습니다. :(</p>}
+              {router.pathname === "/users/[username]/likes" && Number(data?.user?._count.productLikes) + Number(data?.user?._count.postLikes) === 0 && (
+                <p className="text-center mt-20">관심 목록이 없습니다. :(</p>
+              )}
+              {router.pathname === "/users/[username]/sales" && data?.user?._count.sales === 0 && <p className="text-center mt-20">판매 물품이 없습니다. :(</p>}
+              {router.pathname === "/users/[username]/purchases" && data?.user?._count.purchases === 0 && <p className="text-center mt-20">구매 물품이 없습니다. :(</p>}
+              {router.pathname === "/users/[username]/reviews" && data?.user?._count.receivedReviews === 0 && <p className="text-center mt-20">거래 후기가 없습니다. :(</p>}
               <div className="grid grid-cols-3 gap-x-9 gap-y-12">{children}</div>
             </div>
           </div>

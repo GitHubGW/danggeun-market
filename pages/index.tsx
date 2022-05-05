@@ -9,8 +9,6 @@ import useMe from "libs/client/useMe";
 const Home: NextPage = () => {
   const me = useMe();
 
-  console.log("me", me);
-
   return (
     <MainLayout pageTitle="홈" hasFooter={true}>
       <div className="wrapper relative">
@@ -34,7 +32,7 @@ const Home: NextPage = () => {
                   </div>
                 </div>
                 <div className="flex-[2] flex items-end">
-                  <img src="images/background_main1.webp" alt="" className="w-full" />
+                  <img src="images/background_main1.png" alt="" className="w-full" />
                 </div>
               </div>
             </div>
@@ -45,7 +43,7 @@ const Home: NextPage = () => {
             <div className="bg-white h-[700px]">
               <div className="content flex relative">
                 <div className="flex-[1] flex items-end">
-                  <img src="images/background_main2.webp" alt="" className="w-full" />
+                  <img src="images/background_main2.png" alt="" className="w-full" />
                 </div>
                 <div className="flex-[1] justify-center items-center flex">
                   <div>
@@ -112,7 +110,7 @@ const Home: NextPage = () => {
                   </div>
                 </div>
                 <div className="flex-[1] flex items-end">
-                  <img src="images/background_main3.webp" alt="" className="w-full" />
+                  <img src="images/background_main3.png" alt="" className="w-full" />
                 </div>
               </div>
             </div>
@@ -123,7 +121,7 @@ const Home: NextPage = () => {
             <div className="bg-white h-[700px]">
               <div className="content flex relative">
                 <div className="flex-[1] flex items-end">
-                  <img src="images/background_main4.webp" alt="" className="w-full" />
+                  <img src="images/background_main4.png" alt="" className="w-full" />
                 </div>
                 <div className="flex-[1] justify-center items-center flex">
                   <div>

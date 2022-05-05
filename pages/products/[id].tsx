@@ -19,17 +19,18 @@ import DetailImage from "components/detail-image";
 import DeleteButton from "components/delete-button";
 import useMe from "libs/client/useMe";
 
-interface ProductDetailWithUserAndCount extends Product {
-  user: { id: number; username: string; avatarUrl: string | null };
+interface ProductWithUserAndCount extends Product {
+  user: { id: number; username: string; avatarUrl: string | null; address: string | null };
   _count: { productLikes: number };
 }
 
 interface SimilarProductWithCount extends Product {
+  user: { id: number; username: string; avatarUrl: string | null; address: string | null };
   _count: { productLikes: number };
 }
 
 interface ProductDetailResult extends CommonResult {
-  product?: ProductDetailWithUserAndCount;
+  product?: ProductWithUserAndCount;
   similarProducts?: SimilarProductWithCount[];
   isLiked: boolean;
 }
@@ -100,7 +101,7 @@ const ProductDetail: NextPage = () => {
                     <Username text={data?.product?.user?.username} size="text-[15px]" textDecoration={true} />
                   </a>
                 </Link>
-                <Region text="서울 강남구" size="text-[13px]" />
+                <Region text={data?.product?.user.address} size="text-[13px]" />
               </div>
               {data?.product?.userId === me?.id ? <DeleteButton onClick={handleDeleteProduct} text="게시글 삭제" /> : null}
             </div>
@@ -115,8 +116,6 @@ const ProductDetail: NextPage = () => {
               <p className="font-normal my-5 leading-7 text-[17px]">{data?.product?.description}</p>
               <p className="text-xs text-gray-400 space-x-1">
                 <span>관심 {data?.product?._count.productLikes}</span>
-                <Separator />
-                <span>채팅 17</span>
               </p>
             </div>
             <div className="flex items-center justify-between py-4 border-t border-b">

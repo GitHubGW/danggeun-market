@@ -16,19 +16,20 @@ import useMutation from "libs/client/useMutation";
 import { useForm } from "react-hook-form";
 import useMe from "libs/client/useMe";
 import DeleteButton from "components/delete-button";
+import CommentItem from "components/items/comment-item";
 
 interface PostDetailFormData {
   text: string;
 }
 
-interface PostDetailWithUserAndCommentsAndCount extends Post {
-  user: { id: number; username: string; avatarUrl: string | null };
-  postComments: { id: number; text: string; createdAt: string; user: { id: number; username: string; avatarUrl: string | null } }[];
+interface PostWithUserAndCommentsAndCount extends Post {
+  user: { id: number; username: string; avatarUrl: string | null; address: string | null };
+  postComments: { id: number; text: string; createdAt: string; user: { id: number; username: string; avatarUrl: string | null; address: string | null } }[];
   _count: { postComments: number; postLikes: number };
 }
 
 interface PostDetailResult extends CommonResult {
-  post?: PostDetailWithUserAndCommentsAndCount;
+  post?: PostWithUserAndCommentsAndCount;
   isLiked: boolean;
 }
 
@@ -118,7 +119,7 @@ const PostDetail: NextPage = () => {
                     <Username text={data?.post?.user.username} size="text-[15px]" textDecoration={true} />
                   </a>
                 </Link>
-                <Region text="서울 강남구" size="text-[13px]" />
+                <Region text={data?.post?.user.address} size="text-[13px]" />
               </div>
               {data?.post?.userId === me?.id ? <DeleteButton onClick={handleDeletePost} text="게시글 삭제" /> : null}
             </div>
@@ -138,24 +139,7 @@ const PostDetail: NextPage = () => {
                 </div>
               </div>
               {data?.post?.postComments.map((postComment) => (
-                <div key={postComment.id} className="border-b border-b-gray-200 py-5 last-of-type:border-none">
-                  <div className="flex items-center space-x-2 relative">
-                    <Link href={`/users/${postComment.user.username}/posts`}>
-                      <a>
-                        <Avatar avatarUrl={postComment.user.avatarUrl} size="w-6" />
-                      </a>
-                    </Link>
-                    <Link href={`/users/${postComment.user.username}/posts`}>
-                      <a>
-                        <Username text={postComment.user.username} size="text-[15px]" textDecoration={true} />
-                      </a>
-                    </Link>
-                    <Region text="서울시 강남구" size="text-[13px]" />
-                    {postComment.user.id === me?.id ? <DeleteButton onClick={() => handleDeleteComment(postComment.id)} text="삭제" /> : null}
-                  </div>
-                  <div className="mt-3 mb-1 text-[15px]">{postComment.text}</div>
-                  <CreatedAt date={postComment.createdAt} size="text-[13px]" />
-                </div>
+                <CommentItem key={postComment.id} {...postComment} me={me} handleDeleteComment={() => handleDeleteComment(postComment.id)} />
               ))}
             </div>
           </div>

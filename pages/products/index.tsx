@@ -4,22 +4,24 @@ import { CommonResult } from "libs/server/withHandler";
 import { Product } from ".prisma/client";
 import Link from "next/link";
 import ProductItem from "components/items/product-item";
+import FloatingButton from "components/floating-button";
+import { BsBagPlusFill } from "react-icons/bs";
 
-interface ProductsWithLikes extends Product {
-  _count: { likes: number };
+interface ProductWithUserAndCount extends Product {
+  user: { id: number; username: string; avatarUrl: string | null; address: string | null };
+  _count: { productLikes: number };
 }
 
 interface ProductsResult extends CommonResult {
-  products?: ProductsWithLikes[] | undefined;
+  products?: ProductWithUserAndCount[] | undefined;
 }
 
 const Products = () => {
   const { data } = useSWR<ProductsResult>(`/api/products`);
-  console.log("data", data);
 
   return (
     <MainLayout pageTitle="중고거래" hasFooter={true}>
-      <section>
+      <section className="relative">
         <div>
           <div className="content py-20">
             <h2 className="font-medium text-3xl leading-tight text-center">중고거래 인기매물</h2>
@@ -33,6 +35,9 @@ const Products = () => {
             </Link>
           </div>
         </div>
+        <FloatingButton href="/products/upload">
+          <BsBagPlusFill />
+        </FloatingButton>
       </section>
     </MainLayout>
   );
