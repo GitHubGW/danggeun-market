@@ -79,7 +79,7 @@ const ProductDetail: NextPage = () => {
   }, [data, router]);
 
   return (
-    <MainLayout pageTitle="상품 상세정보" hasFooter={true}>
+    <MainLayout pageTitle={data?.product?.name} hasFooter={true}>
       <div className="wrapper">
         <div className="content-sub">
           {/* 상품 상세 정보 */}

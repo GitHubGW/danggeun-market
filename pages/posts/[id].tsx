@@ -99,7 +99,7 @@ const PostDetail: NextPage = () => {
   }, [data, router]);
 
   return (
-    <MainLayout pageTitle="동네생활" hasFooter={true}>
+    <MainLayout pageTitle={data?.post?.text} hasFooter={true}>
       <div className="wrapper">
         <div className="content-sub">
           {/* 동네생활 정보 */}

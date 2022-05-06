@@ -3,7 +3,7 @@ import Footer from "components/footer";
 import Header from "components/header";
 
 interface MainLayoutProps {
-  pageTitle: string;
+  pageTitle?: string;
   hasFooter: boolean;
   children: React.ReactNode;
 }
@@ -12,7 +12,7 @@ const MainLayout = ({ pageTitle, hasFooter, children }: MainLayoutProps) => {
   return (
     <div>
       <Head>
-        <title>{pageTitle} | 당신 근처의 당근마켓</title>
+        <title>{pageTitle || "당근마켓"} | 당신 근처의 당근마켓</title>
       </Head>
       <Header />
       {children}
