@@ -10,10 +10,10 @@ datasource db {
 }
 
 model User {
-  id              Int           @id @default(autoincrement())
-  phone           String?       @unique
-  email           String?       @unique
-  username        String        @unique
+  id              Int             @id @default(autoincrement())
+  phone           String?         @unique
+  email           String?         @unique
+  username        String          @unique
   avatarUrl       String?
   address         String?
   tokens          Token[]
@@ -22,12 +22,14 @@ model User {
   posts           Post[]
   postLikes       PostLike[]
   postComments    PostComment[]
-  writtenReviews  Review[]      @relation(name: "WrittenReviews")
-  receivedReviews Review[]      @relation(name: "ReceivedReviews")
+  writtenReviews  Review[]        @relation(name: "WrittenReviews")
+  receivedReviews Review[]        @relation(name: "ReceivedReviews")
   purchases       Purchase[]
   sales           Sale[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt()
+  streams         Stream[]
+  streamMessages  StreamMessage[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt()
 }
 
 model Token {
@@ -125,6 +127,28 @@ model Sale {
   userId    Int
   product   Product  @relation(fields: [productId], references: [id])
   productId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model Stream {
+  id             Int             @id @default(autoincrement())
+  title          String
+  description    String          @db.MediumText
+  user           User            @relation(fields: [userId], references: [id])
+  userId         Int
+  streamMessages StreamMessage[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt()
+}
+
+model StreamMessage {
+  id        Int      @id @default(autoincrement())
+  text      String   @db.MediumText
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  stream    Stream   @relation(fields: [streamId], references: [id])
+  streamId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 }
