@@ -3,15 +3,24 @@ import MainLayout from "components/layouts/main-layout";
 import StreamItem from "components/items/stream-item";
 import FloatingButton from "components/floating-button";
 import { RiVideoAddFill } from "react-icons/ri";
+import { CommonResult } from "libs/server/withHandler";
+import { Stream } from ".prisma/client";
+import useSWR from "swr";
+
+interface StreamsResult extends CommonResult {
+  streams?: Stream[];
+}
 
 const Streams: NextPage = () => {
+  const { data } = useSWR<StreamsResult>(`/api/streams`);
+
   return (
-    <MainLayout pageTitle="스트림" hasFooter={true}>
+    <MainLayout pageTitle="라이브" hasFooter={true}>
       <div className="wrapper relative">
         <div className="content mt-8 mb-16">
           <div className="grid grid-cols-3 gap-x-4 gap-y-20">
-            {[...new Array(17)].map((i) => (
-              <StreamItem key={i} title={"[생방송]🥕 실시간 스트리밍 방송"} />
+            {data?.streams?.map((stream) => (
+              <StreamItem key={stream.id} {...stream} />
             ))}
           </div>
         </div>
