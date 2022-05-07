@@ -1,10 +1,16 @@
 import useSWR from "swr";
 import { useState, useEffect } from "react";
 
-const useSWRInfiniteScroll = <T extends {}>(url: string) => {
+interface InfiniteScrollResult {
+  ok: boolean;
+  message: string;
+  infiniteData: any[];
+}
+
+const useSWRInfiniteScroll = <T extends {}>(url: string | null) => {
   const [page, setPage] = useState<number>(1);
   const [infiniteData, setInfiniteData] = useState<T[]>([]);
-  const { data } = useSWR(`${url}?page=${page}`);
+  const { data } = useSWR<InfiniteScrollResult>(url ? `${url}?page=${page}` : null);
 
   const handleScroll = () => {
     const offsetHeight: number = document.documentElement.offsetHeight;
@@ -19,8 +25,10 @@ const useSWRInfiniteScroll = <T extends {}>(url: string) => {
   useEffect(() => {
     if (data) {
       setInfiniteData((prev) => {
-        const result = [...prev, ...data.infiniteData];
-        return result;
+        if (JSON.stringify(prev) === JSON.stringify(data.infiniteData)) {
+          return [...prev];
+        }
+        return [...prev, ...data.infiniteData];
       });
     }
   }, [data]);

@@ -48,35 +48,35 @@ const UserLayout = ({ children }: UserLayoutProps) => {
               <ul className="flex border-b border-gray-300 pb-2 justify-between">
                 <li className={`text-[17px] ${router.pathname === "/users/[username]/posts" ? "text-orange-400 font-normal" : "font-normal"}`}>
                   <Link href={`/users/${data?.user?.username}/posts`}>
-                    <a className={`py-2.5 px-6 ${router.pathname === "/users/[username]/posts" ? "border-b-[3px] border-orange-400" : ""}`}>
+                    <a className={`py-2.5 px-4 ${router.pathname === "/users/[username]/posts" ? "border-b-[3px] border-orange-400" : ""}`}>
                       동네생활 ({data?.user?._count.posts})
                     </a>
                   </Link>
                 </li>
                 <li className={`text-[17px] ${router.pathname === "/users/[username]/likes" ? "text-orange-400 font-normal" : "font-normal"}`}>
                   <Link href={`/users/${data?.user?.username}/likes`}>
-                    <a className={`py-2.5 px-6 ${router.pathname === "/users/[username]/likes" ? "border-b-[3px] border-orange-400" : ""}`}>
+                    <a className={`py-2.5 px-4 ${router.pathname === "/users/[username]/likes" ? "border-b-[3px] border-orange-400" : ""}`}>
                       관심 목록 ({Number(data?.user?._count.productLikes) + Number(data?.user?._count.postLikes)})
                     </a>
                   </Link>
                 </li>
                 <li className={`text-[17px] ${router.pathname === "/users/[username]/sales" ? "text-orange-400 font-normal" : "font-normal"}`}>
                   <Link href={`/users/${data?.user?.username}/sales`}>
-                    <a className={`py-2.5 px-6 ${router.pathname === "/users/[username]/sales" ? "border-b-[3px] border-orange-400" : ""}`}>
+                    <a className={`py-2.5 px-4 ${router.pathname === "/users/[username]/sales" ? "border-b-[3px] border-orange-400" : ""}`}>
                       판매 물품 ({data?.user?._count.sales})
                     </a>
                   </Link>
                 </li>
                 <li className={`text-[17px] ${router.pathname === "/users/[username]/purchases" ? "text-orange-400 font-normal" : "font-normal"}`}>
                   <Link href={`/users/${data?.user?.username}/purchases`}>
-                    <a className={`py-2.5 px-6 ${router.pathname === "/users/[username]/purchases" ? "border-b-[3px] border-orange-400" : ""}`}>
+                    <a className={`py-2.5 px-4 ${router.pathname === "/users/[username]/purchases" ? "border-b-[3px] border-orange-400" : ""}`}>
                       구매 물품 ({data?.user?._count.purchases})
                     </a>
                   </Link>
                 </li>
                 <li className={`text-[17px] ${router.pathname === "/users/[username]/reviews" ? "text-orange-400 font-normal" : "font-normal"}`}>
                   <Link href={`/users/${data?.user?.username}/reviews`}>
-                    <a className={`py-2.5 px-6 ${router.pathname === "/users/[username]/reviews" ? "border-b-[3px] border-orange-400" : ""}`}>
+                    <a className={`py-2.5 px-4 ${router.pathname === "/users/[username]/reviews" ? "border-b-[3px] border-orange-400" : ""}`}>
                       거래 후기 ({data?.user?._count.receivedReviews})
                     </a>
                   </Link>

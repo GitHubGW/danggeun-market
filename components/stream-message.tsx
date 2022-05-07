@@ -1,14 +1,21 @@
+import { FaCrown } from "react-icons/fa";
+
 interface StreamMessageProps {
-  isMe: boolean;
-  avatarUrl: string;
+  username: string;
+  avatarUrl: string | null;
   text: string;
+  isMe: boolean;
 }
 
-const StreamMessage = ({ isMe, avatarUrl, text }: StreamMessageProps) => {
+const StreamMessage = ({ username, avatarUrl, text, isMe }: StreamMessageProps) => {
   return (
     <div className="flex items-center mb-3">
-      <img src={avatarUrl} alt="" className="w-8 h-8 border rounded-full mr-2" />
-      <div className={`text-sm py-2 px-3 rounded-3xl ${isMe === true ? "bg-orange-500 text-white" : "bg-gray-200"}`}>
+      <img src={avatarUrl ? avatarUrl : "/images/basic_user.png"} alt="" className="w-8 h-8 border rounded-full" />
+      <div className="text-[13px] text-gray-500 ml-1.5 mr-2 flex items-center">
+        <span className="text-[10px] text-orange-500 mr-0.5">{isMe === true ? <FaCrown /> : null}</span>
+        <span>{username}</span>
+      </div>
+      <div className="text-[14px] rounded-3xl">
         <p>{text}</p>
       </div>
     </div>

@@ -7,7 +7,7 @@ interface CreatedAtProps {
 }
 
 const CreatedAt = ({ date, size }: CreatedAtProps) => {
-  const parsedCreatedAt: string = moment(new Date(String(date)), "YYYYMMDD").fromNow();
+  const parsedCreatedAt: string = moment(new Date(String(date)), "YYYYMMDD").fromNow() || "방금 전";
   return <span className={`${size} text-gray-400`}>{parsedCreatedAt}</span>;
 };
 

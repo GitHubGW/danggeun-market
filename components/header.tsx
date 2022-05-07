@@ -45,7 +45,7 @@ const Header = () => {
           {me && (
             <Link href={`/users/${me.username}/posts`}>
               <a>
-                <Avatar avatarUrl={me.avatarUrl} size="w-10" />
+                <Avatar avatarUrl={me.avatarUrl} size="w-[38px]" />
               </a>
             </Link>
           )}
