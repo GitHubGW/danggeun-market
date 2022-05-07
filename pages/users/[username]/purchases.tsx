@@ -3,9 +3,8 @@ import MainLayout from "components/layouts/main-layout";
 import UserLayout from "components/layouts/user-layout";
 import ProductItem from "components/items/product-item";
 import { NextRouter, useRouter } from "next/router";
-import useSWR from "swr";
 import { Product, Sale } from ".prisma/client";
-import { CommonResult } from "libs/server/withHandler";
+import useSWRInfiniteScroll from "libs/client/useSWRInfiniteScroll";
 
 interface ProductWithUserAndCount extends Product {
   user: { address: string | null };
@@ -16,19 +15,23 @@ interface SaleWithProduct extends Sale {
   product: ProductWithUserAndCount;
 }
 
-interface UserPurchasesResult extends CommonResult {
-  purchases?: SaleWithProduct[];
-}
-
 const UserPurchases: NextPage = () => {
   const router: NextRouter = useRouter();
-  const { data } = useSWR<UserPurchasesResult>(router.query.username ? `/api/users/${router.query.username}/purchases` : null);
+  const infiniteData = useSWRInfiniteScroll<SaleWithProduct>(router.query.username ? `/api/users/${router.query.username}/purchases` : null);
 
   return (
     <MainLayout pageTitle="구매 물품" hasFooter={true}>
       <UserLayout>
-        {data?.purchases?.map((purchase) => (
-          <ProductItem key={purchase.product.id} {...purchase.product} />
+        {infiniteData?.map((purchase) => (
+          <ProductItem
+            key={purchase.product.id}
+            id={purchase.product.id}
+            name={purchase.product.name}
+            price={purchase.product.price}
+            imageUrl={purchase.product.imageUrl}
+            user={purchase.product.user}
+            _count={purchase.product._count}
+          />
         ))}
       </UserLayout>
     </MainLayout>

@@ -5,9 +5,17 @@ import FloatingButton from "components/floating-button";
 import { BsBagPlusFill } from "react-icons/bs";
 import MainLayout from "components/layouts/main-layout";
 import useMe from "libs/client/useMe";
+import { Product } from ".prisma/client";
+import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
+
+interface ProductWithUserAndCount extends Product {
+  user: { id: number; username: string; avatarUrl: string | null; address: string | null };
+  _count: { productLikes: number };
+}
 
 const Home: NextPage = () => {
   const me = useMe();
+  const infiniteData = useSWRInfiniteClick<ProductWithUserAndCount>(`/api/products`);
 
   return (
     <MainLayout pageTitle="홈" hasFooter={true}>
@@ -54,11 +62,8 @@ const Home: NextPage = () => {
                     </h2>
                     <p className="mt-7">동네 주민들과 가깝고 따뜻한 거래를 지금 경험해보세요.</p>
                     <div className="mt-7 flex space-x-5">
-                      <Link href="/">
+                      <Link href="/products">
                         <a className="hover:bg-gray-200 px-6 py-4 rounded-md bg-gray-100 text-lg font-semibold">인기매물 보기</a>
-                      </Link>
-                      <Link href="/">
-                        <a className="hover:bg-gray-200 px-6 py-4 rounded-md bg-gray-100 text-lg font-semibold">믿을 수 있는 중고거래</a>
                       </Link>
                     </div>
                   </div>
@@ -136,8 +141,8 @@ const Home: NextPage = () => {
                       동네 주민이 남긴 진짜 후기를 함께 확인해보세요!
                     </p>
                     <div className="mt-7 flex space-x-5">
-                      <Link href="/">
-                        <a className="hover:bg-gray-200 px-6 py-4 rounded-md bg-gray-100 text-lg font-semibold">당근마켓 동네가게 찾기</a>
+                      <Link href="/posts">
+                        <a className="hover:bg-gray-200 px-6 py-4 rounded-md bg-gray-100 text-lg font-semibold">동네생활 보기</a>
                       </Link>
                     </div>
                   </div>
@@ -152,8 +157,16 @@ const Home: NextPage = () => {
               <div className="content py-20">
                 <h2 className="font-semibold text-4xl leading-tight text-center">중고거래 인기매물</h2>
                 <div className="grid grid-cols-4 mt-14 gap-x-10 gap-y-12">
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                    <ProductItem key={i} productUrl="https://newsimg.sedaily.com/2022/02/21/26288ZY0E1_3.jpg" />
+                  {infiniteData.map((product) => (
+                    <ProductItem
+                      key={product.id}
+                      id={product.id}
+                      name={product.name}
+                      price={product.price}
+                      imageUrl={product.imageUrl}
+                      user={product.user}
+                      _count={product._count}
+                    />
                   ))}
                 </div>
                 <Link href="/products">

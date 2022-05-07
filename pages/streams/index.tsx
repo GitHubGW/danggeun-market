@@ -3,24 +3,23 @@ import MainLayout from "components/layouts/main-layout";
 import StreamItem from "components/items/stream-item";
 import FloatingButton from "components/floating-button";
 import { RiVideoAddFill } from "react-icons/ri";
-import { CommonResult } from "libs/server/withHandler";
 import { Stream } from ".prisma/client";
-import useSWR from "swr";
+import useSWRInfiniteScroll from "libs/client/useSWRInfiniteScroll";
 
-interface StreamsResult extends CommonResult {
-  streams?: Stream[];
+interface StreamWithUser extends Stream {
+  user: { id: number; username: string; avatarUrl: string | null };
 }
 
 const Streams: NextPage = () => {
-  const { data } = useSWR<StreamsResult>(`/api/streams`);
+  const infiniteData = useSWRInfiniteScroll<StreamWithUser>(`/api/streams`);
 
   return (
     <MainLayout pageTitle="라이브" hasFooter={true}>
       <div className="wrapper relative">
         <div className="content mt-8 mb-16">
           <div className="grid grid-cols-3 gap-x-4 gap-y-20">
-            {data?.streams?.map((stream) => (
-              <StreamItem key={stream.id} {...stream} />
+            {infiniteData?.map((stream) => (
+              <StreamItem key={stream.id} id={stream.id} title={stream.title} user={stream.user} />
             ))}
           </div>
         </div>
