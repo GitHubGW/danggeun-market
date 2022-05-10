@@ -10,26 +10,26 @@ datasource db {
 }
 
 model User {
-  id              Int             @id @default(autoincrement())
-  phone           String?         @unique
-  email           String?         @unique
-  username        String          @unique
-  avatarUrl       String?
-  address         String?
-  tokens          Token[]
-  products        Product[]
-  productLikes    ProductLike[]
-  posts           Post[]
-  postLikes       PostLike[]
-  postComments    PostComment[]
-  writtenReviews  Review[]        @relation(name: "WrittenReviews")
-  receivedReviews Review[]        @relation(name: "ReceivedReviews")
-  purchases       Purchase[]
-  sales           Sale[]
-  streams         Stream[]
-  streamMessages  StreamMessage[]
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt()
+  id                Int             @id @default(autoincrement())
+  phone             String?         @unique
+  email             String?         @unique
+  username          String          @unique
+  cloudflareImageId String?
+  address           String?
+  tokens            Token[]
+  products          Product[]
+  productLikes      ProductLike[]
+  posts             Post[]
+  postLikes         PostLike[]
+  postComments      PostComment[]
+  writtenReviews    Review[]        @relation(name: "WrittenReviews")
+  receivedReviews   Review[]        @relation(name: "ReceivedReviews")
+  purchases         Purchase[]
+  sales             Sale[]
+  streams           Stream[]
+  streamMessages    StreamMessage[]
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt()
 }
 
 model Token {
@@ -42,18 +42,18 @@ model Token {
 }
 
 model Product {
-  id           Int           @id @default(autoincrement())
-  name         String
-  price        Int
-  imageUrl     String
-  description  String        @db.MediumText
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       Int
-  productLikes ProductLike[]
-  purchases    Purchase[]
-  sales        Sale[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt()
+  id                Int           @id @default(autoincrement())
+  name              String
+  price             Int
+  cloudflareImageId String
+  description       String        @db.MediumText
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            Int
+  productLikes      ProductLike[]
+  purchases         Purchase[]
+  sales             Sale[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt()
 }
 
 model ProductLike {
@@ -67,15 +67,15 @@ model ProductLike {
 }
 
 model Post {
-  id           Int           @id @default(autoincrement())
-  text         String        @db.MediumText
-  imageUrl     String?
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       Int
-  postLikes    PostLike[]
-  postComments PostComment[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt()
+  id                Int           @id @default(autoincrement())
+  text              String        @db.MediumText
+  cloudflareImageId String?
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            Int
+  postLikes         PostLike[]
+  postComments      PostComment[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt()
 }
 
 model PostLike {
