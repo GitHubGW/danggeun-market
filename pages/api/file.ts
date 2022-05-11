@@ -27,10 +27,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
       })
     ).json();
 
-    return res.status(200).json({ ok: true, message: "Cloudflare Upload URL을 받는데 성공하였습니다.", cloudflareUploadUrl: response.result.uploadURL });
+    console.log("response", response);
+
+    return res.status(200).json({
+      ok: true,
+      message: "Cloudflare로부터 Image id와 Upload url을 받는데 성공하였습니다.",
+      cloudflareImageId: response.result.id,
+      cloudflareUploadUrl: response.result.uploadURL,
+    });
   } catch (error) {
     console.log("file handler error");
-    return res.status(400).json({ ok: false, message: "Cloudflare Upload URL을 받는데 실패하였습니다." });
+    return res.status(400).json({ ok: false, message: "Cloudflare로부터 Image id와 Upload url을 받는데 실패하였습니다." });
   }
 };
 

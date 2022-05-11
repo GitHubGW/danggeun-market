@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
           select: {
             id: true,
             text: true,
-            user: { select: { id: true, username: true, avatarUrl: true } },
+            user: { select: { id: true, username: true, cloudflareImageId: true } },
           },
         },
       },

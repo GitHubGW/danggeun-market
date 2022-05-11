@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     const countedProducts = (await prisma?.product.count()) || 0;
     const foundProducts = await prisma?.product.findMany({
       include: {
-        user: { select: { id: true, username: true, avatarUrl: true, address: true } },
+        user: { select: { id: true, username: true, cloudflareImageId: true, address: true } },
         _count: { select: { productLikes: true } },
       },
       orderBy: { createdAt: "desc" },

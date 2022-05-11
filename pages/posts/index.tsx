@@ -2,14 +2,13 @@ import { NextPage } from "next";
 import { RiPencilFill } from "react-icons/ri";
 import FloatingButton from "components/floating-button";
 import MainLayout from "components/layouts/main-layout";
-import { CommonResult } from "libs/server/withHandler";
 import { Post } from ".prisma/client";
 import PostItem from "components/items/post-item";
 import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
 import { MutableRefObject, useRef } from "react";
 
 interface PostWithUserAndCount extends Post {
-  user: { id: number; username: string; avatarUrl: string | null; address: string | null };
+  user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
   _count: { postComments: number; postLikes: number };
 }
 

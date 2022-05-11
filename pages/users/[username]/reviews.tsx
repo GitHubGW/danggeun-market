@@ -22,7 +22,7 @@ interface ReviewWithFrom extends Review {
   from: {
     id: number;
     username: string;
-    avatarUrl: string | null;
+    cloudflareImageId: string | null;
     address: string | null;
   };
 }
@@ -47,8 +47,15 @@ const UserReviews: NextPage = () => {
     if (reviewDeleteLoading === true) {
       return;
     }
+
+    mutate((prev) => {
+      const filteredReviews = prev?.reviews?.filter((review) => {
+        return review.id !== reviewId;
+      });
+      const result = prev && prev.reviews && { ...prev, reviews: filteredReviews };
+      return result;
+    }, false);
     await reviewdeleteMutation({ reviewId });
-    await mutate();
   };
 
   const onValid = async () => {
@@ -56,9 +63,23 @@ const UserReviews: NextPage = () => {
       return;
     }
     const { text, rating } = getValues();
-    await reviewAddMutation({ text, rating });
-    await mutate();
+
+    mutate((prev) => {
+      const newReview = {
+        id: Date.now(),
+        text,
+        rating,
+        from: { id: me?.id, username: me?.username, address: me?.address, cloudflareImageId: me?.cloudflareImageId },
+        fromId: me?.id,
+        // toId: 31,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      const result = prev && prev.reviews && ({ ...prev, reviews: [newReview, ...prev.reviews] } as any);
+      return result;
+    }, false);
     reset();
+    await reviewAddMutation({ text, rating });
   };
 
   return (
@@ -67,7 +88,15 @@ const UserReviews: NextPage = () => {
         <div className="w-[700px] max-w-[700px]">
           <div>
             {data?.reviews?.map((review) => (
-              <ReviewItem key={review.id} {...review} handleDeleteReview={() => handleDeleteReview(review.id)} />
+              <ReviewItem
+                key={review.id}
+                id={review.id}
+                text={review.text}
+                rating={review.rating}
+                createdAt={review.createdAt}
+                from={review.from}
+                handleDeleteReview={() => handleDeleteReview(review.id)}
+              />
             ))}
           </div>
 

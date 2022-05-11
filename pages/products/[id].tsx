@@ -20,12 +20,12 @@ import DeleteButton from "components/delete-button";
 import useMe from "libs/client/useMe";
 
 interface ProductWithUserAndCount extends Product {
-  user: { id: number; username: string; avatarUrl: string | null; address: string | null };
+  user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
   _count: { productLikes: number };
 }
 
 interface SimilarProductWithCount extends Product {
-  user: { id: number; username: string; avatarUrl: string | null; address: string | null };
+  user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
   _count: { productLikes: number };
 }
 
@@ -85,13 +85,13 @@ const ProductDetail: NextPage = () => {
           {/* 상품 상세 정보 */}
           <div>
             <div className="cursor-pointer">
-              <DetailImage imageUrl={data?.product?.imageUrl} />
+              <DetailImage cloudflareImageId={data?.product?.cloudflareImageId} />
             </div>
             <div className="border-b pt-6 pb-5 flex items-center relative">
               <div>
                 <Link href={`/users/${data?.product?.user?.username}/posts`}>
                   <a>
-                    <Avatar avatarUrl={data?.product?.user?.avatarUrl} size="w-10" />
+                    <Avatar cloudflareImageId={data?.product?.user?.cloudflareImageId} size="w-10 h-10" />
                   </a>
                 </Link>
               </div>
@@ -108,7 +108,7 @@ const ProductDetail: NextPage = () => {
             <div className="py-8">
               <h1 className="text-xl font-semibold">{data?.product?.name}</h1>
               <p className="text-xs text-gray-400 mt-2 mb-1.5 space-x-1">
-                <span>게임/취미</span>
+                <span>상품</span>
                 <Separator />
                 <CreatedAt size="" date={data?.product?.createdAt} />
               </p>

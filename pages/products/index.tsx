@@ -7,7 +7,7 @@ import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
 import { MutableRefObject, useRef } from "react";
 
 interface ProductWithUserAndCount extends Product {
-  user: { id: number; username: string; avatarUrl: string | null; address: string | null };
+  user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
   _count: { productLikes: number };
 }
 
@@ -23,7 +23,15 @@ const Products = () => {
             <h2 className="font-medium text-3xl leading-tight text-center">중고거래 인기매물</h2>
             <div className="grid grid-cols-4 mt-14 gap-x-10 gap-y-12">
               {infiniteData?.map((product) => (
-                <ProductItem key={product.id} id={product.id} name={product.name} price={product.price} imageUrl={product.imageUrl} user={product.user} _count={product._count} />
+                <ProductItem
+                  key={product.id}
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  cloudflareImageId={product.cloudflareImageId}
+                  user={product.user}
+                  _count={product._count}
+                />
               ))}
             </div>
             <span ref={moreRef} className="underline mt-14 text-center font-semibold block cursor-pointer">

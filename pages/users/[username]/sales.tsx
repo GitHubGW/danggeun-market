@@ -28,7 +28,7 @@ const UserSales: NextPage = () => {
             id={sale.product.id}
             name={sale.product.name}
             price={sale.product.price}
-            imageUrl={sale.product.imageUrl}
+            cloudflareImageId={sale.product.cloudflareImageId}
             user={sale.product.user}
             _count={sale.product._count}
           />

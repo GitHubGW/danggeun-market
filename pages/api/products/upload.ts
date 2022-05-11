@@ -6,11 +6,17 @@ import { NextApiRequest, NextApiResponse } from "next";
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
   try {
     const {
-      body: { file, name, price, description },
+      body: { name, price, description, cloudflareImageId },
       session: { loggedInUser },
     } = req;
     const createdProduct: Product | undefined = await prisma?.product.create({
-      data: { name, price: +price, imageUrl: "", description, user: { connect: { id: loggedInUser?.id } } },
+      data: {
+        name,
+        price: +price,
+        description,
+        cloudflareImageId,
+        user: { connect: { id: loggedInUser?.id } },
+      },
     });
     return res.status(201).json({ ok: true, message: "상품 업로드에 성공하였습니다.", product: createdProduct });
   } catch (error) {

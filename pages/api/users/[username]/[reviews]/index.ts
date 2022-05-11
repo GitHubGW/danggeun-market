@@ -10,7 +10,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     } = req;
     const foundReviews = await prisma.review.findMany({
       where: { to: { username: String(username) } },
-      include: { from: { select: { id: true, username: true, avatarUrl: true, address: true } } },
+      include: { from: { select: { id: true, username: true, cloudflareImageId: true, address: true } } },
+      orderBy: { createdAt: "desc" },
     });
     return res.status(200).json({ ok: true, message: "사용자 리뷰 보기에 성공하였습니다.", reviews: foundReviews });
   } catch (error) {

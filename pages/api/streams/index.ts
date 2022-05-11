@@ -10,7 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     } = req;
 
     const foundStreams = await prisma?.stream.findMany({
-      include: { user: { select: { id: true, username: true, avatarUrl: true } } },
+      include: { user: { select: { id: true, username: true, cloudflareImageId: true } } },
       orderBy: { createdAt: "desc" },
       take: LIMIT,
       skip: (+page - 1) * LIMIT,

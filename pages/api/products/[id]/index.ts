@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     const foundProduct = await prisma?.product.findUnique({
       where: { id: +id },
       include: {
-        user: { select: { id: true, username: true, avatarUrl: true, address: true } },
+        user: { select: { id: true, username: true, cloudflareImageId: true, address: true } },
         _count: { select: { productLikes: true } },
       },
     });
@@ -31,7 +31,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
       orderBy: { createdAt: "desc" },
       take: 6,
       include: {
-        user: { select: { id: true, username: true, avatarUrl: true, address: true } },
+        user: { select: { id: true, username: true, cloudflareImageId: true, address: true } },
         _count: { select: { productLikes: true } },
       },
     });

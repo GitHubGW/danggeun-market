@@ -54,7 +54,14 @@ const UserLikes: NextPage = () => {
             {Number(data?.postLikes?.length) > 0 && <h2 className="font-medium text-lg mb-1">관심 게시물 ({data?.postLikes?.length})</h2>}
             <div className="">
               {data?.postLikes?.map((postLike) => (
-                <PostItem key={postLike.post.id} {...postLike.post} />
+                <PostItem
+                  key={postLike.post.id}
+                  id={postLike.post.id}
+                  text={postLike.post.text}
+                  createdAt={postLike.post.createdAt}
+                  user={postLike.post.user}
+                  _count={postLike.post._count}
+                />
               ))}
             </div>
           </div>

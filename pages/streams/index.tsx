@@ -7,7 +7,7 @@ import { Stream } from ".prisma/client";
 import useSWRInfiniteScroll from "libs/client/useSWRInfiniteScroll";
 
 interface StreamWithUser extends Stream {
-  user: { id: number; username: string; avatarUrl: string | null };
+  user: { id: number; username: string; cloudflareImageId: string | null };
 }
 
 const Streams: NextPage = () => {
