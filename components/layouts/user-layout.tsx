@@ -30,7 +30,7 @@ const UserLayout = ({ children }: UserLayoutProps) => {
           <div className="mb-9">
             <div className="flex items-center space-x-4">
               <div>
-                <Avatar avatarUrl={data?.user?.avatarUrl} size="w-14" />
+                <Avatar cloudflareImageId={data?.user?.cloudflareImageId} size="w-14 h-14" />
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center">

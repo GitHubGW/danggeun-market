@@ -1,11 +1,16 @@
+import Image from "next/image";
+import basicUser from "public/images/basic_user.png";
+
 interface MessageProps {
   isMe: boolean;
-  avatarUrl?: string;
+  cloudflareImageId?: string;
   createdAt: string;
   text: string;
 }
 
-const Message = ({ isMe, avatarUrl, text, createdAt }: MessageProps) => {
+const Message = ({ isMe, cloudflareImageId, text, createdAt }: MessageProps) => {
+  console.log("cloudflareImageId", cloudflareImageId);
+
   return (
     <>
       {isMe === true ? (
@@ -17,8 +22,16 @@ const Message = ({ isMe, avatarUrl, text, createdAt }: MessageProps) => {
         </div>
       ) : (
         <div className="flex mb-4">
-          <img src={avatarUrl} alt="" className="w-8 h-8 border rounded-full mr-2" />
-          <div className="text-sm bg-gray-200 rounded-3xl rounded-tl-none py-2.5 px-3.5">
+          <div className="">
+            <Image
+              width={32}
+              height={32}
+              src={cloudflareImageId ? `https://imagedelivery.net/mrfqMz0r88w_Qqln2FwPhQ/${cloudflareImageId}/avatar` : basicUser}
+              alt=""
+              className="border rounded-full"
+            />
+          </div>
+          <div className="text-sm bg-gray-200 rounded-3xl rounded-tl-none ml-2 py-2.5 px-3.5">
             <p>{text}</p>
           </div>
           <div className="flex items-end">

@@ -19,8 +19,8 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
                 <Link href="/">
                   <a className="flex items-center space-x-2.5">
                     <Avatar
-                      avatarUrl="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_256_disabled-97ac2510cb2860b9e37caf23beb1e8e0ca130152a119b65402c4673af18bf2a1.png"
-                      size="w-11"
+                      cloudflareImageId="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_256_disabled-97ac2510cb2860b9e37caf23beb1e8e0ca130152a119b65402c4673af18bf2a1.png"
+                      size="w-11 h-11"
                     />
                     <Username text="슈가" size="text-base" textDecoration={false} />
                   </a>
@@ -33,8 +33,8 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
                       <a className="flex items-center space-x-2">
                         <div>
                           <Avatar
-                            avatarUrl="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_256_disabled-97ac2510cb2860b9e37caf23beb1e8e0ca130152a119b65402c4673af18bf2a1.png"
-                            size="w-9"
+                            cloudflareImageId="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_256_disabled-97ac2510cb2860b9e37caf23beb1e8e0ca130152a119b65402c4673af18bf2a1.png"
+                            size="w-9 h-9"
                           />
                         </div>
                         <div>

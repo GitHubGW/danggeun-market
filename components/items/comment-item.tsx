@@ -10,7 +10,7 @@ interface CommentItemProps {
   id: number;
   text: string;
   createdAt?: Date | string;
-  user: { id: number; username: string; avatarUrl: string | null; address: string | null };
+  user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
   me?: User;
   handleDeleteComment: (postCommentId: number) => Promise<void>;
 }
@@ -21,7 +21,7 @@ const CommentItem = ({ id, text, createdAt, user, me, handleDeleteComment }: Com
       <div className="flex items-center space-x-2 relative">
         <Link href={`/users/${user?.username}/posts`}>
           <a>
-            <Avatar avatarUrl={user?.avatarUrl} size="w-6" />
+            <Avatar cloudflareImageId={user?.cloudflareImageId} size="w-6 h-6" />
           </a>
         </Link>
         <Link href={`/users/${user?.username}/posts`}>

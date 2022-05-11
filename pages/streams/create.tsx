@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import { CommonResult } from "libs/server/withHandler";
 import { Stream } from ".prisma/client";
 import FormError from "components/form-error";
+import Image from "next/image";
+import backgroundStream from "public/images/background_stream.png";
 
 interface StreamCreateFormData {
   title: string;
@@ -52,11 +54,11 @@ const StreamCreate: NextPage = () => {
   }, [data, router]);
 
   return (
-    <MainLayout pageTitle="스트림 시작" hasFooter={true}>
+    <MainLayout pageTitle="스트리밍 생성" hasFooter={true}>
       <div className="wrapper">
         <div className="content-sub without-header-footer">
           <div className="flex flex-col justify-center items-center w-full my-6">
-            <img src="/images/background_stream.png" alt="" className="w-full rounded-lg" />
+            <Image src={backgroundStream} alt="" className="w-full rounded-lg" />
             <form onSubmit={handleSubmit(onValid)} className="flex flex-col w-full">
               <label className="mt-5">
                 <LabelTitle text="제목" />

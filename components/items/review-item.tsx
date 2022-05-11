@@ -12,7 +12,7 @@ interface ReviewItemProps {
   text: string;
   rating: number;
   createdAt?: Date | string;
-  from: { id: number; username: string; avatarUrl: string | null; address: string | null };
+  from: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
   handleDeleteReview: () => any;
 }
 
@@ -24,7 +24,7 @@ const ReviewItem = ({ id, text, rating, createdAt, from, handleDeleteReview }: R
       <div className="flex items-center space-x-2 relative">
         <Link href={`/users/${from?.username}/posts`}>
           <a>
-            <Avatar avatarUrl={from?.avatarUrl} size="w-6" />
+            <Avatar cloudflareImageId={from?.cloudflareImageId} size="w-6 h-6" />
           </a>
         </Link>
         <Link href={`/users/${from?.username}/posts`}>

@@ -7,14 +7,16 @@ import FileInput from "components/file-input";
 import { useForm } from "react-hook-form";
 import Input from "components/input";
 import useMe from "libs/client/useMe";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import FormError from "components/form-error";
 import useMutation from "libs/client/useMutation";
 import { NextRouter, useRouter } from "next/router";
 import { CommonResult } from "libs/server/withHandler";
+import Image from "next/image";
+import basicUser from "public/images/basic_user.png";
 
 interface UserEditFormData {
-  file: FileList;
+  avatar: FileList;
   username: string;
   email: string;
   phone: string;
@@ -24,6 +26,7 @@ interface UserEditFormData {
 const UserEdit: NextPage = () => {
   const me = useMe();
   const router: NextRouter = useRouter();
+  const [avatarPreview, setAvatarPreview] = useState("");
   const [userEditMutation, { data, loading }] = useMutation<CommonResult>(`/api/users/${router.query.username}/edit`);
   const {
     register,
@@ -32,23 +35,43 @@ const UserEdit: NextPage = () => {
     setValue,
     setError,
     clearErrors,
+    watch,
     formState: { errors },
   } = useForm<UserEditFormData>({ mode: "onChange" });
+  const watchingAvatar = watch("avatar");
 
-  const onValid = () => {
+  const onValid = async () => {
     if (loading === true) {
       return;
     }
-    const { file, username, email, phone } = getValues();
+
+    const { avatar, username, email, phone } = getValues();
     if (email === "" && phone === "") {
       return setError("error", { message: "이메일 또는 휴대폰 번호를 입력해주세요." });
     }
-    userEditMutation({ username, email, phone });
+
+    if (avatar && avatar.length > 0) {
+      const { cloudflareImageId, cloudflareUploadUrl } = await (await fetch("/api/file")).json();
+      const formData = new FormData();
+      formData.append("file", avatar[0], `${me?.username}_avatar_${avatar[0].name}`);
+      await (await fetch(cloudflareUploadUrl, { method: "POST", body: formData })).json();
+      userEditMutation({ username, email, phone, cloudflareImageId });
+    } else {
+      userEditMutation({ username, email, phone });
+    }
   };
 
   const onKeyDown = () => {
     clearErrors("error");
   };
+
+  useEffect(() => {
+    if (watchingAvatar && watchingAvatar.length > 0) {
+      const avatarFile = watchingAvatar[0];
+      const objectURL = URL.createObjectURL(avatarFile);
+      setAvatarPreview(objectURL);
+    }
+  }, [watchingAvatar]);
 
   useEffect(() => {
     if (data?.ok === false) {
@@ -72,8 +95,18 @@ const UserEdit: NextPage = () => {
           <form onSubmit={handleSubmit(onValid)} className="flex flex-col w-full pt-10">
             <div className="flex justify-center">
               <label className="transition-all rounded-full flex justify-center items-center cursor-pointer">
-                <img src={me?.avatarUrl ? me?.avatarUrl : "/images/basic_user.png"} alt="" className="border border-gray-200 rounded-full w-56 h-56" />
-                <FileInput register={register("file")} required={false} />
+                {avatarPreview === "" ? (
+                  <Image
+                    width={224}
+                    height={224}
+                    src={me?.cloudflareImageId ? `https://imagedelivery.net/mrfqMz0r88w_Qqln2FwPhQ/${me?.cloudflareImageId}/avatar` : basicUser}
+                    alt=""
+                    className="border border-gray-200 rounded-full w-56 h-56"
+                  />
+                ) : (
+                  <Image width={224} height={224} src={avatarPreview} alt="" className="border border-gray-200 rounded-full w-56 h-56" />
+                )}
+                <FileInput register={register("avatar")} required={false} />
               </label>
             </div>
             <label className="mt-4">

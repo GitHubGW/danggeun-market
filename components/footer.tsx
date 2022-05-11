@@ -1,5 +1,7 @@
 import { faBlogger, faFacebookSquare, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
+import logoWhite from "public/images/logo_white.svg";
 
 const Footer = () => {
   return (
@@ -7,7 +9,7 @@ const Footer = () => {
       <nav className="content">
         <div className="flex justify-between pb-14 border-b border-gray-500">
           <div>
-            <img src="/images/logo_white.svg" alt="" />
+            <Image src={logoWhite} alt="" />
           </div>
           <ul className="pt-2 space-y-3">
             <li>

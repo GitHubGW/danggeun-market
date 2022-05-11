@@ -6,13 +6,15 @@ import FileInput from "components/file-input";
 import { useForm } from "react-hook-form";
 import Textarea from "components/textarea";
 import useMutation from "libs/client/useMutation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { CommonResult } from "libs/server/withHandler";
 import { Post } from ".prisma/client";
+import Image from "next/image";
+import useMe from "libs/client/useMe";
 
 interface PostWriteFormData {
-  file: any;
+  file: FileList;
   text: string;
 }
 
@@ -21,17 +23,36 @@ interface PostWriteResult extends CommonResult {
 }
 
 const PostWrite: NextPage = () => {
+  const me = useMe();
   const router: NextRouter = useRouter();
-  const { register, handleSubmit, getValues } = useForm<PostWriteFormData>();
+  const [filePreview, setFilePreview] = useState("");
+  const { register, handleSubmit, getValues, watch } = useForm<PostWriteFormData>();
   const [postWriteMutation, { data, loading }] = useMutation<PostWriteResult>("/api/posts/write");
+  const watchingFile = watch("file");
 
-  const onValid = () => {
+  const onValid = async () => {
     if (loading === true) {
       return;
     }
     const { file, text } = getValues();
-    postWriteMutation({ file, text });
+    if (file && file.length > 0) {
+      const { cloudflareImageId, cloudflareUploadUrl } = await (await fetch("/api/file")).json();
+      const formData = new FormData();
+      formData.append("file", file[0], `${me?.username}_post_${file[0].name}`);
+      await (await fetch(cloudflareUploadUrl, { method: "POST", body: formData })).json();
+      postWriteMutation({ text, cloudflareImageId });
+    } else {
+      postWriteMutation({ text });
+    }
   };
+
+  useEffect(() => {
+    if (watchingFile && watchingFile.length > 0) {
+      const file = watchingFile[0];
+      const objectUrl = URL.createObjectURL(file);
+      setFilePreview(objectUrl);
+    }
+  }, [watchingFile]);
 
   useEffect(() => {
     if (data?.ok === true) {
@@ -44,8 +65,8 @@ const PostWrite: NextPage = () => {
       <div className="wrapper">
         <div className="content-sub without-header-footer">
           <form onSubmit={handleSubmit(onValid)} className="flex flex-col">
-            <label className="transition-all rounded-lg border-dashed border-2 text-gray-200 hover:border-orange-400 hover:text-orange-400 flex justify-center items-center h-[500px] cursor-pointer">
-              <RiImageAddFill className="text-[40px]" />
+            <label className="relative transition-all rounded-lg border-dashed border-2 text-gray-200 hover:border-orange-400 hover:text-orange-400 flex justify-center items-center h-[500px] cursor-pointer">
+              {filePreview === "" ? <RiImageAddFill className="text-[40px]" /> : <Image objectFit="cover" layout="fill" src={filePreview} alt="" className="h-full rounded-lg" />}
               <FileInput register={register("file")} required={false} />
             </label>
             <label className="mt-5 mb-2">

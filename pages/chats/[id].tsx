@@ -14,22 +14,14 @@ const ChatDetail = () => {
           <div className="h-[calc(100%_-_110px)]">
             <Link href="/">
               <a className="flex items-center space-x-2 px-3 border-b max-h-[61px] h-[61px]">
-                <Avatar
-                  avatarUrl="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_256_disabled-97ac2510cb2860b9e37caf23beb1e8e0ca130152a119b65402c4673af18bf2a1.png"
-                  size="w-9"
-                />
+                <Avatar cloudflareImageId="" size="w-9 h-9" />
                 <Username text="포켓몬" size="text-base" textDecoration={false} />
               </a>
             </Link>
             <div className="h-full pb-16">
               <div className="px-3 h-full overflow-auto pt-4">
                 <Message isMe={true} text="안녕하세요" createdAt="오후 7:00" />
-                <Message
-                  isMe={false}
-                  text="안녕하세요"
-                  createdAt="오후 7:10"
-                  avatarUrl="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_256_disabled-97ac2510cb2860b9e37caf23beb1e8e0ca130152a119b65402c4673af18bf2a1.png"
-                />
+                <Message isMe={false} text="안녕하세요" createdAt="오후 7:10" cloudflareImageId="" />
               </div>
             </div>
           </div>

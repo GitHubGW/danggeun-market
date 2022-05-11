@@ -7,9 +7,17 @@ import MainLayout from "components/layouts/main-layout";
 import useMe from "libs/client/useMe";
 import { Product } from ".prisma/client";
 import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
+import Image from "next/image";
+import backgroundMain1 from "public/images/background_main1.png";
+import backgroundMain2 from "public/images/background_main2.png";
+import backgroundMain3 from "public/images/background_main3.png";
+import backgroundMain4 from "public/images/background_main4.png";
+import storyIcon1 from "public/images/story_icon1.svg";
+import storyIcon2 from "public/images/story_icon2.svg";
+import storyIcon3 from "public/images/story_icon3.svg";
 
 interface ProductWithUserAndCount extends Product {
-  user: { id: number; username: string; avatarUrl: string | null; address: string | null };
+  user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
   _count: { productLikes: number };
 }
 
@@ -40,7 +48,7 @@ const Home: NextPage = () => {
                   </div>
                 </div>
                 <div className="flex-[2] flex items-end">
-                  <img src="images/background_main1.png" alt="" className="w-full" />
+                  <Image src={backgroundMain1} alt="" placeholder="blur" />
                 </div>
               </div>
             </div>
@@ -51,7 +59,7 @@ const Home: NextPage = () => {
             <div className="bg-white h-[700px]">
               <div className="content flex relative">
                 <div className="flex-[1] flex items-end">
-                  <img src="images/background_main2.png" alt="" className="w-full" />
+                  <Image src={backgroundMain2} alt="" placeholder="blur" />
                 </div>
                 <div className="flex-[1] justify-center items-center flex">
                   <div>
@@ -86,7 +94,7 @@ const Home: NextPage = () => {
                     <p className="mt-6">우리 동네의 다양한 이야기를 이웃과 함께 나누어요.</p>
                     <div className="flex mt-10 gap-x-16">
                       <div>
-                        <img src="images/story_icon1.svg" alt="" />
+                        <Image src={storyIcon1} alt="" />
                         <h2 className="font-semibold text-sm mt-4 mb-2">우리 동네 질문</h2>
                         <p className="text-xs leading-4">
                           궁금한 게 있을 땐<br />
@@ -94,7 +102,7 @@ const Home: NextPage = () => {
                         </p>
                       </div>
                       <div>
-                        <img src="images/story_icon2.svg" alt="" />
+                        <Image src={storyIcon2} alt="" />
                         <h2 className="font-semibold text-sm mt-4 mb-2">동네 분실 센터</h2>
                         <p className="text-xs leading-4">
                           무언가를 잃어버렸을 때,
@@ -103,7 +111,7 @@ const Home: NextPage = () => {
                         </p>
                       </div>
                       <div>
-                        <img src="images/story_icon3.svg" alt="" />
+                        <Image src={storyIcon3} alt="" />
                         <h2 className="font-semibold text-sm mt-4 mb-2">동네 모임</h2>
                         <p className="text-xs leading-4">
                           관심사가 비슷한 이웃과
@@ -115,7 +123,7 @@ const Home: NextPage = () => {
                   </div>
                 </div>
                 <div className="flex-[1] flex items-end">
-                  <img src="images/background_main3.png" alt="" className="w-full" />
+                  <Image src={backgroundMain3} alt="" placeholder="blur" />
                 </div>
               </div>
             </div>
@@ -126,7 +134,7 @@ const Home: NextPage = () => {
             <div className="bg-white h-[700px]">
               <div className="content flex relative">
                 <div className="flex-[1] flex items-end">
-                  <img src="images/background_main4.png" alt="" className="w-full" />
+                  <Image src={backgroundMain4} alt="" placeholder="blur" />
                 </div>
                 <div className="flex-[1] justify-center items-center flex">
                   <div>
@@ -163,7 +171,7 @@ const Home: NextPage = () => {
                       id={product.id}
                       name={product.name}
                       price={product.price}
-                      imageUrl={product.imageUrl}
+                      cloudflareImageId={product.cloudflareImageId}
                       user={product.user}
                       _count={product._count}
                     />

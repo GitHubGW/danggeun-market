@@ -10,12 +10,14 @@ import Input from "components/input";
 import Textarea from "components/textarea";
 import useMutation from "libs/client/useMutation";
 import { CommonResult } from "libs/server/withHandler";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { Product } from ".prisma/client";
+import useMe from "libs/client/useMe";
+import Image from "next/image";
 
 interface ProductUploadFormData {
-  file: any;
+  file: FileList;
   name: string;
   price: number;
   description: string;
@@ -26,17 +28,36 @@ interface ProductUploadResult extends CommonResult {
 }
 
 const ProductUpload: NextPage = () => {
+  const me = useMe();
   const router: NextRouter = useRouter();
-  const { register, handleSubmit, getValues } = useForm<ProductUploadFormData>();
+  const [filePreview, setFilePreview] = useState("");
   const [productUploadMutation, { data, loading }] = useMutation<ProductUploadResult>("/api/products/upload");
+  const { register, handleSubmit, getValues, watch } = useForm<ProductUploadFormData>();
+  const watchingFile = watch("file");
 
-  const onValid = () => {
+  const onValid = async () => {
     if (loading === true) {
       return;
     }
     const { file, name, price, description } = getValues();
-    productUploadMutation({ file, name, price, description });
+    if (file && file.length > 0) {
+      const { cloudflareImageId, cloudflareUploadUrl } = await (await fetch("/api/file")).json();
+      const formData = new FormData();
+      formData.append("file", file[0], `${me?.username}_product_${file[0].name}`);
+      await (await fetch(cloudflareUploadUrl, { method: "POST", body: formData })).json();
+      productUploadMutation({ name, price, description, cloudflareImageId });
+    } else {
+      productUploadMutation({ name, price, description });
+    }
   };
+
+  useEffect(() => {
+    if (watchingFile && watchingFile.length > 0) {
+      const file = watchingFile[0];
+      const objectUrl = URL.createObjectURL(file);
+      setFilePreview(objectUrl);
+    }
+  }, [watchingFile]);
 
   useEffect(() => {
     if (data?.ok === true) {
@@ -50,7 +71,7 @@ const ProductUpload: NextPage = () => {
         <div className="content-sub">
           <form onSubmit={handleSubmit(onValid)} className="flex flex-col">
             <label className="transition-all rounded-lg border-dashed border-2 text-gray-200 hover:border-orange-400 hover:text-orange-400 flex justify-center items-center h-[500px] cursor-pointer">
-              <MdAddAPhoto className="text-[40px]" />
+              {filePreview === "" ? <MdAddAPhoto className="text-[40px]" /> : <Image src={filePreview} alt="" className="h-full" />}
               <FileInput register={register("file", { required: true })} required={true} />
             </label>
             <label className="mt-5">
