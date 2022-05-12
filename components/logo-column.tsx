@@ -6,7 +6,7 @@ interface LogoColumnProps {
 }
 
 const LogoColumn = ({ size }: LogoColumnProps) => {
-  return <Image src={logoMainColumn} alt="" className={`${size}`} />;
+  return <Image width={128} height={140} src={logoMainColumn} alt="" className={`${size}`} />;
 };
 
 export default LogoColumn;

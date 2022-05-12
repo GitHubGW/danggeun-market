@@ -27,8 +27,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
       })
     ).json();
 
-    console.log("response", response);
-
     return res.status(200).json({
       ok: true,
       message: "Cloudflare로부터 Image id와 Upload url을 받는데 성공하였습니다.",

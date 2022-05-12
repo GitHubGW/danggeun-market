@@ -11,7 +11,7 @@ interface StreamMessageProps {
 
 const StreamMessage = ({ username, cloudflareImageId, text, isMe }: StreamMessageProps) => {
   return (
-    <div className="flex items-center mb-3">
+    <div className="flex items-center mb-2">
       <Image
         width={34}
         height={34}

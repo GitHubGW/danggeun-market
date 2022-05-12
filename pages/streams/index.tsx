@@ -14,12 +14,12 @@ const Streams: NextPage = () => {
   const infiniteData = useSWRInfiniteScroll<StreamWithUser>(`/api/streams`);
 
   return (
-    <MainLayout pageTitle="라이브" hasFooter={true}>
+    <MainLayout pageTitle="스트리밍" hasFooter={true}>
       <div className="wrapper relative">
         <div className="content mt-8 mb-16">
           <div className="grid grid-cols-3 gap-x-4 gap-y-20">
             {infiniteData?.map((stream) => (
-              <StreamItem key={stream.id} id={stream.id} title={stream.title} user={stream.user} />
+              <StreamItem key={stream.id} id={stream.id} title={stream.title} user={stream.user} cloudflareStreamId={stream.cloudflareStreamId} />
             ))}
           </div>
         </div>

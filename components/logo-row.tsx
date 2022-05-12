@@ -6,7 +6,7 @@ interface LogoRowProps {
 }
 
 const LogoRow = ({ size }: LogoRowProps) => {
-  return <Image src={logoMainRow} alt="" className={`${size}`} />;
+  return <Image width={120} height={34} src={logoMainRow} alt="" className={`${size}`} />;
 };
 
 export default LogoRow;

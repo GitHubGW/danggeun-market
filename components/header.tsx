@@ -12,7 +12,7 @@ const Header = () => {
       <nav className="content flex justify-between items-center">
         <div className="flex items-center">
           <Link href="/">
-            <a className="mb-1.5">
+            <a>
               <LogoRow size="w-32" />
             </a>
           </Link>
@@ -35,7 +35,7 @@ const Header = () => {
             <a>동네생활</a>
           </Link>
           <Link href="/streams">
-            <a>라이브</a>
+            <a>스트리밍</a>
           </Link>
           {me && (
             <Link href="/chats">
