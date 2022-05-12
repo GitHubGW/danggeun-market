@@ -5,14 +5,47 @@ import useSWR from "swr";
 import { NextRouter, useRouter } from "next/router";
 import { CommonResult } from "libs/server/withHandler";
 import { Stream } from ".prisma/client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useMutation from "libs/client/useMutation";
 import DeleteButton from "components/delete-button";
 import useMe from "libs/client/useMe";
+import RecordedVideoItem from "components/items/recorded-video-item";
 
 interface StreamDetailFormData {
   text: string;
+}
+
+interface RecordedVideo {
+  uid: string;
+  meta: { name: string };
+  preview: string;
+  liveInput: string;
+  thumbnail: string;
+  thumbnailTimestampPct: number;
+  allowedOrigins: any[];
+  size: number;
+  input: { width: number; height: number };
+  playback: { hls: string; dash: string };
+  status: { state: string; pctComplete: string; errorReasonCode: string; errorReasonText: string };
+  creator: any;
+  duration: number;
+  maxDurationSeconds: any;
+  maxSizeBytes: any;
+  modified: string;
+  readyToStream: boolean;
+  requireSignedURLs: boolean;
+  uploadExpiry: any;
+  watermark: any;
+  created: string;
+  uploaded: string;
+}
+
+interface RecordedVideos {
+  success: boolean;
+  errors: any[];
+  messages: any[];
+  result: RecordedVideo[];
 }
 
 interface StreamMessages {
@@ -27,17 +60,36 @@ interface StreamWithStreamMessages extends Stream {
 
 interface StreamDetailResult extends CommonResult {
   stream?: StreamWithStreamMessages;
+  recordedVideos?: RecordedVideos;
+}
+
+interface ViewsResult {
+  liveViewers: number;
+}
+
+interface LifecycleResult {
+  isInput: boolean;
+  live: boolean;
+  status: string;
+  videoUID: string | null;
 }
 
 const StreamDetail: NextPage = () => {
   const me = useMe();
   const router: NextRouter = useRouter();
+  const [showStreamInfo, setShowStreamInfo] = useState(false);
+  const [streamMessageAddMutation, { loading: streamMessageAddLoading }] = useMutation<CommonResult>(`/api/streams/${router.query.id}/message`);
+  const [streamDeleteMutation, { data: streamDeleteData, loading: streamDeleteLoading }] = useMutation<CommonResult>(`/api/streams/${router.query.id}/delete`);
+  const { register, handleSubmit, getValues, reset } = useForm<StreamDetailFormData>({ defaultValues: { text: "" } });
   const { data, mutate } = useSWR<StreamDetailResult>(router.query.id ? `/api/streams/${router.query.id}` : null, {
     refreshInterval: 1000,
   });
-  const [streamMessageAddMutation, { data: streamMessageAddData, loading: streamMessageAddLoading }] = useMutation<CommonResult>(`/api/streams/${router.query.id}/message`);
-  const [streamDeleteMutation, { data: streamDeleteData, loading: streamDeleteLoading }] = useMutation<CommonResult>(`/api/streams/${router.query.id}/delete`);
-  const { register, handleSubmit, getValues, reset } = useForm<StreamDetailFormData>({ defaultValues: { text: "" } });
+  const { data: viewsData } = useSWR<ViewsResult>(data?.stream?.cloudflareStreamId ? `https://videodelivery.net/${data?.stream?.cloudflareStreamId}/views` : null, {
+    refreshInterval: 1000,
+  });
+  const { data: lifecycleData } = useSWR<LifecycleResult>(data?.stream?.cloudflareStreamId ? `https://videodelivery.net/${data?.stream?.cloudflareStreamId}/lifecycle` : null, {
+    refreshInterval: 1000,
+  });
 
   const onValid = async () => {
     if (streamMessageAddLoading === true) {
@@ -57,6 +109,10 @@ const StreamDetail: NextPage = () => {
     await streamDeleteMutation();
   };
 
+  const handleToggleStreamInfo = () => {
+    setShowStreamInfo((showStreamInfo) => !showStreamInfo);
+  };
+
   useEffect(() => {
     if (streamDeleteData?.ok === true) {
       router.push("/streams");
@@ -74,17 +130,54 @@ const StreamDetail: NextPage = () => {
       <div className="wrapper">
         <div className="max-w-[700px] mx-auto h-full pt-8 pb-8">
           <div>
-            <div className="w-full rounded-lg bg-slate-200 h-[470px]"></div>
-            <div className="mt-4 mb-4 relative">
-              <h1 className="text-lg font-medium">{data?.stream?.title}</h1>
-              <p className="text-[15px] text-gray-400 mt-0.5">{data?.stream?.description}</p>
+            <div className="w-full rounded-lg aspect-video border">
+              {data?.stream?.cloudflareStreamId ? (
+                <iframe
+                  src={`https://iframe.videodelivery.net/${data?.stream?.cloudflareStreamId}`}
+                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                  allowFullScreen={true}
+                  className="w-full h-full rounded-lg"
+                ></iframe>
+              ) : (
+                <div className="w-full h-full rounded-lg bg-gray-50"></div>
+              )}
+            </div>
+            <div className="mt-3 mb-5 relative">
+              <h1 className="text-xl">
+                {lifecycleData?.live === true && "[생] "}
+                {data?.stream?.title}
+              </h1>
+              {lifecycleData?.live === false ? <p className="text-base text-gray-800 mt-1.5">{data?.stream?.description}</p> : null}
+              {lifecycleData?.live === true ? <p className="text-[14px] text-gray-600 mt-1.5">현재 {viewsData?.liveViewers}명 시청 중</p> : null}
               {data?.stream?.userId === me?.id ? (
-                <div className="absolute right-0 top-2 w-full">
-                  <DeleteButton onClick={handleDeleteStream} text="스트리밍 삭제" />
+                <div className="absolute top-0 right-0 w-full">
+                  <DeleteButton onClick={handleDeleteStream} text="스트림 삭제" />
+                  <button
+                    onClick={handleToggleStreamInfo}
+                    type="button"
+                    className="absolute top-9 right-0 rounded-md text-xs cursor-pointer px-2 py-1.5 border text-gray-400 hover:bg-gray-50"
+                  >
+                    스트림 정보
+                  </button>
                 </div>
               ) : null}
             </div>
           </div>
+
+          {/* 스트림 정보 보기 */}
+          {showStreamInfo === true ? (
+            <div className="px-5 py-5 mb-2 bg-gray-100 rounded-md flex flex-col space-y-4">
+              <div>
+                <p className="font-semibold text-[14px]">서버 URL</p>
+                <span className="text-[14px]">{data?.stream?.cloudflareStreamUrl}</span>
+              </div>
+              <div>
+                <p className="font-semibold text-[14px]">스트림 키</p>
+                <span className="text-[14px]">{data?.stream?.cloudflareStreamKey}</span>
+              </div>
+            </div>
+          ) : null}
+
           <div className="border border-gray-100 rounded-lg">
             <div className="px-3 pt-4 relative h-[40vh] bg-neutral-50 overflow-auto scrollbar-hide">
               {data?.stream?.streamMessages.map((streamMessage) => (
@@ -110,6 +203,22 @@ const StreamDetail: NextPage = () => {
                 </button>
               </div>
             </form>
+          </div>
+
+          {/* 최근 방송 */}
+          <div className="mt-12">
+            <h2 className="mb-3 font-medium">최근 방송</h2>
+            <div className="grid grid-cols-2 gap-x-5 gap-y-14">
+              {data?.recordedVideos?.result.map((recordedVideo: any) => (
+                <RecordedVideoItem
+                  key={recordedVideo.uid}
+                  preview={recordedVideo.preview}
+                  meta={recordedVideo.meta}
+                  duration={recordedVideo.duration}
+                  created={recordedVideo.created}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

@@ -6,13 +6,25 @@ interface StreamItemProps {
   id: number;
   title: string;
   user: { id: number; username: string; cloudflareImageId: string | null };
+  cloudflareStreamId: string | null;
 }
 
-const StreamItem = ({ id, title, user }: StreamItemProps) => {
+const StreamItem = ({ id, title, user, cloudflareStreamId }: StreamItemProps) => {
   return (
     <Link href={`/streams/${id}`}>
       <a>
-        <div className="h-[185px] aspect-video rounded-lg bg-slate-200"></div>
+        <div className="relative h-[185px] shadow-lg rounded-lg hover:opacity-90">
+          {cloudflareStreamId ? (
+            <Image
+              layout="fill"
+              src={`https://videodelivery.net/${cloudflareStreamId}/thumbnails/thumbnail.jpg?height=185`}
+              alt=""
+              className="h-[185px] aspect-video rounded-lg bg-slate-200 border-red"
+            />
+          ) : (
+            <div className="h-[185px] aspect-video rounded-lg bg-slate-200 border-red"></div>
+          )}
+        </div>
         <div className="mt-2 flex">
           <div>
             <Image
