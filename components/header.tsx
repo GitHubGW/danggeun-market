@@ -5,16 +5,29 @@ import Avatar from "./avatar";
 import useMe from "libs/client/useMe";
 import useMutation from "libs/client/useMutation";
 import { CommonResult } from "libs/server/withHandler";
+import { useForm } from "react-hook-form";
+import { NextRouter, useRouter } from "next/router";
+
+interface SearchFormData {
+  keyword: string;
+}
 
 const Header = () => {
   const me = useMe();
-  const [logoutMutation, { data, loading }] = useMutation<CommonResult>("/api/logout");
+  const router: NextRouter = useRouter();
+  const [logoutMutation, { loading }] = useMutation<CommonResult>("/api/logout");
+  const { register, handleSubmit, getValues } = useForm<SearchFormData>({ defaultValues: { keyword: "" } });
 
   const handleLogout = async () => {
     if (loading === true) {
       return;
     }
     await logoutMutation();
+  };
+
+  const onValid = () => {
+    const { keyword } = getValues();
+    router.push(`/search?keyword=${keyword}`);
   };
 
   return (
@@ -26,11 +39,14 @@ const Header = () => {
               <LogoRow size="w-32" />
             </a>
           </Link>
-          <form className="ml-8 relative">
+          <form onSubmit={handleSubmit(onValid)} className="ml-10 relative">
             <input
+              {...register("keyword", { required: true, maxLength: 30 })}
+              required
+              maxLength={30}
               type="text"
-              placeholder="동네 이름, 물품명 등을 검색해보세요!"
-              className="rounded-md outline-none border focus:border-black w-[400px] px-3 py-1.5 text-md placeholder:text-gray-300"
+              placeholder="동네생활, 물품명 등을 검색해보세요!"
+              className="rounded-md outline-none border focus:border-black w-[380px] px-3 py-1.5 text-md placeholder:text-gray-300"
             />
             <button type="submit" className="absolute text-gray-400 right-3.5 top-1/2 -translate-y-1/2">
               <BiSearch size={20} />
