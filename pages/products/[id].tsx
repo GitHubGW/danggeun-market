@@ -5,12 +5,11 @@ import ProductItem from "components/items/product-item";
 import Region from "components/region";
 import Username from "components/username";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import Button from "components/button";
 import Separator from "components/separator";
 import MainLayout from "components/layouts/main-layout";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { NextRouter, useRouter } from "next/router";
-import { Product } from ".prisma/client";
+import { Product, Chat } from ".prisma/client";
 import { CommonResult } from "libs/server/withHandler";
 import CreatedAt from "components/created-at";
 import useMutation from "libs/client/useMutation";
@@ -18,6 +17,8 @@ import { useEffect } from "react";
 import DetailImage from "components/detail-image";
 import DeleteButton from "components/delete-button";
 import useMe from "libs/client/useMe";
+import { BsBagPlusFill, BsFillCheckCircleFill } from "react-icons/bs";
+import FloatingButton from "components/floating-button";
 
 interface ProductWithUserAndCount extends Product {
   user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
@@ -35,14 +36,24 @@ interface ProductDetailResult extends CommonResult {
   isLiked: boolean;
 }
 
+interface ChatCreateResult extends CommonResult {
+  chat?: Chat;
+}
+
 const ProductDetail: NextPage = () => {
   const me = useMe();
   const router: NextRouter = useRouter();
+  const { mutate: configMutate } = useSWRConfig();
   const { data, mutate } = useSWR<ProductDetailResult>(router.query.id && `/api/products/${router.query.id}`);
   const [productLikeMutation] = useMutation<CommonResult>(`/api/products/${router.query.id}/like`);
   const [productDeleteMutation, { data: productDeleteData, loading: productDeleteLoading }] = useMutation<CommonResult>(`/api/products/${router.query.id}/delete`);
+  const [productSoldOutMutation, { data: productSoldOutData, loading: productSoldOutLoading }] = useMutation<CommonResult>(`/api/products/${router.query.id}/soldout`);
+  const [chatCreateMutation, { data: chatCreateData, loading: chatCreateLoading }] = useMutation<ChatCreateResult>(`/api/chats/create`);
 
   const handleToggleProductLike = async () => {
+    if (me === undefined) {
+      return router.push("/login");
+    }
     if (data === undefined) {
       return;
     }
@@ -66,6 +77,36 @@ const ProductDetail: NextPage = () => {
     await productDeleteMutation();
   };
 
+  const handleSoldOut = async () => {
+    if (productSoldOutLoading === true) {
+      return;
+    }
+    mutate((prev) => {
+      return prev && prev.product && { ...prev, product: { ...prev.product, isSelling: false } };
+    }, false);
+    await productSoldOutMutation();
+    configMutate(`/api/users/${me?.username}/sales`);
+    configMutate(`/api/users/${me?.username}/soldout`);
+  };
+
+  const handleChatWithSeller = async () => {
+    if (me === undefined) {
+      router.push("/login");
+    }
+    if (chatCreateLoading === true) {
+      return;
+    }
+    await chatCreateMutation({ sellerId: data?.product?.user.id });
+  };
+
+  useEffect(() => {
+    console.log("chatCreateData", chatCreateData);
+
+    if (chatCreateData && chatCreateData.ok === true) {
+      router.push(`/chats/${chatCreateData.chat?.id}`);
+    }
+  }, [chatCreateData, router]);
+
   useEffect(() => {
     if (productDeleteData?.ok === true) {
       router.push("/products");
@@ -84,8 +125,9 @@ const ProductDetail: NextPage = () => {
         <div className="content-sub">
           {/* 상품 상세 정보 */}
           <div>
-            <div className="cursor-pointer">
+            <div className={`${data?.product?.isSelling === false ? "opacity-50" : ""} cursor-pointer relative`}>
               <DetailImage cloudflareImageId={data?.product?.cloudflareImageId} />
+              {data?.product?.isSelling === false ? <BsFillCheckCircleFill size={100} className="text-black absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" /> : null}
             </div>
             <div className="border-b pt-6 pb-5 flex items-center relative">
               <div>
@@ -119,7 +161,35 @@ const ProductDetail: NextPage = () => {
               </p>
             </div>
             <div className="flex items-center justify-between py-4 border-t border-b">
-              <Button loading={false} type="button" text="채팅으로 거래하기" size="w-full" />
+              {data?.product?.userId === me?.id && (data?.product?.isSelling === false || productSoldOutData?.ok === true) ? (
+                <button type="button" disabled={true} className="w-full flex justify-center items-center px-4 py-2.5 h-[44px] max-h-[44px] rounded-[4px] text-white bg-gray-300">
+                  판매를 완료하었습니다.
+                </button>
+              ) : null}
+              {data?.product?.userId === me?.id && (data?.product?.isSelling === true || productSoldOutData?.ok === false) ? (
+                <button
+                  onClick={handleSoldOut}
+                  type="button"
+                  className="w-full flex justify-center items-center cursor-pointer px-4 py-2.5 h-[44px] max-h-[44px] rounded-[4px] text-white bg-orange-400 hover:bg-orange-500"
+                >
+                  판매 완료
+                </button>
+              ) : null}
+
+              {data?.product?.isSelling === true && data?.product?.userId !== me?.id ? (
+                <button
+                  onClick={handleChatWithSeller}
+                  type="button"
+                  className="w-full flex justify-center items-center cursor-pointer px-4 py-2.5 h-[44px] max-h-[44px] rounded-[4px] text-white bg-orange-400 hover:bg-orange-500"
+                >
+                  채팅으로 거래하기
+                </button>
+              ) : null}
+              {data?.product?.isSelling === false && data?.product?.userId !== me?.id ? (
+                <button type="button" disabled={true} className="w-full flex justify-center items-center px-4 py-2.5 h-[44px] max-h-[44px] rounded-[4px] text-white bg-gray-300">
+                  판매를 완료하었습니다.
+                </button>
+              ) : null}
               {data?.isLiked === true ? (
                 <AiFillHeart onClick={handleToggleProductLike} className="text-red-500 text-[44px] p-2 ml-2 cursor-pointer rounded-full hover:bg-gray-100" />
               ) : (
@@ -149,6 +219,9 @@ const ProductDetail: NextPage = () => {
             </section>
           </div>
         </div>
+        <FloatingButton href={me ? "/products/upload" : "/login"}>
+          <BsBagPlusFill />
+        </FloatingButton>
       </div>
     </MainLayout>
   );
