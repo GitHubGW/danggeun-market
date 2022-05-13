@@ -3,9 +3,19 @@ import LogoRow from "./logo-row";
 import { BiSearch } from "react-icons/bi";
 import Avatar from "./avatar";
 import useMe from "libs/client/useMe";
+import useMutation from "libs/client/useMutation";
+import { CommonResult } from "libs/server/withHandler";
 
 const Header = () => {
   const me = useMe();
+  const [logoutMutation, { data, loading }] = useMutation<CommonResult>("/api/logout");
+
+  const handleLogout = async () => {
+    if (loading === true) {
+      return;
+    }
+    await logoutMutation();
+  };
 
   return (
     <header className="py-3 border-b border-gray-200 h-[63px] max-h-[63px]">
@@ -50,9 +60,9 @@ const Header = () => {
             </Link>
           )}
           {me && (
-            <Link href="/logout">
-              <a className="bg-orange-400 hover:bg-orange-500 py-2 px-3.5 text-white rounded-md">로그아웃</a>
-            </Link>
+            <button onClick={handleLogout} type="button" className="bg-orange-400 hover:bg-orange-500 py-2 px-3.5 text-white rounded-md">
+              로그아웃
+            </button>
           )}
           {me === undefined && (
             <Link href="/login">

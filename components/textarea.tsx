@@ -5,10 +5,11 @@ interface TextareaProps {
   rows: number;
   maxLength: number;
   placeholder: string;
+  style?: string;
 }
 
-const Textarea = ({ register, rows, maxLength, placeholder }: TextareaProps) => {
-  return <textarea {...register} required rows={rows} maxLength={maxLength} placeholder={placeholder} className="resize-none input ring-normal" />;
+const Textarea = ({ register, rows, maxLength, placeholder, style }: TextareaProps) => {
+  return <textarea {...register} required rows={rows} maxLength={maxLength} placeholder={placeholder} className={`${style} resize-none input ring-normal`} />;
 };
 
 export default Textarea;

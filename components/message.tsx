@@ -1,24 +1,23 @@
 import Image from "next/image";
 import basicUser from "public/images/basic_user.png";
+import CreatedAt from "components/created-at";
 
 interface MessageProps {
   isMe: boolean;
   cloudflareImageId?: string;
-  createdAt: string;
+  createdAt?: Date | string;
   text: string;
 }
 
 const Message = ({ isMe, cloudflareImageId, text, createdAt }: MessageProps) => {
-  console.log("cloudflareImageId", cloudflareImageId);
-
   return (
     <>
       {isMe === true ? (
-        <div className="flex flex-row-reverse items-end mb-4">
+        <div className="flex flex-row-reverse items-end mb-3">
           <div className="text-sm bg-orange-500 text-white rounded-2xl rounded-tr-none py-2.5 px-3.5">
             <p>{text}</p>
           </div>
-          <time className="text-xs text-gray-400 mr-1">{createdAt}</time>
+          <CreatedAt date={createdAt} size="text-[12px]" style="text-gray-400 mr-2" />
         </div>
       ) : (
         <div className="flex mb-4">
@@ -35,7 +34,7 @@ const Message = ({ isMe, cloudflareImageId, text, createdAt }: MessageProps) => 
             <p>{text}</p>
           </div>
           <div className="flex items-end">
-            <time className="text-xs text-gray-400 ml-1">{createdAt}</time>
+            <CreatedAt date={createdAt} size="text-[12px]" style="text-gray-400 ml-2" />
           </div>
         </div>
       )}

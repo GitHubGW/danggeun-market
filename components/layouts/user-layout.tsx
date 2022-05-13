@@ -17,6 +17,8 @@ interface UserDetailWithCount extends User {
 
 interface UserDetailResult extends CommonResult {
   user?: UserDetailWithCount;
+  sellingProducts: number;
+  soldOutProducts: number;
 }
 
 const UserLayout = ({ children }: UserLayoutProps) => {
@@ -49,35 +51,35 @@ const UserLayout = ({ children }: UserLayoutProps) => {
                 <li className={`text-[17px] ${router.pathname === "/users/[username]/posts" ? "text-orange-400 font-normal" : "font-normal"}`}>
                   <Link href={`/users/${data?.user?.username}/posts`}>
                     <a className={`py-2.5 px-4 ${router.pathname === "/users/[username]/posts" ? "border-b-[3px] border-orange-400" : ""}`}>
-                      동네생활 ({data?.user?._count.posts})
+                      동네생활 ({data?.user?._count.posts || 0})
                     </a>
                   </Link>
                 </li>
                 <li className={`text-[17px] ${router.pathname === "/users/[username]/likes" ? "text-orange-400 font-normal" : "font-normal"}`}>
                   <Link href={`/users/${data?.user?.username}/likes`}>
                     <a className={`py-2.5 px-4 ${router.pathname === "/users/[username]/likes" ? "border-b-[3px] border-orange-400" : ""}`}>
-                      관심 목록 ({Number(data?.user?._count.productLikes) + Number(data?.user?._count.postLikes)})
+                      관심 목록 ({Number(data?.user?._count.productLikes) + Number(data?.user?._count.postLikes) || 0})
                     </a>
                   </Link>
                 </li>
                 <li className={`text-[17px] ${router.pathname === "/users/[username]/sales" ? "text-orange-400 font-normal" : "font-normal"}`}>
                   <Link href={`/users/${data?.user?.username}/sales`}>
                     <a className={`py-2.5 px-4 ${router.pathname === "/users/[username]/sales" ? "border-b-[3px] border-orange-400" : ""}`}>
-                      판매 물품 ({data?.user?._count.sales})
+                      판매 물품 ({data?.sellingProducts || 0})
                     </a>
                   </Link>
                 </li>
-                <li className={`text-[17px] ${router.pathname === "/users/[username]/purchases" ? "text-orange-400 font-normal" : "font-normal"}`}>
-                  <Link href={`/users/${data?.user?.username}/purchases`}>
-                    <a className={`py-2.5 px-4 ${router.pathname === "/users/[username]/purchases" ? "border-b-[3px] border-orange-400" : ""}`}>
-                      구매 물품 ({data?.user?._count.purchases})
+                <li className={`text-[17px] ${router.pathname === "/users/[username]/soldout" ? "text-orange-400 font-normal" : "font-normal"}`}>
+                  <Link href={`/users/${data?.user?.username}/soldout`}>
+                    <a className={`py-2.5 px-4 ${router.pathname === "/users/[username]/soldout" ? "border-b-[3px] border-orange-400" : ""}`}>
+                      판매 완료 ({data?.soldOutProducts || 0})
                     </a>
                   </Link>
                 </li>
                 <li className={`text-[17px] ${router.pathname === "/users/[username]/reviews" ? "text-orange-400 font-normal" : "font-normal"}`}>
                   <Link href={`/users/${data?.user?.username}/reviews`}>
                     <a className={`py-2.5 px-4 ${router.pathname === "/users/[username]/reviews" ? "border-b-[3px] border-orange-400" : ""}`}>
-                      거래 후기 ({data?.user?._count.receivedReviews})
+                      거래 후기 ({data?.user?._count.receivedReviews || 0})
                     </a>
                   </Link>
                 </li>
@@ -89,8 +91,8 @@ const UserLayout = ({ children }: UserLayoutProps) => {
               {router.pathname === "/users/[username]/likes" && Number(data?.user?._count.productLikes) + Number(data?.user?._count.postLikes) === 0 && (
                 <p className="text-center mt-20">관심 목록이 없습니다. :(</p>
               )}
-              {router.pathname === "/users/[username]/sales" && data?.user?._count.sales === 0 && <p className="text-center mt-20">판매 물품이 없습니다. :(</p>}
-              {router.pathname === "/users/[username]/purchases" && data?.user?._count.purchases === 0 && <p className="text-center mt-20">구매 물품이 없습니다. :(</p>}
+              {router.pathname === "/users/[username]/sales" && data?.sellingProducts === 0 && <p className="text-center mt-20">판매 중인 물품이 없습니다. :(</p>}
+              {router.pathname === "/users/[username]/soldout" && data?.soldOutProducts === 0 && <p className="text-center mt-20">판매 완료한 물품이 없습니다. :(</p>}
               {router.pathname === "/users/[username]/reviews" && data?.user?._count.receivedReviews === 0 && <p className="text-center mt-20">거래 후기가 없습니다. :(</p>}
               <div className="grid grid-cols-3 gap-x-9 gap-y-12">{children}</div>
             </div>
