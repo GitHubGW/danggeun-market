@@ -3,7 +3,7 @@ import MainLayout from "components/layouts/main-layout";
 import UserLayout from "components/layouts/user-layout";
 import ProductItem from "components/items/product-item";
 import { NextRouter, useRouter } from "next/router";
-import { Product, Sale } from ".prisma/client";
+import { Product } from ".prisma/client";
 import useSWRInfiniteScroll from "libs/client/useSWRInfiniteScroll";
 
 interface ProductWithUserAndCount extends Product {
@@ -11,26 +11,23 @@ interface ProductWithUserAndCount extends Product {
   _count: { productLikes: number };
 }
 
-interface SaleWithProduct extends Sale {
-  product: ProductWithUserAndCount;
-}
-
 const UserSales: NextPage = () => {
   const router: NextRouter = useRouter();
-  const infiniteData = useSWRInfiniteScroll<SaleWithProduct>(router.query.username ? `/api/users/${router.query.username}/sales` : null);
+  const infiniteData = useSWRInfiniteScroll<ProductWithUserAndCount>(router.query.username ? `/api/users/${router.query.username}/sales` : null);
 
   return (
-    <MainLayout pageTitle="판매 물품" hasFooter={true}>
+    <MainLayout pageTitle="판매 중인 물품" hasFooter={true}>
       <UserLayout>
-        {infiniteData?.map((sale) => (
+        {infiniteData?.map((product) => (
           <ProductItem
-            key={sale.product.id}
-            id={sale.product.id}
-            name={sale.product.name}
-            price={sale.product.price}
-            cloudflareImageId={sale.product.cloudflareImageId}
-            user={sale.product.user}
-            _count={sale.product._count}
+            key={product.id}
+            id={product.id}
+            name={product.name}
+            price={product.price}
+            cloudflareImageId={product.cloudflareImageId}
+            user={product.user}
+            _count={product._count}
+            isSelling={product.isSelling}
           />
         ))}
       </UserLayout>

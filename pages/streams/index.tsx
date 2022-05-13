@@ -5,12 +5,14 @@ import FloatingButton from "components/floating-button";
 import { RiVideoAddFill } from "react-icons/ri";
 import { Stream } from ".prisma/client";
 import useSWRInfiniteScroll from "libs/client/useSWRInfiniteScroll";
+import useMe from "libs/client/useMe";
 
 interface StreamWithUser extends Stream {
   user: { id: number; username: string; cloudflareImageId: string | null };
 }
 
 const Streams: NextPage = () => {
+  const me = useMe();
   const infiniteData = useSWRInfiniteScroll<StreamWithUser>(`/api/streams`);
 
   return (
@@ -23,7 +25,7 @@ const Streams: NextPage = () => {
             ))}
           </div>
         </div>
-        <FloatingButton href="/streams/create">
+        <FloatingButton href={me ? "/streams/create" : "/login"}>
           <RiVideoAddFill />
         </FloatingButton>
       </div>

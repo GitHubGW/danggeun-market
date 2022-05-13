@@ -94,12 +94,12 @@ const UserEdit: NextPage = () => {
         <div className="content-sub flex items-center">
           <form onSubmit={handleSubmit(onValid)} className="flex flex-col w-full pt-10">
             <div className="flex justify-center">
-              <label className="transition-all rounded-full flex justify-center items-center cursor-pointer">
+              <label className="border transition-all rounded-full flex justify-center items-center cursor-pointer">
                 {avatarPreview === "" ? (
                   <Image
                     width={224}
                     height={224}
-                    src={me?.cloudflareImageId ? `https://imagedelivery.net/mrfqMz0r88w_Qqln2FwPhQ/${me?.cloudflareImageId}/avatar` : basicUser}
+                    src={me?.cloudflareImageId ? `https://imagedelivery.net/mrfqMz0r88w_Qqln2FwPhQ/${me?.cloudflareImageId}/public` : basicUser}
                     alt=""
                     className="border border-gray-200 rounded-full w-56 h-56"
                   />

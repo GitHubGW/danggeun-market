@@ -22,6 +22,8 @@ import heartIcon from "public/images/heart_icon.svg";
 import thumbIcon from "public/images/thumb_icon.svg";
 import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
 import { Product } from ".prisma/client";
+import FloatingButton from "components/floating-button";
+import { RiPencilFill } from "react-icons/ri";
 
 interface PostDetailFormData {
   text: string;
@@ -55,6 +57,9 @@ const PostDetail: NextPage = () => {
   const { register, handleSubmit, getValues, reset } = useForm<PostDetailFormData>({ defaultValues: { text: "" } });
 
   const handleTogglePostLike = async () => {
+    if (me === undefined) {
+      return router.push("/login");
+    }
     if (data === undefined || data.post === undefined) {
       return;
     }
@@ -171,12 +176,16 @@ const PostDetail: NextPage = () => {
             <input
               {...register("text", { required: true, maxLength: 80 })}
               type="text"
-              placeholder="댓글을 입력해주세요."
+              placeholder={me === undefined ? "로그인 후 댓글 입력가능합니다." : "댓글을 입력해주세요."}
               required
               maxLength={80}
               className="ml-3 w-full border pl-4 pr-16 py-1.5 rounded-full outline-none placeholder:text-gray-300 text-[15px] ring-normal"
             />
-            <button type="submit" className="absolute rounded-full right-[4px] text-xs cursor-pointer px-3 py-1.5 text-white bg-orange-400 hover:bg-orange-500">
+            <button
+              disabled={me === undefined}
+              type="submit"
+              className="absolute rounded-full right-[4px] text-xs cursor-pointer px-3 py-1.5 text-white bg-orange-400 hover:bg-orange-500"
+            >
               작성
             </button>
           </form>
@@ -202,6 +211,7 @@ const PostDetail: NextPage = () => {
                         cloudflareImageId={product.cloudflareImageId}
                         user={product.user}
                         _count={product._count}
+                        isSelling={product.isSelling}
                       />
                     ))}
                   </div>
@@ -210,6 +220,9 @@ const PostDetail: NextPage = () => {
             </section>
           </div>
         </div>
+        <FloatingButton href={me ? "/posts/write" : "/login"}>
+          <RiPencilFill />
+        </FloatingButton>
       </div>
     </MainLayout>
   );

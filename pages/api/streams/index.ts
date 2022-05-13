@@ -15,6 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
       take: LIMIT,
       skip: (+page - 1) * LIMIT,
     });
+
     return res.status(200).json({ ok: true, message: "전체 스트리밍 보기에 성공하였습니다.", infiniteData: foundStreams });
   } catch (error) {
     console.log("streams handler error");

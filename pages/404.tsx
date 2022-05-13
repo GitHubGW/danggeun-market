@@ -12,7 +12,7 @@ const NotFound: NextPage = () => {
           <div className="mb-4">
             <Image width={250} height={250} src={background404} alt="" />
           </div>
-          <h2 className="text-3xl font-semibold">앗! 죄송해요.</h2>
+          <h2 className="text-2xl font-semibold">앗! 죄송해요.</h2>
           <p className="text-base text-center my-5">
             원하시는 페이지를 찾을 수 없어요.
             <br />

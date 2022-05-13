@@ -5,6 +5,7 @@ import FloatingButton from "components/floating-button";
 import { BsBagPlusFill } from "react-icons/bs";
 import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
 import { MutableRefObject, useRef } from "react";
+import useMe from "libs/client/useMe";
 
 interface ProductWithUserAndCount extends Product {
   user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
@@ -12,6 +13,7 @@ interface ProductWithUserAndCount extends Product {
 }
 
 const Products = () => {
+  const me = useMe();
   const moreRef: MutableRefObject<HTMLSpanElement | null> = useRef(null);
   const infiniteData = useSWRInfiniteClick<ProductWithUserAndCount>(`/api/products`, moreRef);
 
@@ -31,6 +33,7 @@ const Products = () => {
                   cloudflareImageId={product.cloudflareImageId}
                   user={product.user}
                   _count={product._count}
+                  isSelling={product.isSelling}
                 />
               ))}
             </div>
@@ -39,7 +42,7 @@ const Products = () => {
             </span>
           </div>
         </div>
-        <FloatingButton href="/products/upload">
+        <FloatingButton href={me ? "/products/upload" : "/login"}>
           <BsBagPlusFill />
         </FloatingButton>
       </section>

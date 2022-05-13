@@ -70,8 +70,8 @@ const ProductUpload: NextPage = () => {
       <div className="wrapper">
         <div className="content-sub">
           <form onSubmit={handleSubmit(onValid)} className="flex flex-col">
-            <label className="transition-all rounded-lg border-dashed border-2 text-gray-200 hover:border-orange-400 hover:text-orange-400 flex justify-center items-center h-[500px] cursor-pointer">
-              {filePreview === "" ? <MdAddAPhoto className="text-[40px]" /> : <Image src={filePreview} alt="" className="h-full" />}
+            <label className="relative transition-all rounded-lg border-dashed border-2 text-gray-200 hover:border-orange-400 hover:text-orange-400 flex justify-center items-center h-[500px] cursor-pointer">
+              {filePreview === "" ? <MdAddAPhoto className="text-[40px]" /> : <Image objectFit="cover" layout="fill" src={filePreview} alt="" className="h-full rounded-lg" />}
               <FileInput register={register("file", { required: true })} required={true} />
             </label>
             <label className="mt-5">

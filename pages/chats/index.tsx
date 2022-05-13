@@ -4,7 +4,7 @@ import MainLayout from "components/layouts/main-layout";
 
 const Chats = () => {
   return (
-    <MainLayout pageTitle="채팅" hasFooter={false}>
+    <MainLayout pageTitle="전체 채팅" hasFooter={false}>
       <ChatLayout>
         <div className="text-gray-300 h-full flex flex-col justify-center items-center">
           <IoChatbubblesOutline size={80} />

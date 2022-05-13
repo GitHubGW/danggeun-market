@@ -11,6 +11,8 @@ import useMutation from "libs/client/useMutation";
 import DeleteButton from "components/delete-button";
 import useMe from "libs/client/useMe";
 import RecordedVideoItem from "components/items/recorded-video-item";
+import FloatingButton from "components/floating-button";
+import { RiVideoAddFill } from "react-icons/ri";
 
 interface StreamDetailFormData {
   text: string;
@@ -221,6 +223,9 @@ const StreamDetail: NextPage = () => {
             </div>
           </div>
         </div>
+        <FloatingButton href={me ? "/streams/create" : "/login"}>
+          <RiVideoAddFill />
+        </FloatingButton>
       </div>
     </MainLayout>
   );

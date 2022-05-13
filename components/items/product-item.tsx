@@ -24,7 +24,7 @@ const ProductItem = ({ id, name, price, cloudflareImageId, user, _count, isSelli
           alt={name}
           className="border border-gray-100 rounded-2xl transition-all hover:scale-[1.02]"
         />
-        <h3 className="mt-3 mb-0.5">{name}</h3>
+        <h3 className="mt-1 mb-0.5">{name}</h3>
         <div className="flex items-center mt-0.5">
           {isSelling === false ? <span className="text-white bg-gray-700 text-xs px-2 py-1.5 rounded-[4px] mr-1.5">거래완료</span> : null}
           <span className="font-semibold">{price}원</span>

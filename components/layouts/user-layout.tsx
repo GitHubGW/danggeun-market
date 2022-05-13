@@ -6,6 +6,7 @@ import { NextRouter, useRouter } from "next/router";
 import useSWR from "swr";
 import { CommonResult } from "libs/server/withHandler";
 import { Prisma, User } from ".prisma/client";
+import { useEffect } from "react";
 
 interface UserLayoutProps {
   children: React.ReactNode;
@@ -24,6 +25,12 @@ interface UserDetailResult extends CommonResult {
 const UserLayout = ({ children }: UserLayoutProps) => {
   const router: NextRouter = useRouter();
   const { data } = useSWR<UserDetailResult>(router.query.username ? `/api/users/${router.query.username}` : null);
+
+  useEffect(() => {
+    if (data?.ok === false) {
+      router.push("/");
+    }
+  }, [data, router]);
 
   return (
     <div className="wrapper">

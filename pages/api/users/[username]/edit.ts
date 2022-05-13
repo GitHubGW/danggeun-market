@@ -34,12 +34,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     await prisma?.user.update({
       where: { id: loggedInUser?.id },
       data: {
-        username,
-        email,
-        phone,
+        ...(username && { username }),
+        ...(email && { email }),
+        ...(phone && { phone }),
         ...(cloudflareImageId && { cloudflareImageId }),
       },
     });
+
     return res.status(200).json({ ok: true, message: "프로필 수정에 성공하였습니다." });
   } catch (error) {
     console.log("user edit handler error", error);

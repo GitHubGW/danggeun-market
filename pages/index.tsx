@@ -174,6 +174,7 @@ const Home: NextPage = () => {
                       cloudflareImageId={product.cloudflareImageId}
                       user={product.user}
                       _count={product._count}
+                      isSelling={product.isSelling}
                     />
                   ))}
                 </div>
@@ -213,7 +214,7 @@ const Home: NextPage = () => {
             </div>
           </section>
         </div>
-        <FloatingButton href="/products/upload">
+        <FloatingButton href={me ? "/products/upload" : "/login"}>
           <BsBagPlusFill />
         </FloatingButton>
       </div>

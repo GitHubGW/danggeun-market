@@ -6,6 +6,7 @@ import { Post } from ".prisma/client";
 import PostItem from "components/items/post-item";
 import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
 import { MutableRefObject, useRef } from "react";
+import useMe from "libs/client/useMe";
 
 interface PostWithUserAndCount extends Post {
   user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
@@ -13,6 +14,7 @@ interface PostWithUserAndCount extends Post {
 }
 
 const Posts: NextPage = () => {
+  const me = useMe();
   const moreRef: MutableRefObject<HTMLSpanElement | null> = useRef(null);
   const infiniteData = useSWRInfiniteClick<PostWithUserAndCount>(`/api/posts`, moreRef);
 
@@ -30,7 +32,7 @@ const Posts: NextPage = () => {
             </span>
           </div>
         </div>
-        <FloatingButton href="/posts/write">
+        <FloatingButton href={me ? "/posts/write" : "/login"}>
           <RiPencilFill />
         </FloatingButton>
       </div>
