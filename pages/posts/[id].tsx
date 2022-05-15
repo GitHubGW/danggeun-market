@@ -176,7 +176,7 @@ const PostDetail: NextPage = () => {
             <input
               {...register("text", { required: true, maxLength: 80 })}
               type="text"
-              placeholder={me === undefined ? "로그인 후 댓글 입력가능합니다." : "댓글을 입력해주세요."}
+              placeholder={me === undefined ? "로그인 후 이용가능합니다." : "댓글을 입력해주세요."}
               required
               maxLength={80}
               className="ml-3 w-full border pl-4 pr-16 py-1.5 rounded-full outline-none placeholder:text-gray-300 text-[15px] ring-normal"

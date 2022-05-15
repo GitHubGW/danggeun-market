@@ -7,6 +7,7 @@ import useSWR from "swr";
 import { CommonResult } from "libs/server/withHandler";
 import { Prisma, User } from ".prisma/client";
 import { useEffect } from "react";
+import useMe from "libs/client/useMe";
 
 interface UserLayoutProps {
   children: React.ReactNode;
@@ -23,6 +24,7 @@ interface UserDetailResult extends CommonResult {
 }
 
 const UserLayout = ({ children }: UserLayoutProps) => {
+  const me = useMe();
   const router: NextRouter = useRouter();
   const { data } = useSWR<UserDetailResult>(router.query.username ? `/api/users/${router.query.username}` : null);
 
@@ -44,9 +46,11 @@ const UserLayout = ({ children }: UserLayoutProps) => {
               <div className="flex flex-col">
                 <div className="flex items-center">
                   <Username text={data?.user?.username} size="text-xl" textDecoration={false} />
-                  <Link href={`/users/${data?.user?.username}/edit`}>
-                    <a className="ml-2.5 text-xs border text-gray-400 hover:text-gray-600 hover:border-gray-600 px-1.5 py-0.5 rounded-sm">프로필 수정</a>
-                  </Link>
+                  {router.query.username === me?.username ? (
+                    <Link href={`/users/${data?.user?.username}/edit`}>
+                      <a className="ml-2.5 text-xs border text-gray-400 hover:text-gray-600 hover:border-gray-600 px-1.5 py-0.5 rounded-sm">프로필 수정</a>
+                    </Link>
+                  ) : null}
                 </div>
                 <Region text={data?.user?.address} size="text-md" />
               </div>

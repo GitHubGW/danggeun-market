@@ -80,7 +80,7 @@ const ChatDetail = () => {
   }, [chatDeleteData, router]);
 
   return (
-    <MainLayout pageTitle="채팅" hasFooter={false}>
+    <MainLayout pageTitle={`${opponent?.user.username ? `${opponent?.user.username}님과 채팅` : "채팅"}`} hasFooter={false}>
       <ChatLayout>
         <div className="h-full pb-3">
           <div className="h-[calc(100%_-_110px)] relative">

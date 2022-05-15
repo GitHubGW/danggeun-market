@@ -16,7 +16,7 @@ const UserSoldOut: NextPage = () => {
   const infiniteData = useSWRInfiniteScroll<ProductWithUserAndCount>(router.query.username ? `/api/users/${router.query.username}/soldout` : null);
 
   return (
-    <MainLayout pageTitle="판매 완료 물품" hasFooter={true}>
+    <MainLayout pageTitle="판매 완료" hasFooter={true}>
       <UserLayout>
         {infiniteData?.map((product) => (
           <ProductItem

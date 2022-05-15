@@ -161,12 +161,12 @@ const ProductDetail: NextPage = () => {
               </p>
             </div>
             <div className="flex items-center justify-between py-4 border-t border-b">
-              {data?.product?.userId === me?.id && (data?.product?.isSelling === false || productSoldOutData?.ok === true) ? (
+              {data?.product?.userId === me?.id && data?.product?.isSelling === false ? (
                 <button type="button" disabled={true} className="w-full flex justify-center items-center px-4 py-2.5 h-[44px] max-h-[44px] rounded-[4px] text-white bg-gray-300">
                   판매를 완료하었습니다.
                 </button>
               ) : null}
-              {data?.product?.userId === me?.id && (data?.product?.isSelling === true || productSoldOutData?.ok === false) ? (
+              {data?.product?.userId === me?.id && data?.product?.isSelling === true ? (
                 <button
                   onClick={handleSoldOut}
                   type="button"

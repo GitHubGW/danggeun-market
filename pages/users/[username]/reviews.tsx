@@ -100,23 +100,28 @@ const UserReviews: NextPage = () => {
             ))}
           </div>
 
-          {me?.username !== router.query.username ? (
+          {me && me?.username !== router.query.username ? (
             <>
-              <div className="rating-container mt-8">
+              <div className="rating-container mt-20">
                 <fieldset>
                   {[5, 4, 3, 2, 1].map((index) => (
                     <React.Fragment key={index}>
                       <input {...register("rating")} type="radio" value={index} id={`rate${index}`} className="hidden" />
-                      <label onClick={() => handleRating(index)} htmlFor={`rate${index}`} className="text-xl text-[lightgray] hover:text-[gold] cursor-pointer">
+                      <label onClick={() => handleRating(index)} htmlFor={`rate${index}`} className="text-lg text-[lightgray] hover:text-[gold] cursor-pointer">
                         ★
                       </label>
                     </React.Fragment>
                   ))}
-                  <span className="text-medium text-base mr-1.5 text-gray-400">.평점을 선택해주세요</span>
+                  <span className="text-medium text-[15px] mr-1.5 text-gray-400">.평점을 선택해주세요</span>
                 </fieldset>
               </div>
               <form onClick={handleSubmit(onValid)}>
-                <Textarea register={register("text", { required: true })} rows={5} maxLength={200} placeholder="거래 후에 상대방에게 감사 인사를 남겨보세요." />
+                <Textarea
+                  register={register("text", { required: true })}
+                  rows={5}
+                  maxLength={200}
+                  placeholder={me === undefined ? "로그인 후 이용가능합니다." : "거래 후에 상대방에게 감사 인사를 남겨보세요."}
+                />
                 <Button loading={false} type="submit" text="작성" size="w-full" />
               </form>
             </>

@@ -197,10 +197,14 @@ const StreamDetail: NextPage = () => {
                 <input
                   {...register("text", { required: true, maxLength: 80 })}
                   maxLength={80}
-                  placeholder="메세지를 입력해주세요."
+                  placeholder={me === undefined ? "로그인 후 이용가능합니다." : "메세지를 입력해주세요."}
                   className="text-[15px] outline-none w-full placeholder:text-gray-300"
                 />
-                <button type="submit" className="absolute right-0.5 bottom-1 flex items-end px-4 py-1.5 rounded-md bg-orange-400 hover:bg-orange-500 text-sm text-white">
+                <button
+                  disabled={me === undefined}
+                  type="submit"
+                  className="absolute right-0.5 bottom-1 flex items-end px-4 py-1.5 rounded-md bg-orange-400 hover:bg-orange-500 text-sm text-white"
+                >
                   전송
                 </button>
               </div>

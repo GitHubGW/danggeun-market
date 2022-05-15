@@ -16,7 +16,7 @@ const UserPosts: NextPage = () => {
   const infiniteData = useSWRInfiniteScroll<PostWithUserAndCount>(router.query.username ? `/api/users/${router.query.username}/posts` : null);
 
   return (
-    <MainLayout pageTitle="동네생활 게시글" hasFooter={true}>
+    <MainLayout pageTitle="동네생활" hasFooter={true}>
       <UserLayout>
         <div className="w-[700px] max-w-[700px]">
           <div>
