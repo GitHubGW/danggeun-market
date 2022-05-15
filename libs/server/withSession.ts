@@ -1,6 +1,6 @@
+import { GetServerSidePropsContext, GetServerSidePropsResult, NextApiHandler } from "next";
 import { IronSessionOptions } from "iron-session";
-import { withIronSessionApiRoute } from "iron-session/next";
-import { NextApiHandler } from "next";
+import { withIronSessionApiRoute, withIronSessionSsr } from "iron-session/next";
 
 declare module "iron-session" {
   interface IronSessionData {
@@ -18,4 +18,10 @@ const sessionOptions: IronSessionOptions = {
 
 export const withSessionRoute = (handler: NextApiHandler) => {
   return withIronSessionApiRoute(handler, sessionOptions);
+};
+
+export const withSessionSsr = <P extends { [key: string]: unknown }>(
+  handler: (context: GetServerSidePropsContext) => GetServerSidePropsResult<P> | Promise<GetServerSidePropsResult<P>>
+) => {
+  return withIronSessionSsr(handler, sessionOptions);
 };
