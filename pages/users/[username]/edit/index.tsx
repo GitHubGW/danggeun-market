@@ -88,6 +88,12 @@ const UserEdit: NextPage = () => {
     setValue("phone", me?.phone || "");
   }, [me?.username, me?.email, me?.phone, setValue]);
 
+  useEffect(() => {
+    if (router.query.username !== me?.username) {
+      router.push(`/users/${me?.username}/edit`);
+    }
+  }, [me?.username, router]);
+
   return (
     <MainLayout pageTitle="프로필 수정" hasFooter={true}>
       <div className="wrapper without-header-footer">
