@@ -1,16 +1,19 @@
+import dynamic from "next/dynamic";
 import { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "components/button";
 import FormError from "components/form-error";
 import Input from "components/input";
 import MainLayout from "components/layouts/main-layout";
 import LogoColumn from "components/logo-column";
-import PhoneInput from "components/phone-input";
 import useMutation from "libs/client/useMutation";
 import { CommonResult } from "libs/server/withHandler";
 import { NextRouter, useRouter } from "next/router";
 import useAddress, { Address } from "libs/client/useAddress";
+import Loading from "components/loading";
+
+const DynamicPhoneInputComponent = dynamic(() => import("components/phone-input"), { suspense: true });
 
 interface LoginFormData {
   phone?: string;
@@ -86,7 +89,15 @@ const Login: NextPage = () => {
                   ) : (
                     <div className="relative">
                       <span className="absolute top-1/2 left-2.5 -translate-y-1/2 text-gray-300 select-none">+82</span>
-                      <PhoneInput register={register("phone", { required: "현재 사용 중인 휴대폰 번호를 입력해주세요.", maxLength: 15 })} required={true} />
+                      <Suspense
+                        fallback={
+                          <div className="flex justify-center py-1.5">
+                            <Loading color="orange" />
+                          </div>
+                        }
+                      >
+                        <DynamicPhoneInputComponent register={register("phone", { required: "현재 사용 중인 휴대폰 번호를 입력해주세요.", maxLength: 15 })} required={true} />
+                      </Suspense>
                     </div>
                   )}
                   {errors.email?.message ? <FormError text={errors.email?.message || ""} /> : null}
