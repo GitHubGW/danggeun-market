@@ -1,12 +1,11 @@
-import { NextPage } from "next";
 import MainLayout from "components/layouts/main-layout";
 import UserLayout from "components/layouts/user-layout";
 import ProductItem from "components/items/product-item";
-import useSWR from "swr";
-import { NextRouter, useRouter } from "next/router";
-import { CommonResult } from "libs/server/withHandler";
 import { Post, PostLike, Product, ProductLike } from ".prisma/client";
 import PostItem from "components/items/post-item";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
+import prisma from "libs/server/prisma";
+import { CommonResult } from "libs/server/withHandler";
 
 interface ProductWithUserAndCount extends Product {
   user: { address: string | null };
@@ -31,29 +30,26 @@ interface UserLikesResult extends CommonResult {
   postLikes?: PostLikeWithPost[];
 }
 
-const UserLikes: NextPage = () => {
-  const router: NextRouter = useRouter();
-  const { data } = useSWR<UserLikesResult>(router.query.username ? `/api/users/${router.query.username}/likes` : null);
-
+const UserLikes: NextPage<UserLikesResult> = ({ productLikes, postLikes }) => {
   return (
     <MainLayout pageTitle="관심 목록" hasFooter={true}>
       <UserLayout>
         <div className="w-[700px] max-w-[700px]">
           {/* 관심 상품 */}
           <div>
-            {Number(data?.productLikes?.length) > 0 && <h2 className="font-medium text-lg mb-3">관심 상품 ({data?.productLikes?.length})</h2>}
+            {Number(productLikes?.length) > 0 && <h2 className="font-medium text-lg mb-3">관심 상품 ({productLikes?.length})</h2>}
             <div className="grid grid-cols-3 gap-x-9 gap-y-12">
-              {data?.productLikes?.map((productLike) => (
+              {productLikes?.map((productLike) => (
                 <ProductItem key={productLike.product.id} {...productLike.product} />
               ))}
             </div>
           </div>
 
           {/* 관심 게시글 */}
-          <div className={`${Number(data?.postLikes?.length) > 0 ? "mt-24" : ""}`}>
-            {Number(data?.postLikes?.length) > 0 && <h2 className="font-medium text-lg mb-1">관심 게시물 ({data?.postLikes?.length})</h2>}
-            <div className="">
-              {data?.postLikes?.map((postLike) => (
+          <div className={`${Number(postLikes?.length) > 0 ? "mt-24" : ""}`}>
+            {Number(postLikes?.length) > 0 && <h2 className="font-medium text-lg mb-1">관심 게시물 ({postLikes?.length})</h2>}
+            <div>
+              {postLikes?.map((postLike) => (
                 <PostItem
                   key={postLike.post.id}
                   id={postLike.post.id}
@@ -69,6 +65,50 @@ const UserLikes: NextPage = () => {
       </UserLayout>
     </MainLayout>
   );
+};
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext) => {
+  const foundProductLikes = await prisma?.productLike?.findMany({
+    where: { user: { username: String(context.params?.username) } },
+    include: {
+      product: {
+        include: {
+          user: { select: { address: true } },
+          _count: { select: { productLikes: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const foundPostLikes = await prisma.postLike.findMany({
+    where: { user: { username: String(context.params?.username) } },
+    include: {
+      post: {
+        include: {
+          user: { select: { username: true, address: true } },
+          _count: { select: { postComments: true, postLikes: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return {
+    props: {
+      ok: true,
+      message: "사용자 관심 상품 및 관심 게시물 보기에 성공하였습니다.",
+      productLikes: JSON.parse(JSON.stringify(foundProductLikes)),
+      postLikes: JSON.parse(JSON.stringify(foundPostLikes)),
+    },
+  };
 };
 
 export default UserLikes;
