@@ -1,9 +1,7 @@
-import { NextPage } from "next";
 import MainLayout from "components/layouts/main-layout";
 import StreamMessage from "components/stream-message";
 import useSWR from "swr";
 import { NextRouter, useRouter } from "next/router";
-import { CommonResult } from "libs/server/withHandler";
 import { Stream } from ".prisma/client";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -13,6 +11,10 @@ import useMe from "libs/client/useMe";
 import RecordedVideoItem from "components/items/recorded-video-item";
 import FloatingButton from "components/floating-button";
 import { RiVideoAddFill } from "react-icons/ri";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
+import prisma from "libs/server/prisma";
+import { CommonResult } from "libs/server/withHandler";
+import Loading from "components/loading";
 
 interface StreamDetailFormData {
   text: string;
@@ -76,7 +78,7 @@ interface LifecycleResult {
   videoUID: string | null;
 }
 
-const StreamDetail: NextPage = () => {
+const StreamDetail: NextPage<StreamDetailResult> = ({ stream, recordedVideos }) => {
   const me = useMe();
   const router: NextRouter = useRouter();
   const [showStreamInfo, setShowStreamInfo] = useState(false);
@@ -97,11 +99,19 @@ const StreamDetail: NextPage = () => {
     if (streamMessageAddLoading === true) {
       return;
     }
+
     const { text } = getValues();
     const newMessage = { id: Date.now(), text, user: { id: me?.id as number, username: me?.username as string, cloudflareImageId: me?.cloudflareImageId as string } };
-    reset();
     await streamMessageAddMutation({ text });
-    mutate((prev) => prev && prev.stream && { ...prev, stream: { ...prev.stream, streamMessages: [...prev.stream?.streamMessages, newMessage] } }, true);
+    mutate((prev) => {
+      if (prev && prev.stream) {
+        return {
+          ...prev,
+          stream: { ...prev.stream, streamMessages: [...prev.stream?.streamMessages, newMessage] },
+        };
+      }
+    }, false);
+    reset();
   };
 
   const handleDeleteStream = async () => {
@@ -128,7 +138,7 @@ const StreamDetail: NextPage = () => {
   }, [data, router]);
 
   return (
-    <MainLayout pageTitle={data?.stream?.title} hasFooter={false}>
+    <MainLayout pageTitle={stream?.title} hasFooter={false}>
       <div className="wrapper">
         <div className="max-w-[700px] mx-auto h-full pt-8 pb-8">
           <div>
@@ -141,19 +151,23 @@ const StreamDetail: NextPage = () => {
                   className="w-full h-full rounded-lg"
                 ></iframe>
               ) : (
-                <div className="w-full h-full rounded-lg bg-gray-50"></div>
+                <div className="w-full h-full rounded-lg bg-gray-50">
+                  <div className="h-full flex justify-center items-center">
+                    <Loading color="orange" size={36} />
+                  </div>
+                </div>
               )}
             </div>
-            <div className="mt-3 mb-5 relative">
+            <div className="mt-3 mb-5 relative h-[60px]">
               <h1 className="text-xl">
                 {lifecycleData?.live === true && "[생] "}
-                {data?.stream?.title}
+                {stream?.title}
               </h1>
-              {lifecycleData?.live === false ? <p className="text-base text-gray-800 mt-1.5">{data?.stream?.description}</p> : null}
+              {lifecycleData?.live === false ? <p className="text-base text-gray-800 mt-1.5">{stream?.description}</p> : null}
               {lifecycleData?.live === true ? <p className="text-[14px] text-gray-600 mt-1.5">현재 {viewsData?.liveViewers}명 시청 중</p> : null}
               {data?.stream?.userId === me?.id ? (
                 <div className="absolute top-0 right-0 w-full">
-                  <DeleteButton onClick={handleDeleteStream} text="스트림 삭제" />
+                  <DeleteButton onClick={handleDeleteStream} text="스트림 삭제" loading={streamDeleteLoading} />
                   <button
                     onClick={handleToggleStreamInfo}
                     type="button"
@@ -182,15 +196,23 @@ const StreamDetail: NextPage = () => {
 
           <div className="border border-gray-100 rounded-lg">
             <div className="px-3 pt-4 relative h-[40vh] bg-neutral-50 overflow-auto scrollbar-hide">
-              {data?.stream?.streamMessages.map((streamMessage) => (
-                <StreamMessage
-                  key={streamMessage.id}
-                  username={streamMessage.user.username}
-                  cloudflareImageId={streamMessage.user.cloudflareImageId}
-                  text={streamMessage.text}
-                  isMe={streamMessage.user.id === me?.id}
-                />
-              ))}
+              {data?.stream?.streamMessages ? (
+                <>
+                  {data?.stream?.streamMessages.map((streamMessage) => (
+                    <StreamMessage
+                      key={streamMessage.id}
+                      username={streamMessage.user.username}
+                      cloudflareImageId={streamMessage.user.cloudflareImageId}
+                      text={streamMessage.text}
+                      isMe={streamMessage.user.id === me?.id}
+                    />
+                  ))}
+                </>
+              ) : (
+                <div className="h-full flex justify-center items-center">
+                  <Loading color="orange" size={36} />
+                </div>
+              )}
             </div>
             <form onSubmit={handleSubmit(onValid)} className="w-full px-1 py-1 border-t">
               <div className="relative w-full px-2 py-2 rounded-md outline-none bg-white">
@@ -203,29 +225,37 @@ const StreamDetail: NextPage = () => {
                 <button
                   disabled={me === undefined}
                   type="submit"
-                  className="absolute right-0.5 bottom-1 flex items-end px-4 py-1.5 rounded-md bg-orange-400 hover:bg-orange-500 text-sm text-white"
+                  className="absolute h-8 right-0.5 bottom-1 flex items-end px-4 py-1.5 rounded-md bg-orange-400 hover:bg-orange-500 text-sm text-white"
                 >
-                  전송
+                  {streamMessageAddLoading === true ? (
+                    <div>
+                      <Loading color="" size={12} />
+                    </div>
+                  ) : (
+                    "전송"
+                  )}
                 </button>
               </div>
             </form>
           </div>
 
           {/* 최근 방송 */}
-          <div className="mt-12">
-            <h2 className="mb-3 font-medium">최근 방송</h2>
-            <div className="grid grid-cols-2 gap-x-5 gap-y-14">
-              {data?.recordedVideos?.result.map((recordedVideo: any) => (
-                <RecordedVideoItem
-                  key={recordedVideo.uid}
-                  preview={recordedVideo.preview}
-                  meta={recordedVideo.meta}
-                  duration={recordedVideo.duration}
-                  created={recordedVideo.created}
-                />
-              ))}
+          {recordedVideos?.result.length !== 0 ? (
+            <div className="mt-12">
+              <h2 className="mb-3 font-medium">최근 방송</h2>
+              <div className="grid grid-cols-2 gap-x-5 gap-y-14">
+                {recordedVideos?.result.map((recordedVideo: any) => (
+                  <RecordedVideoItem
+                    key={recordedVideo.uid}
+                    preview={recordedVideo.preview}
+                    meta={recordedVideo.meta}
+                    duration={recordedVideo.duration}
+                    created={recordedVideo.created}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
         <FloatingButton href={me ? "/streams/create" : "/login"}>
           <RiVideoAddFill />
@@ -233,6 +263,56 @@ const StreamDetail: NextPage = () => {
       </div>
     </MainLayout>
   );
+};
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext) => {
+  if (!context?.params?.id) {
+    return {
+      props: {},
+    };
+  }
+
+  const foundStream = await prisma?.stream.findUnique({
+    where: { id: +context.params.id },
+    include: {
+      streamMessages: {
+        select: {
+          id: true,
+          text: true,
+          user: { select: { id: true, username: true, cloudflareImageId: true } },
+        },
+      },
+    },
+  });
+
+  let recordedVideos = undefined;
+  if (foundStream?.cloudflareStreamId) {
+    recordedVideos = await (
+      await fetch(`https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/stream/live_inputs/${foundStream.cloudflareStreamId}/videos`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${process.env.CLOUDFLARE_STREAM_API_TOKEN}`,
+        },
+      })
+    ).json();
+  }
+
+  return {
+    props: {
+      ok: true,
+      message: "스트리밍 보기에 성공하였습니다.",
+      stream: JSON.parse(JSON.stringify(foundStream)),
+      recordedVideos: JSON.parse(JSON.stringify(recordedVideos)),
+    },
+    revalidate: 10,
+  };
 };
 
 export default StreamDetail;
