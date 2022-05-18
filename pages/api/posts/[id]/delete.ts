@@ -16,6 +16,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     }
 
     await prisma?.post.delete({ where: { id: +id } });
+
+    const foundUser = await prisma.user.findUnique({
+      where: { id: loggedInUser?.id },
+    });
+    await res.unstable_revalidate(`/users/${foundUser?.username}/posts`);
+    await res.unstable_revalidate(`/users/${foundUser?.username}/likes`);
+
     return res.status(200).json({ ok: true, message: "동네생활 게시글 삭제에 성공하였습니다." });
   } catch (error) {
     console.log("post detail delete handler error");

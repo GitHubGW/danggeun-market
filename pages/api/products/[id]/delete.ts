@@ -16,6 +16,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     }
 
     await prisma?.product.delete({ where: { id: +id } });
+
+    const foundUser = await prisma.user.findUnique({
+      where: { id: loggedInUser?.id },
+    });
+    await res.unstable_revalidate(`/users/${foundUser?.username}/sales`);
+    await res.unstable_revalidate(`/users/${foundUser?.username}/soldout`);
+    await res.unstable_revalidate(`/users/${foundUser?.username}/likes`);
+
     return res.status(200).json({ ok: true, message: "상품 삭제에 성공하였습니다." });
   } catch (error) {
     console.log("product detail delete handler error");

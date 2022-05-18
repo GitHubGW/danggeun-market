@@ -21,6 +21,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
       },
     });
 
+    const foundUser = await prisma.user.findUnique({
+      where: { id: loggedInUser?.id },
+    });
+    await res.unstable_revalidate(`/users/${foundUser?.username}/sales`);
+
     return res.status(201).json({ ok: true, message: "상품 업로드에 성공하였습니다.", product: createdProduct });
   } catch (error) {
     console.log("product upload handler error");

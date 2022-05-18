@@ -89,7 +89,7 @@ export const getStaticProps: GetStaticProps = async (context: GetStaticPropsCont
     orderBy: { createdAt: "desc" },
   });
 
-  const foundPostLikes = await prisma.postLike.findMany({
+  const foundPostLikes = await prisma?.postLike?.findMany({
     where: { user: { username: String(context.params?.username) } },
     include: {
       post: {
@@ -114,6 +114,7 @@ export const getStaticProps: GetStaticProps = async (context: GetStaticPropsCont
       postLikes: JSON.parse(JSON.stringify(foundPostLikes)),
       user: JSON.parse(JSON.stringify(foundUser)),
     },
+    revalidate: 10,
   };
 };
 

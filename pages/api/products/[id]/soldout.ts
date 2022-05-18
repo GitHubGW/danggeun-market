@@ -17,6 +17,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
 
     await prisma?.product.update({ where: { id: +id }, data: { isSelling: false } });
 
+    const foundUser = await prisma.user.findUnique({
+      where: { id: loggedInUser?.id },
+    });
+    await res.unstable_revalidate(`/users/${foundUser?.username}/sales`);
+    await res.unstable_revalidate(`/users/${foundUser?.username}/soldout`);
+
     return res.status(200).json({ ok: true, message: "상품 판매 완료에 성공하였습니다." });
   } catch (error) {
     console.log("product detail soldout error");

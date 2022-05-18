@@ -92,7 +92,7 @@ const UserReviews: NextPage<UserReviewsResult> = ({ user }) => {
               </>
             ) : (
               <div className="flex justify-center items-center">
-                <Loading color="orange" size={30} />
+                <Loading color="orange" size={36} />
               </div>
             )}
           </div>
@@ -147,6 +147,7 @@ export const getStaticProps: GetStaticProps = async (context: GetStaticPropsCont
       message: "사용자 정보 보기에 성공하였습니다.",
       user: JSON.parse(JSON.stringify(foundUser)),
     },
+    revalidate: 10,
   };
 };
 

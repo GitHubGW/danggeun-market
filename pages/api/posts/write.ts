@@ -18,6 +18,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
       },
     });
 
+    const foundUser = await prisma.user.findUnique({
+      where: { id: loggedInUser?.id },
+    });
+    await res.unstable_revalidate(`/users/${foundUser?.username}/posts`);
+
     return res.status(201).json({ ok: true, message: "동네생활 게시글 생성에 성공하였습니다.", post: createdPost });
   } catch (error) {
     console.log("post write handler error", error);

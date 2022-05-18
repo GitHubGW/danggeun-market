@@ -57,6 +57,7 @@ export const getStaticProps: GetStaticProps = async (context: GetStaticPropsCont
       posts: JSON.parse(JSON.stringify(foundPosts)),
       user: JSON.parse(JSON.stringify(foundUser)),
     },
+    revalidate: 10,
   };
 };
 
