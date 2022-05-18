@@ -20,14 +20,17 @@ const useSWRInfiniteClick = <T extends {}>(url: string | null, ref?: MutableRefO
 
   useEffect(() => {
     if (data) {
-      setInfiniteData((prev) => {
-        if (JSON.stringify(prev) === JSON.stringify(data.infiniteData)) {
-          return [...prev];
-        }
-        return [...prev, ...data.infiniteData];
-      });
+      setInfiniteData([...data.infiniteData]);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (page === data?.totalPages) {
+      if (ref?.current) {
+        ref.current.style.display = "none";
+      }
+    }
+  }, [page, data?.totalPages, ref]);
 
   useEffect(() => {
     ref?.current?.addEventListener("click", handleClick);

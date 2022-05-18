@@ -81,6 +81,7 @@ const PostDetail: NextPage<PostDetailResult> = ({ post, products }) => {
     if (postCommentAddLoading === true) {
       return;
     }
+
     const { text } = getValues();
     await postCommentAddMutation({ text });
     mutate();
@@ -137,7 +138,7 @@ const PostDetail: NextPage<PostDetailResult> = ({ post, products }) => {
                 </Link>
                 <Region text={post?.user.address} size="text-[13px]" />
               </div>
-              {post?.userId === me?.id ? <DeleteButton onClick={handleDeletePost} text="게시글 삭제" /> : null}
+              {post?.userId === me?.id ? <DeleteButton onClick={handleDeletePost} text="게시글 삭제" loading={postDeleteLoading} /> : null}
             </div>
             <div className="py-8">
               <p className="font-normal leading-7 text-[17px]">{post?.text}</p>
@@ -170,7 +171,7 @@ const PostDetail: NextPage<PostDetailResult> = ({ post, products }) => {
               </div>
             ) : (
               <div className="flex justify-center py-12">
-                <Loading color="orange" size={30} />
+                <Loading color="orange" size={36} />
               </div>
             )}
           </div>

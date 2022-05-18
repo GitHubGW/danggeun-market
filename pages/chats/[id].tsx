@@ -62,16 +62,20 @@ const ChatDetail = () => {
         updatedAt: me?.updatedAt,
       },
     };
-    reset();
     await chatMessageAddMutation({ text });
-    mutate((prev) => prev && prev.chatMessages && ({ ...prev, chatMessages: [...prev.chatMessages, newMessage] } as any), false);
+    mutate((prev) => {
+      if (prev && prev.chatMessages) {
+        return { ...prev, chatMessages: [...prev.chatMessages, newMessage] } as any;
+      }
+    }, false);
+    reset();
   };
 
   const handleDeleteChat = async () => {
     if (chatDeleteLoading === true) {
       return;
     }
-    chatDeleteMutation();
+    await chatDeleteMutation();
   };
 
   useEffect(() => {
@@ -94,7 +98,7 @@ const ChatDetail = () => {
             </Link>
 
             {/* 채팅방 나가기 버튼 */}
-            <DeleteButton onClick={handleDeleteChat} text="채팅방 나가기" style="top-4 mr-3" />
+            <DeleteButton onClick={handleDeleteChat} text="채팅방 나가기" style="top-4 mr-3" loading={chatDeleteLoading} />
 
             {/* 채팅방 메인 */}
             <div className="h-full pb-16">

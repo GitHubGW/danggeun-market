@@ -243,6 +243,7 @@ export const getStaticProps: GetStaticProps = async () => {
       message: "전체 상품 보기에 성공하였습니다.",
       products: JSON.parse(JSON.stringify(foundProducts)),
     },
+    revalidate: 10,
   };
 };
 

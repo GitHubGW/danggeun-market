@@ -150,7 +150,7 @@ const ProductDetail: NextPage<ProductDetailResult> = ({ product, similarProducts
                 </Link>
                 <Region text={product?.user.address} size="text-[13px]" />
               </div>
-              {product?.userId === me?.id ? <DeleteButton onClick={handleDeleteProduct} text="게시글 삭제" /> : null}
+              {product?.userId === me?.id ? <DeleteButton onClick={handleDeleteProduct} text="게시글 삭제" loading={productDeleteLoading} /> : null}
             </div>
             <div className="py-8">
               <h1 className="text-xl font-semibold">{product?.name}</h1>
@@ -203,7 +203,7 @@ const ProductDetail: NextPage<ProductDetailResult> = ({ product, similarProducts
               </div>
             ) : (
               <div className="flex justify-center items-center h-[78px]">
-                <Loading color="orange" size={30} />
+                <Loading color="orange" size={36} />
               </div>
             )}
           </div>

@@ -19,6 +19,7 @@ const ProductItem = ({ id, name, price, cloudflareImageId, user, _count, isSelli
       <a>
         <div className="relative w-[208px] h-[208px]">
           <Image
+            priority
             layout="fill"
             src={cloudflareImageId ? `https://imagedelivery.net/mrfqMz0r88w_Qqln2FwPhQ/${cloudflareImageId}/product` : noImage}
             alt={name}

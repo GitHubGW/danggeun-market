@@ -7,6 +7,7 @@ import useMutation from "libs/client/useMutation";
 import { CommonResult } from "libs/server/withHandler";
 import { useForm } from "react-hook-form";
 import { NextRouter, useRouter } from "next/router";
+import { useEffect } from "react";
 
 interface SearchFormData {
   keyword: string;
@@ -15,7 +16,7 @@ interface SearchFormData {
 const Header = () => {
   const me = useMe();
   const router: NextRouter = useRouter();
-  const [logoutMutation, { loading }] = useMutation<CommonResult>("/api/logout");
+  const [logoutMutation, { data, loading }] = useMutation<CommonResult>("/api/logout");
   const { register, handleSubmit, getValues } = useForm<SearchFormData>({ defaultValues: { keyword: "" } });
 
   const handleLogout = async () => {
@@ -29,6 +30,12 @@ const Header = () => {
     const { keyword } = getValues();
     router.push(`/search?keyword=${keyword}`);
   };
+
+  useEffect(() => {
+    if (data?.ok === true) {
+      router.push("/login");
+    }
+  }, [data, router]);
 
   return (
     <header className="py-3 border-b border-gray-200 h-[63px] max-h-[63px]">
