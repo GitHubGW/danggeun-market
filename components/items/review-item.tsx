@@ -14,9 +14,10 @@ interface ReviewItemProps {
   createdAt?: Date | string;
   from: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
   handleDeleteReview: () => any;
+  loading?: boolean;
 }
 
-const ReviewItem = ({ id, text, rating, createdAt, from, handleDeleteReview }: ReviewItemProps) => {
+const ReviewItem = ({ id, text, rating, createdAt, from, handleDeleteReview, loading }: ReviewItemProps) => {
   const me = useMe();
 
   return (
@@ -38,7 +39,7 @@ const ReviewItem = ({ id, text, rating, createdAt, from, handleDeleteReview }: R
             <AiFillStar key={index} color={rating >= index ? "gold" : "lightgray"} />
           ))}
         </div>
-        {from.id === me?.id ? <DeleteButton onClick={handleDeleteReview} text="삭제" /> : null}
+        {from.id === me?.id ? <DeleteButton onClick={handleDeleteReview} text="삭제" loading={loading} /> : null}
       </div>
       <div className="mt-3 mb-1 text-[15px]">{text}</div>
       <CreatedAt date={createdAt} size="text-[13px]" />

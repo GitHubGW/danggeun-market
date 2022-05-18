@@ -14,7 +14,7 @@ const Button = ({ loading, type, text, size }: ButtonProps) => {
       type={type}
       className={`${size} flex justify-center items-center cursor-pointer px-4 py-2.5 h-[44px] max-h-[44px] rounded-[4px] text-white bg-orange-400 hover:bg-orange-500`}
     >
-      {loading === true ? <Loading color="white" /> : text}
+      {loading === true ? <Loading color="white" size={20} /> : text}
     </button>
   );
 };

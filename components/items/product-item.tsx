@@ -1,7 +1,7 @@
 import Region from "components/region";
 import Image from "next/image";
 import Link from "next/link";
-import carrotLogo1 from "public/images/carrot_logo1.png";
+import noImage from "public/images/no_image.png";
 
 interface ProductItemProps {
   id: number;
@@ -17,13 +17,14 @@ const ProductItem = ({ id, name, price, cloudflareImageId, user, _count, isSelli
   return (
     <Link href={`/products/${id}`}>
       <a>
-        <Image
-          width={208}
-          height={208}
-          src={cloudflareImageId ? `https://imagedelivery.net/mrfqMz0r88w_Qqln2FwPhQ/${cloudflareImageId}/productItem` : carrotLogo1}
-          alt={name}
-          className="border border-gray-100 rounded-2xl transition-all hover:scale-[1.02]"
-        />
+        <div className="relative w-[208px] h-[208px]">
+          <Image
+            layout="fill"
+            src={cloudflareImageId ? `https://imagedelivery.net/mrfqMz0r88w_Qqln2FwPhQ/${cloudflareImageId}/product` : noImage}
+            alt={name}
+            className="border border-gray-100 rounded-2xl transition-all hover:scale-[1.02]"
+          />
+        </div>
         <h3 className="mt-1 mb-0.5">{name}</h3>
         <div className="flex items-center mt-0.5">
           {isSelling === false ? <span className="text-white bg-gray-700 text-xs px-2 py-1.5 rounded-[4px] mr-1.5">거래완료</span> : null}

@@ -11,6 +11,7 @@ import useMe from "libs/client/useMe";
 
 interface UserLayoutProps {
   children: React.ReactNode;
+  user?: User;
 }
 
 interface UserDetailWithCount extends User {
@@ -23,7 +24,7 @@ interface UserDetailResult extends CommonResult {
   soldOutProducts: number;
 }
 
-const UserLayout = ({ children }: UserLayoutProps) => {
+const UserLayout = ({ children, user }: UserLayoutProps) => {
   const me = useMe();
   const router: NextRouter = useRouter();
   const { data } = useSWR<UserDetailResult>(router.query.username ? `/api/users/${router.query.username}` : null);
@@ -41,18 +42,18 @@ const UserLayout = ({ children }: UserLayoutProps) => {
           <div className="mb-9">
             <div className="flex items-center space-x-4">
               <div>
-                <Avatar cloudflareImageId={data?.user?.cloudflareImageId} size="w-14 h-14" />
+                <Avatar cloudflareImageId={user?.cloudflareImageId} size="w-14 h-14" />
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center">
-                  <Username text={data?.user?.username} size="text-xl" textDecoration={false} />
+                  <Username text={user?.username} size="text-xl" textDecoration={false} />
                   {router.query.username === me?.username ? (
-                    <Link href={`/users/${data?.user?.username}/edit`}>
+                    <Link href={`/users/${user?.username}/edit`}>
                       <a className="ml-2.5 text-xs border text-gray-400 hover:text-gray-600 hover:border-gray-600 px-1.5 py-0.5 rounded-sm">프로필 수정</a>
                     </Link>
                   ) : null}
                 </div>
-                <Region text={data?.user?.address} size="text-md" />
+                <Region text={user?.address} size="text-md" />
               </div>
             </div>
           </div>

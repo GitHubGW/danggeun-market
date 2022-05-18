@@ -4,10 +4,11 @@ import loadingWhite from "public/images/loading_white.gif";
 
 interface LoadingProps {
   color: string;
+  size: number;
 }
 
-const Loading = ({ color }: LoadingProps) => {
-  return <>{color === "orange" ? <Image width={20} height={20} src={loadingOrange} alt="" /> : <Image width={20} height={20} src={loadingWhite} alt="" />}</>;
+const Loading = ({ color, size }: LoadingProps) => {
+  return <>{color === "orange" ? <Image width={size} height={size} src={loadingOrange} alt="" /> : <Image width={size} height={size} src={loadingWhite} alt="" />}</>;
 };
 
 export default Loading;

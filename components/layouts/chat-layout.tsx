@@ -6,8 +6,9 @@ import Username from "components/username";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import useSWR from "swr";
 import { Chat, ChatMessage, Prisma, User } from "@prisma/client";
-import { CommonResult } from "libs/server/withHandler";
 import useMe from "libs/client/useMe";
+import { CommonResult } from "libs/server/withHandler";
+import Loading from "components/loading";
 
 interface ChatLayoutProps {
   children: React.ReactNode;
@@ -42,6 +43,11 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
                 </Link>
               </div>
               <ul className="border-t border-b h-[calc(100%_-_120px)] overflow-auto">
+                {data === undefined ? (
+                  <div className="flex justify-center items-center h-[65px]">
+                    <Loading color="orange" size={20} />
+                  </div>
+                ) : null}
                 {data?.chats?.map((chat) => (
                   <li key={chat.id} className="border-b last-of-type:border-none py-3 px-3 hover:bg-gray-50">
                     <Link href={`/chats/${chat.id}`}>
