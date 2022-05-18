@@ -8,6 +8,7 @@ import Image from "next/image";
 import { NextRouter, useRouter } from "next/router";
 import useSWR from "swr";
 import background404 from "public/images/background_404.png";
+import Loading from "components/loading";
 
 interface ProductWithUserAndCount extends Product {
   user: User;
@@ -44,11 +45,20 @@ const Search: NextPage = () => {
             </div>
           ) : null}
 
-          {data?.products?.length !== 0 ? (
+          {data?.products === undefined || data.posts === undefined ? (
+            <div className="without-header-footer flex justify-center">
+              <div className="flex justify-center items-center flex-col">
+                <Loading color="orange" size={50} />
+                <span className="text-base mt-1.5 font-medium text-orange-500">{router.query.keyword} 검색중...</span>
+              </div>
+            </div>
+          ) : null}
+
+          {data?.products && data?.products?.length > 0 ? (
             <div>
               <div className="content-post py-20 mt-12">
                 <h2 className="font-medium text-2xl leading-tight text-center">중고거래 인기매물</h2>
-                <div className="grid grid-cols-4 mt-10 gap-x-7 gap-y-10">
+                <div className="grid grid-cols-3 mt-10 gap-x-20 gap-y-10">
                   {data?.products?.map((product) => (
                     <ProductItem
                       key={product.id}
@@ -66,7 +76,7 @@ const Search: NextPage = () => {
             </div>
           ) : null}
 
-          {data?.posts?.length !== 0 ? (
+          {data?.posts && data?.posts?.length > 0 ? (
             <div className="content-post">
               <div className="border rounded-lg bg-white px-8 py-4">
                 <h1 className="text-lg font-medium">동네생활</h1>

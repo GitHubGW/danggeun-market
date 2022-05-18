@@ -31,6 +31,7 @@ const ProductUpload: NextPage = () => {
   const me = useMe();
   const router: NextRouter = useRouter();
   const [filePreview, setFilePreview] = useState("");
+  const [mutationLoading, setMutationLoading] = useState(false);
   const [productUploadMutation, { data, loading }] = useMutation<ProductUploadResult>("/api/products/upload");
   const { register, handleSubmit, getValues, watch } = useForm<ProductUploadFormData>();
   const watchingFile = watch("file");
@@ -40,15 +41,19 @@ const ProductUpload: NextPage = () => {
       return;
     }
     const { file, name, price, description } = getValues();
+    setMutationLoading(true);
+
     if (file && file.length > 0) {
       const { cloudflareImageId, cloudflareUploadUrl } = await (await fetch("/api/file")).json();
       const formData = new FormData();
       formData.append("file", file[0], `${me?.username}_product_${file[0].name}`);
-      await (await fetch(cloudflareUploadUrl, { method: "POST", body: formData })).json();
-      productUploadMutation({ name, price, description, cloudflareImageId });
+      await fetch(cloudflareUploadUrl, { method: "POST", body: formData });
+      await productUploadMutation({ name, price, description, cloudflareImageId });
     } else {
-      productUploadMutation({ name, price, description });
+      await productUploadMutation({ name, price, description });
     }
+
+    setMutationLoading(false);
   };
 
   useEffect(() => {
@@ -94,7 +99,7 @@ const ProductUpload: NextPage = () => {
                 placeholder="게시글 내용을 작성해주세요. 가품 및 판매금지품목은 게시가 제한될 수 있어요."
               />
             </label>
-            <Button loading={loading} type="submit" text="상품 업로드" size="w-full" />
+            <Button loading={mutationLoading} type="submit" text="상품 업로드" size="w-full" />
           </form>
         </div>
       </div>

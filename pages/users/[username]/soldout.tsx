@@ -1,7 +1,7 @@
 import MainLayout from "components/layouts/main-layout";
 import UserLayout from "components/layouts/user-layout";
 import ProductItem from "components/items/product-item";
-import { Product } from ".prisma/client";
+import { Product, User } from ".prisma/client";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import prisma from "libs/server/prisma";
 import { CommonResult } from "libs/server/withHandler";
@@ -13,12 +13,13 @@ interface ProductWithUserAndCount extends Product {
 
 interface UserSoldOutResult extends CommonResult {
   products?: ProductWithUserAndCount[];
+  user?: User;
 }
 
-const UserSoldOut: NextPage<UserSoldOutResult> = ({ products }) => {
+const UserSoldOut: NextPage<UserSoldOutResult> = ({ products, user }) => {
   return (
     <MainLayout pageTitle="판매 완료" hasFooter={true}>
-      <UserLayout>
+      <UserLayout user={user}>
         {products?.map((product) => (
           <ProductItem
             key={product.id}
@@ -56,11 +57,16 @@ export const getStaticProps: GetStaticProps = async (context: GetStaticPropsCont
     orderBy: { createdAt: "desc" },
   });
 
+  const foundUser = await prisma.user.findFirst({
+    where: { username: String(context.params?.username) },
+  });
+
   return {
     props: {
       ok: true,
       message: "사용자 판매 완료 물품 보기에 성공하였습니다.",
       products: JSON.parse(JSON.stringify(foundProducts)),
+      user: JSON.parse(JSON.stringify(foundUser)),
     },
   };
 };

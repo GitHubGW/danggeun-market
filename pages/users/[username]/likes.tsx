@@ -1,7 +1,7 @@
 import MainLayout from "components/layouts/main-layout";
 import UserLayout from "components/layouts/user-layout";
 import ProductItem from "components/items/product-item";
-import { Post, PostLike, Product, ProductLike } from ".prisma/client";
+import { Post, PostLike, Product, ProductLike, User } from ".prisma/client";
 import PostItem from "components/items/post-item";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import prisma from "libs/server/prisma";
@@ -28,12 +28,13 @@ interface PostLikeWithPost extends PostLike {
 interface UserLikesResult extends CommonResult {
   productLikes?: ProductLikeWithProduct[];
   postLikes?: PostLikeWithPost[];
+  user?: User;
 }
 
-const UserLikes: NextPage<UserLikesResult> = ({ productLikes, postLikes }) => {
+const UserLikes: NextPage<UserLikesResult> = ({ productLikes, postLikes, user }) => {
   return (
     <MainLayout pageTitle="관심 목록" hasFooter={true}>
-      <UserLayout>
+      <UserLayout user={user}>
         <div className="w-[700px] max-w-[700px]">
           {/* 관심 상품 */}
           <div>
@@ -101,12 +102,17 @@ export const getStaticProps: GetStaticProps = async (context: GetStaticPropsCont
     orderBy: { createdAt: "desc" },
   });
 
+  const foundUser = await prisma.user.findFirst({
+    where: { username: String(context.params?.username) },
+  });
+
   return {
     props: {
       ok: true,
       message: "사용자 관심 상품 및 관심 게시물 보기에 성공하였습니다.",
       productLikes: JSON.parse(JSON.stringify(foundProductLikes)),
       postLikes: JSON.parse(JSON.stringify(foundPostLikes)),
+      user: JSON.parse(JSON.stringify(foundUser)),
     },
   };
 };

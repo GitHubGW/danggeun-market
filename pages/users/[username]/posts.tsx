@@ -13,12 +13,13 @@ interface PostWithUserAndCount extends Post {
 
 interface UserPostsResult extends CommonResult {
   posts?: PostWithUserAndCount[];
+  user?: User;
 }
 
-const UserPosts: NextPage<UserPostsResult> = ({ posts }) => {
+const UserPosts: NextPage<UserPostsResult> = ({ posts, user }) => {
   return (
     <MainLayout pageTitle="동네생활" hasFooter={true}>
-      <UserLayout>
+      <UserLayout user={user}>
         <div className="w-[700px] max-w-[700px]">
           <div>
             {posts?.map((post) => (
@@ -45,11 +46,16 @@ export const getStaticProps: GetStaticProps = async (context: GetStaticPropsCont
     orderBy: { createdAt: "desc" },
   });
 
+  const foundUser = await prisma.user.findFirst({
+    where: { username: String(context.params?.username) },
+  });
+
   return {
     props: {
       ok: true,
       message: "사용자 동네 생활 게시글 보기에 성공하였습니다.",
       posts: JSON.parse(JSON.stringify(foundPosts)),
+      user: JSON.parse(JSON.stringify(foundUser)),
     },
   };
 };

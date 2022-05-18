@@ -17,6 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
       take: LIMIT,
       skip: (+page - 1) * LIMIT,
     });
+
     return res.status(200).json({ ok: true, message: "사용자 동네 생활 게시글 보기에 성공하였습니다.", infiniteData: foundPosts });
   } catch (error) {
     console.log("users posts handler error");

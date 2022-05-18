@@ -26,6 +26,7 @@ const PostWrite: NextPage = () => {
   const me = useMe();
   const router: NextRouter = useRouter();
   const [filePreview, setFilePreview] = useState("");
+  const [mutationLoading, setMutationLoading] = useState(false);
   const { register, handleSubmit, getValues, watch } = useForm<PostWriteFormData>();
   const [postWriteMutation, { data, loading }] = useMutation<PostWriteResult>("/api/posts/write");
   const watchingFile = watch("file");
@@ -34,16 +35,21 @@ const PostWrite: NextPage = () => {
     if (loading === true) {
       return;
     }
+
     const { file, text } = getValues();
+    setMutationLoading(true);
+
     if (file && file.length > 0) {
       const { cloudflareImageId, cloudflareUploadUrl } = await (await fetch("/api/file")).json();
       const formData = new FormData();
       formData.append("file", file[0], `${me?.username}_post_${file[0].name}`);
-      await (await fetch(cloudflareUploadUrl, { method: "POST", body: formData })).json();
-      postWriteMutation({ text, cloudflareImageId });
+      await fetch(cloudflareUploadUrl, { method: "POST", body: formData });
+      await postWriteMutation({ text, cloudflareImageId });
     } else {
-      postWriteMutation({ text });
+      await postWriteMutation({ text });
     }
+
+    setMutationLoading(false);
   };
 
   useEffect(() => {
@@ -72,7 +78,7 @@ const PostWrite: NextPage = () => {
             <label className="mt-5 mb-2">
               <Textarea register={register("text", { required: true })} rows={7} maxLength={400} placeholder="근처의 이웃에게 질문하거나 이야기를 해보세요." />
             </label>
-            <Button loading={loading} type="submit" text="글쓰기" size="w-full" />
+            <Button loading={mutationLoading} type="submit" text="글쓰기" size="w-full" />
           </form>
         </div>
       </div>

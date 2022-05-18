@@ -1,3 +1,4 @@
+import prisma from "libs/server/prisma";
 import { Product } from ".prisma/client";
 import withHandler, { ResponseData } from "libs/server/withHandler";
 import { withSessionRoute } from "libs/server/withSession";
@@ -9,6 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
       body: { name, price, description, cloudflareImageId },
       session: { loggedInUser },
     } = req;
+
     const createdProduct: Product | undefined = await prisma?.product.create({
       data: {
         name,
@@ -18,6 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
         user: { connect: { id: loggedInUser?.id } },
       },
     });
+
     return res.status(201).json({ ok: true, message: "상품 업로드에 성공하였습니다.", product: createdProduct });
   } catch (error) {
     console.log("product upload handler error");

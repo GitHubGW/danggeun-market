@@ -1,3 +1,4 @@
+import prisma from "libs/server/prisma";
 import withHandler, { ResponseData } from "libs/server/withHandler";
 import { withSessionRoute } from "libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -17,6 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
         },
         postComments: {
           select: { id: true, text: true, createdAt: true, user: { select: { id: true, username: true, cloudflareImageId: true, address: true } } },
+          orderBy: { createdAt: "desc" },
         },
         _count: {
           select: { postComments: true, postLikes: true },

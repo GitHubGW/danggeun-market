@@ -1,3 +1,4 @@
+import prisma from "libs/server/prisma";
 import withHandler, { ResponseData } from "libs/server/withHandler";
 import { withSessionRoute } from "libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -20,8 +21,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
         },
       },
       orderBy: { createdAt: "desc" },
-      take: LIMIT,
-      skip: (+page - 1) * LIMIT,
+      take: LIMIT * Number(page),
+      skip: 0,
     });
 
     return res.status(200).json({

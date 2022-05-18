@@ -92,7 +92,7 @@ const Login: NextPage = () => {
                       <Suspense
                         fallback={
                           <div className="flex justify-center py-1.5">
-                            <Loading color="orange" />
+                            <Loading color="orange" size={20} />
                           </div>
                         }
                       >

@@ -7,6 +7,7 @@ import PostItem from "components/items/post-item";
 import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
 import { MutableRefObject, useRef } from "react";
 import useMe from "libs/client/useMe";
+import Loading from "components/loading";
 
 interface PostWithUserAndCount extends Post {
   user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
@@ -24,9 +25,19 @@ const Posts: NextPage = () => {
         <div className="content-post">
           <div className="border rounded-lg bg-white px-8 py-4">
             <h1 className="text-lg font-medium">동네생활</h1>
-            {infiniteData?.map((post) => (
-              <PostItem key={post.id} id={post.id} text={post.text} createdAt={post.createdAt} user={post.user} _count={post._count} />
-            ))}
+            {infiniteData.length !== 0 ? (
+              <>
+                {infiniteData?.map((post) => (
+                  <PostItem key={post.id} id={post.id} text={post.text} createdAt={post.createdAt} user={post.user} _count={post._count} />
+                ))}
+              </>
+            ) : (
+              <div className="w-full h-[909px] flex justify-center">
+                <div className="flex justify-center items-center flex-col">
+                  <Loading color="orange" size={40} />
+                </div>
+              </div>
+            )}
             <span ref={moreRef} className="text-center block text-gray-600 mt-6 cursor-pointer">
               더보기
             </span>

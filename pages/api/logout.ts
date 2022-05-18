@@ -1,3 +1,4 @@
+import prisma from "libs/server/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseData } from "libs/server/withHandler";
 import { withSessionRoute } from "libs/server/withSession";

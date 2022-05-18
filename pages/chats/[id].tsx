@@ -13,6 +13,7 @@ import { ChatMessage, User } from "@prisma/client";
 import DeleteButton from "components/delete-button";
 import useMutation from "libs/client/useMutation";
 import { useForm } from "react-hook-form";
+import Loading from "components/loading";
 
 interface ChatDetailFormData {
   text: string;
@@ -125,8 +126,14 @@ const ChatDetail = () => {
                 <div className="text-sm text-gray-300 mr-3 mb-1">
                   <span>{watch("text").length}</span>/190
                 </div>
-                <button type="submit" className="px-4 py-1.5 rounded-md bg-orange-400 hover:bg-orange-500 text-sm text-white">
-                  전송
+                <button type="submit" className="px-4 py-1.5 h-8 rounded-md bg-orange-400 hover:bg-orange-500 text-sm text-white">
+                  {chatMessageAddLoading === true ? (
+                    <div className="flex">
+                      <Loading color="" size={13} />
+                    </div>
+                  ) : (
+                    "전송"
+                  )}
                 </button>
               </div>
             </div>

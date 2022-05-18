@@ -27,6 +27,7 @@ const UserEdit: NextPage = () => {
   const me = useMe();
   const router: NextRouter = useRouter();
   const [avatarPreview, setAvatarPreview] = useState("");
+  const [mutationLoading, setMutationLoading] = useState(false);
   const [userEditMutation, { data, loading }] = useMutation<CommonResult>(`/api/users/${router.query.username}/edit`);
   const {
     register,
@@ -49,16 +50,19 @@ const UserEdit: NextPage = () => {
     if (email === "" && phone === "") {
       return setError("error", { message: "이메일 또는 휴대폰 번호를 입력해주세요." });
     }
+    setMutationLoading(true);
 
     if (avatar && avatar.length > 0) {
       const { cloudflareImageId, cloudflareUploadUrl } = await (await fetch("/api/file")).json();
       const formData = new FormData();
       formData.append("file", avatar[0], `${me?.username}_avatar_${avatar[0].name}`);
-      await (await fetch(cloudflareUploadUrl, { method: "POST", body: formData })).json();
-      userEditMutation({ username, email, phone, cloudflareImageId });
+      await fetch(cloudflareUploadUrl, { method: "POST", body: formData });
+      await userEditMutation({ username, email, phone, cloudflareImageId });
     } else {
-      userEditMutation({ username, email, phone });
+      await userEditMutation({ username, email, phone });
     }
+
+    setMutationLoading(false);
   };
 
   const onKeyDown = () => {
@@ -103,14 +107,14 @@ const UserEdit: NextPage = () => {
               <label className="border transition-all rounded-full flex justify-center items-center cursor-pointer">
                 {avatarPreview === "" ? (
                   <Image
+                    alt=""
                     width={224}
                     height={224}
                     src={me?.cloudflareImageId ? `https://imagedelivery.net/mrfqMz0r88w_Qqln2FwPhQ/${me?.cloudflareImageId}/public` : basicUser}
-                    alt=""
                     className="border border-gray-200 rounded-full w-56 h-56"
                   />
                 ) : (
-                  <Image width={224} height={224} src={avatarPreview} alt="" className="border border-gray-200 rounded-full w-56 h-56" />
+                  <Image alt="" width={224} height={224} src={avatarPreview} className="border border-gray-200 rounded-full w-56 h-56" />
                 )}
                 <FileInput register={register("avatar")} required={false} />
               </label>
@@ -135,7 +139,7 @@ const UserEdit: NextPage = () => {
                 <FormError text={errors.error?.message || ""} />
               </div>
             ) : null}
-            <Button loading={loading} type="submit" text="프로필 업데이트" size="w-full" />
+            <Button loading={mutationLoading} type="submit" text="프로필 업데이트" size="w-full" />
           </form>
         </div>
       </div>
