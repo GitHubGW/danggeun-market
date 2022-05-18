@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
 import ProductItem from "components/items/product-item";
 import FloatingButton from "components/floating-button";
@@ -6,24 +6,28 @@ import { BsBagPlusFill } from "react-icons/bs";
 import MainLayout from "components/layouts/main-layout";
 import useMe from "libs/client/useMe";
 import { Product } from ".prisma/client";
-import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
 import Image from "next/image";
 import backgroundMain1 from "public/images/background_main1.png";
 import backgroundMain2 from "public/images/background_main2.png";
 import backgroundMain3 from "public/images/background_main3.png";
 import backgroundMain4 from "public/images/background_main4.png";
-import storyIcon1 from "public/images/story_icon1.svg";
-import storyIcon2 from "public/images/story_icon2.svg";
-import storyIcon3 from "public/images/story_icon3.svg";
+import storyIcon1 from "public/images/story_icon1.png";
+import storyIcon2 from "public/images/story_icon2.png";
+import storyIcon3 from "public/images/story_icon3.png";
+import { CommonResult } from "libs/server/withHandler";
+import prisma from "libs/server/prisma";
 
 interface ProductWithUserAndCount extends Product {
   user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
   _count: { productLikes: number };
 }
 
-const Home: NextPage = () => {
+interface ProductsResult extends CommonResult {
+  products?: ProductWithUserAndCount[];
+}
+
+const Home: NextPage<ProductsResult> = ({ products }) => {
   const me = useMe();
-  const infiniteData = useSWRInfiniteClick<ProductWithUserAndCount>(`/api/products`);
 
   return (
     <MainLayout pageTitle="홈" hasFooter={true}>
@@ -163,9 +167,9 @@ const Home: NextPage = () => {
           <section>
             <div className="bg-[#F8F9FA]">
               <div className="content py-20">
-                <h2 className="font-semibold text-4xl leading-tight text-center">중고거래 인기매물</h2>
-                <div className="grid grid-cols-4 mt-14 gap-x-10 gap-y-12">
-                  {infiniteData.map((product) => (
+                <h2 className="font-semibold text-3xl leading-tight text-center">중고거래 인기매물</h2>
+                <div className="grid grid-cols-4 mt-14 gap-x-16 gap-y-12">
+                  {products?.map((product) => (
                     <ProductItem
                       key={product.id}
                       id={product.id}
@@ -220,6 +224,26 @@ const Home: NextPage = () => {
       </div>
     </MainLayout>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const foundProducts = await prisma?.product.findMany({
+    include: {
+      user: { select: { id: true, username: true, cloudflareImageId: true, address: true } },
+      _count: { select: { productLikes: true } },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 8,
+    skip: 0,
+  });
+
+  return {
+    props: {
+      ok: true,
+      message: "전체 상품 보기에 성공하였습니다.",
+      products: JSON.parse(JSON.stringify(foundProducts)),
+    },
+  };
 };
 
 export default Home;

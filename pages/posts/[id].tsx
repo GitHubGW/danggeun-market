@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import Link from "next/link";
 import Avatar from "components/avatar";
 import CreatedAt from "components/created-at";
@@ -20,10 +20,11 @@ import CommentItem from "components/items/comment-item";
 import Image from "next/image";
 import heartIcon from "public/images/heart_icon.svg";
 import thumbIcon from "public/images/thumb_icon.svg";
-import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
 import { Product } from ".prisma/client";
 import FloatingButton from "components/floating-button";
 import { RiPencilFill } from "react-icons/ri";
+import Loading from "components/loading";
+import prisma from "libs/server/prisma";
 
 interface PostDetailFormData {
   text: string;
@@ -35,21 +36,21 @@ interface PostWithUserAndCommentsAndCount extends Post {
   _count: { postComments: number; postLikes: number };
 }
 
-interface PostDetailResult extends CommonResult {
-  post?: PostWithUserAndCommentsAndCount;
-  isLiked: boolean;
-}
-
 interface ProductWithUserAndCount extends Product {
   user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
   _count: { productLikes: number };
 }
 
-const PostDetail: NextPage = () => {
+interface PostDetailResult extends CommonResult {
+  post?: PostWithUserAndCommentsAndCount;
+  products?: ProductWithUserAndCount[];
+  isLiked: boolean;
+}
+
+const PostDetail: NextPage<PostDetailResult> = ({ post, products }) => {
   const me = useMe();
   const router: NextRouter = useRouter();
   const { data, mutate } = useSWR<PostDetailResult>(router.query.id && `/api/posts/${router.query.id}`);
-  const infiniteData = useSWRInfiniteClick<ProductWithUserAndCount>(`/api/products`);
   const [postLikeMutation, { loading: postLikeLoading }] = useMutation<CommonResult>(`/api/posts/${router.query.id}/like`);
   const [postDeleteMutation, { data: postDeleteData, loading: postDeleteLoading }] = useMutation<CommonResult>(`/api/posts/${router.query.id}/delete`);
   const [postCommentAddMutation, { loading: postCommentAddLoading }] = useMutation<CommonResult>(`/api/posts/${router.query.id}/comment/add`);
@@ -60,20 +61,19 @@ const PostDetail: NextPage = () => {
     if (me === undefined) {
       return router.push("/login");
     }
-    if (data === undefined || data.post === undefined) {
+    if (data === undefined || data.post === undefined || postLikeLoading === true) {
       return;
     }
-    if (postLikeLoading === true) {
-      return;
-    }
-    mutate(
-      {
-        ...data,
-        post: { ...data.post, _count: { ...data.post?._count, postLikes: data.isLiked === true ? data.post?._count.postLikes - 1 : data.post?._count.postLikes + 1 } },
-        isLiked: !data.isLiked,
-      },
-      false
-    );
+
+    mutate((prev) => {
+      if (prev && prev.post && prev.post?._count) {
+        return {
+          ...prev,
+          isLiked: !prev.isLiked,
+          post: { ...prev.post, _count: { ...prev.post?._count, postLikes: prev.isLiked === true ? prev.post?._count.postLikes - 1 : prev.post?._count.postLikes + 1 } },
+        };
+      }
+    }, false);
     postLikeMutation();
   };
 
@@ -83,7 +83,7 @@ const PostDetail: NextPage = () => {
     }
     const { text } = getValues();
     await postCommentAddMutation({ text });
-    await mutate();
+    mutate();
     reset();
   };
 
@@ -92,7 +92,7 @@ const PostDetail: NextPage = () => {
       return;
     }
     await postCommentDeleteMutation({ postCommentId });
-    await mutate();
+    mutate();
   };
 
   const handleDeletePost = async () => {
@@ -115,57 +115,64 @@ const PostDetail: NextPage = () => {
   }, [data, router]);
 
   return (
-    <MainLayout pageTitle={data?.post?.text} hasFooter={true}>
+    <MainLayout pageTitle={post?.text} hasFooter={true}>
       <div className="wrapper">
         <div className="content-sub">
           {/* 동네생활 정보 */}
           <div>
             <div className="cursor-pointer">
-              <DetailImage cloudflareImageId={data?.post?.cloudflareImageId} />
+              <DetailImage cloudflareImageId={post?.cloudflareImageId} />
             </div>
             <div className="border-b pt-6 pb-5 flex items-center relative">
-              <Link href={`/users/${data?.post?.user.username}/posts`}>
+              <Link href={`/users/${post?.user.username}/posts`}>
                 <a>
-                  <Avatar cloudflareImageId={data?.post?.user.cloudflareImageId} size="w-10 h-10" />
+                  <Avatar cloudflareImageId={post?.user.cloudflareImageId} size="w-10 h-10" />
                 </a>
               </Link>
               <div className="flex flex-col ml-2">
-                <Link href={`/users/${data?.post?.user.username}/posts`}>
+                <Link href={`/users/${post?.user.username}/posts`}>
                   <a>
-                    <Username text={data?.post?.user.username} size="text-[15px]" textDecoration={true} />
+                    <Username text={post?.user.username} size="text-[15px]" textDecoration={true} />
                   </a>
                 </Link>
-                <Region text={data?.post?.user.address} size="text-[13px]" />
+                <Region text={post?.user.address} size="text-[13px]" />
               </div>
-              {data?.post?.userId === me?.id ? <DeleteButton onClick={handleDeletePost} text="게시글 삭제" /> : null}
+              {post?.userId === me?.id ? <DeleteButton onClick={handleDeletePost} text="게시글 삭제" /> : null}
             </div>
             <div className="py-8">
-              <p className="font-normal leading-7 text-[17px]">{data?.post?.text}</p>
+              <p className="font-normal leading-7 text-[17px]">{post?.text}</p>
               <p className="text-xs text-gray-400 space-x-1 mt-4">
-                <CreatedAt date={data?.post?.createdAt} size="text-[12px]" />
+                <CreatedAt date={post?.createdAt} size="text-[12px]" />
               </p>
             </div>
-            <div className="border-t py-3 border-gray-200">
-              <div className="flex items-center mb-3 space-x-2">
-                <div className="text-[17px] font-semibold">댓글 {data?.post?._count.postComments}</div>
-                <div onClick={handleTogglePostLike} className="hover:bg-gray-100 p-1.5 rounded-lg  cursor-pointer flex items-center text-[17px] font-semibold">
-                  <Image width={20} height={20} src={heartIcon} alt="" className="w-5 h-5" />
-                  {data?.isLiked === true ? <Image width={20} height={20} src={thumbIcon} alt="" className="w-5 h-5" /> : null}
-                  <span className="ml-1">{data?.post?._count.postLikes}</span>
+            {data ? (
+              <div className="border-t py-3 border-gray-200">
+                <div className="flex items-center mb-3 space-x-2">
+                  <div className="text-[17px] font-semibold">댓글 {data?.post?._count.postComments}</div>
+                  <div onClick={handleTogglePostLike} className="hover:bg-gray-100 p-1.5 rounded-lg  cursor-pointer flex items-center text-[17px] font-semibold">
+                    <Image width={20} height={20} src={heartIcon} alt="" className="w-5 h-5" />
+                    {data?.isLiked === true ? <Image width={20} height={20} src={thumbIcon} alt="" className="w-5 h-5" /> : null}
+                    <span className="ml-1">{data?.post?._count.postLikes}</span>
+                  </div>
                 </div>
+                {data?.post?.postComments.map((postComment) => (
+                  <CommentItem
+                    key={postComment.id}
+                    id={postComment.id}
+                    text={postComment.text}
+                    createdAt={postComment.createdAt}
+                    user={postComment.user}
+                    me={me}
+                    handleDeleteComment={() => handleDeleteComment(postComment.id)}
+                    loading={false}
+                  />
+                ))}
               </div>
-              {data?.post?.postComments.map((postComment) => (
-                <CommentItem
-                  key={postComment.id}
-                  id={postComment.id}
-                  text={postComment.text}
-                  createdAt={postComment.createdAt}
-                  user={postComment.user}
-                  me={me}
-                  handleDeleteComment={() => handleDeleteComment(postComment.id)}
-                />
-              ))}
-            </div>
+            ) : (
+              <div className="flex justify-center py-12">
+                <Loading color="orange" size={30} />
+              </div>
+            )}
           </div>
 
           {/* 댓글 form */}
@@ -184,9 +191,15 @@ const PostDetail: NextPage = () => {
             <button
               disabled={me === undefined}
               type="submit"
-              className="absolute rounded-full right-[4px] text-xs cursor-pointer px-3 py-1.5 text-white bg-orange-400 hover:bg-orange-500"
+              className="absolute rounded-full h-[28px] right-[4px] text-xs cursor-pointer px-3 py-1.5 text-white bg-orange-400 hover:bg-orange-500"
             >
-              작성
+              {postCommentAddLoading === true ? (
+                <div className="flex">
+                  <Loading color="" size={12} />
+                </div>
+              ) : (
+                "작성"
+              )}
             </button>
           </form>
 
@@ -194,7 +207,7 @@ const PostDetail: NextPage = () => {
           <div>
             <div className="my-8 flex justify-between">
               <h3 className="text-lg font-semibold">당근마켓 인기 중고</h3>
-              <Link href="/">
+              <Link href="/products">
                 <a className="text-orange-400 hover:text-orange-500 text-[15px]">더 구경하기</a>
               </Link>
             </div>
@@ -202,7 +215,7 @@ const PostDetail: NextPage = () => {
               <div>
                 <div className="content">
                   <div className="grid grid-cols-3 gap-x-10 gap-y-12">
-                    {infiniteData.map((product) => (
+                    {products?.map((product) => (
                       <ProductItem
                         key={product.id}
                         id={product.id}
@@ -226,6 +239,50 @@ const PostDetail: NextPage = () => {
       </div>
     </MainLayout>
   );
+};
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext) => {
+  if (!context.params?.id) {
+    return {
+      props: {},
+    };
+  }
+
+  const foundPost = await prisma?.post.findUnique({
+    where: { id: +context.params?.id },
+    include: {
+      user: { select: { id: true, username: true, cloudflareImageId: true } },
+      postComments: { select: { id: true, text: true, createdAt: true, user: { select: { id: true, username: true, cloudflareImageId: true, address: true } } } },
+      _count: { select: { postComments: true, postLikes: true } },
+    },
+  });
+
+  const foundProducts = await prisma?.product.findMany({
+    include: {
+      user: { select: { id: true, username: true, cloudflareImageId: true, address: true } },
+      _count: { select: { productLikes: true } },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 6,
+    skip: 0,
+  });
+
+  return {
+    props: {
+      ok: true,
+      message: "동네생활 게시글 보기에 성공하였습니다.",
+      post: JSON.parse(JSON.stringify(foundPost)),
+      products: JSON.parse(JSON.stringify(foundProducts)),
+      isLiked: false,
+    },
+  };
 };
 
 export default PostDetail;
