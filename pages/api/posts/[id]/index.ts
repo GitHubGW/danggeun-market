@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
       where: { id: +id },
       include: {
         user: {
-          select: { id: true, username: true, cloudflareImageId: true },
+          select: { id: true, username: true, cloudflareImageId: true, address: true },
         },
         postComments: {
           select: { id: true, text: true, createdAt: true, user: { select: { id: true, username: true, cloudflareImageId: true, address: true } } },
@@ -28,6 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     if (foundPost === null) {
       return res.status(404).json({ ok: false, message: "존재하지 않는 동네생활 게시글입니다." });
     }
+
     const isLiked = Boolean(await prisma?.postLike.count({ where: { postId: foundPost?.id, userId: loggedInUser?.id } }));
     return res.status(200).json({ ok: true, message: "동네생활 게시글 보기에 성공하였습니다.", post: foundPost, isLiked });
   } catch (error) {

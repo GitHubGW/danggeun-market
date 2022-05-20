@@ -194,22 +194,22 @@ const Home: NextPage<ProductsResult> = ({ products }) => {
             <div className="bg-white py-10">
               <div className="content flex items-center justify-between">
                 <span className="underline font-semibold">중고거래 인기검색어</span>
-                <Link href="/">
+                <Link href="/search?keyword=자전거">
                   <a className="hover:underline">자전거</a>
                 </Link>
-                <Link href="/">
-                  <a className="hover:underline">캠핑</a>
+                <Link href="/search?keyword=카메라">
+                  <a className="hover:underline">카메라</a>
                 </Link>
-                <Link href="/">
-                  <a className="hover:underline">패딩</a>
+                <Link href="/search?keyword=시계">
+                  <a className="hover:underline">시계</a>
                 </Link>
-                <Link href="/">
-                  <a className="hover:underline">의자</a>
+                <Link href="/search?keyword=가방">
+                  <a className="hover:underline">가방</a>
                 </Link>
-                <Link href="/">
+                <Link href="/search?keyword=노트북">
                   <a className="hover:underline">노트북</a>
                 </Link>
-                <Link href="/">
+                <Link href="/search?keyword=아이폰">
                   <a className="hover:underline">아이폰</a>
                 </Link>
               </div>

@@ -258,7 +258,7 @@ export const getStaticProps: GetStaticProps = async (context: GetStaticPropsCont
   const foundPost = await prisma?.post.findUnique({
     where: { id: +context.params?.id },
     include: {
-      user: { select: { id: true, username: true, cloudflareImageId: true } },
+      user: { select: { id: true, username: true, cloudflareImageId: true, address: true } },
       postComments: { select: { id: true, text: true, createdAt: true, user: { select: { id: true, username: true, cloudflareImageId: true, address: true } } } },
       _count: { select: { postComments: true, postLikes: true } },
     },
