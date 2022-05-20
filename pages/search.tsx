@@ -1,14 +1,14 @@
-import { Post, Prisma, Product, User } from "@prisma/client";
+import useSWR from "swr";
+import Image from "next/image";
+import Loading from "components/loading";
 import PostItem from "components/items/post-item";
 import ProductItem from "components/items/product-item";
 import MainLayout from "components/layouts/main-layout";
-import { CommonResult } from "libs/server/withHandler";
-import { NextPage } from "next";
-import Image from "next/image";
-import { NextRouter, useRouter } from "next/router";
-import useSWR from "swr";
 import background404 from "public/images/background_404.png";
-import Loading from "components/loading";
+import { NextPage } from "next";
+import { NextRouter, useRouter } from "next/router";
+import { CommonResult } from "libs/server/withHandler";
+import { Post, Prisma, Product, User } from "@prisma/client";
 
 interface ProductWithUserAndCount extends Product {
   user: User;

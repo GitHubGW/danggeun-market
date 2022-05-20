@@ -1,10 +1,10 @@
-import CreatedAt from "components/created-at";
-import Region from "components/region";
-import Separator from "components/separator";
-import Username from "components/username";
 import Link from "next/link";
-import { AiOutlineHeart } from "react-icons/ai";
+import Region from "components/region";
+import Username from "components/username";
+import CreatedAt from "components/created-at";
+import Separator from "components/separator";
 import { FaRegComment } from "react-icons/fa";
+import { AiOutlineHeart } from "react-icons/ai";
 
 interface PostItemProps {
   id: number;

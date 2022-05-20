@@ -1,21 +1,21 @@
-import { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
+import Image from "next/image";
+import useMe from "libs/client/useMe";
+import prisma from "libs/server/prisma";
 import ProductItem from "components/items/product-item";
 import FloatingButton from "components/floating-button";
-import { BsBagPlusFill } from "react-icons/bs";
 import MainLayout from "components/layouts/main-layout";
-import useMe from "libs/client/useMe";
-import { Product } from ".prisma/client";
-import Image from "next/image";
+import storyIcon1 from "public/images/story_icon1.png";
+import storyIcon2 from "public/images/story_icon2.png";
+import storyIcon3 from "public/images/story_icon3.png";
 import backgroundMain1 from "public/images/background_main1.png";
 import backgroundMain2 from "public/images/background_main2.png";
 import backgroundMain3 from "public/images/background_main3.png";
 import backgroundMain4 from "public/images/background_main4.png";
-import storyIcon1 from "public/images/story_icon1.png";
-import storyIcon2 from "public/images/story_icon2.png";
-import storyIcon3 from "public/images/story_icon3.png";
+import { Product } from ".prisma/client";
+import { BsBagPlusFill } from "react-icons/bs";
+import { GetStaticProps, NextPage } from "next";
 import { CommonResult } from "libs/server/withHandler";
-import prisma from "libs/server/prisma";
 
 interface ProductWithUserAndCount extends Product {
   user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };
@@ -193,9 +193,7 @@ const Home: NextPage<ProductsResult> = ({ products }) => {
           <section>
             <div className="bg-white py-10">
               <div className="content flex items-center justify-between">
-                <Link href="/">
-                  <a className="underline font-semibold">중고거래 인기검색어</a>
-                </Link>
+                <span className="underline font-semibold">중고거래 인기검색어</span>
                 <Link href="/">
                   <a className="hover:underline">자전거</a>
                 </Link>

@@ -1,6 +1,6 @@
+import MainLayout from "components/layouts/main-layout";
 import ChatLayout from "components/layouts/chat-layout";
 import { IoChatbubblesOutline } from "react-icons/io5";
-import MainLayout from "components/layouts/main-layout";
 
 const Chats = () => {
   return (

@@ -1,13 +1,13 @@
-import { NextPage } from "next";
-import { RiPencilFill } from "react-icons/ri";
-import FloatingButton from "components/floating-button";
-import MainLayout from "components/layouts/main-layout";
-import { Post } from ".prisma/client";
-import PostItem from "components/items/post-item";
-import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
-import { MutableRefObject, useRef } from "react";
 import useMe from "libs/client/useMe";
 import Loading from "components/loading";
+import PostItem from "components/items/post-item";
+import FloatingButton from "components/floating-button";
+import MainLayout from "components/layouts/main-layout";
+import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
+import { NextPage } from "next";
+import { Post } from ".prisma/client";
+import { RiPencilFill } from "react-icons/ri";
+import { MutableRefObject, useRef } from "react";
 
 interface PostWithUserAndCount extends Post {
   user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };

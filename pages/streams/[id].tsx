@@ -1,20 +1,20 @@
-import MainLayout from "components/layouts/main-layout";
-import StreamMessage from "components/stream-message";
 import useSWR from "swr";
-import { NextRouter, useRouter } from "next/router";
-import { Stream } from ".prisma/client";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import useMe from "libs/client/useMe";
+import prisma from "libs/server/prisma";
+import Loading from "components/loading";
 import useMutation from "libs/client/useMutation";
 import DeleteButton from "components/delete-button";
-import useMe from "libs/client/useMe";
-import RecordedVideoItem from "components/items/recorded-video-item";
+import StreamMessage from "components/stream-message";
 import FloatingButton from "components/floating-button";
+import MainLayout from "components/layouts/main-layout";
+import RecordedVideoItem from "components/items/recorded-video-item";
+import { Stream } from ".prisma/client";
+import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { RiVideoAddFill } from "react-icons/ri";
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
-import prisma from "libs/server/prisma";
+import { NextRouter, useRouter } from "next/router";
 import { CommonResult } from "libs/server/withHandler";
-import Loading from "components/loading";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 
 interface StreamDetailFormData {
   text: string;

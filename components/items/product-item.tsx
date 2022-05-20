@@ -1,6 +1,6 @@
-import Region from "components/region";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import Region from "components/region";
 import noImage from "public/images/no_image.png";
 
 interface ProductItemProps {

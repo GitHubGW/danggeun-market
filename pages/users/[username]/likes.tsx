@@ -1,11 +1,11 @@
+import prisma from "libs/server/prisma";
+import PostItem from "components/items/post-item";
 import MainLayout from "components/layouts/main-layout";
 import UserLayout from "components/layouts/user-layout";
 import ProductItem from "components/items/product-item";
-import { Post, PostLike, Product, ProductLike, User } from ".prisma/client";
-import PostItem from "components/items/post-item";
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
-import prisma from "libs/server/prisma";
 import { CommonResult } from "libs/server/withHandler";
+import { Post, PostLike, Product, ProductLike, User } from ".prisma/client";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 
 interface ProductWithUserAndCount extends Product {
   user: { address: string | null };

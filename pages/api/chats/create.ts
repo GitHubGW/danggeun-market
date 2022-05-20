@@ -1,8 +1,8 @@
 import prisma from "libs/server/prisma";
 import { Chat } from "@prisma/client";
-import withHandler, { ResponseData } from "libs/server/withHandler";
-import { withSessionRoute } from "libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
+import { withSessionRoute } from "libs/server/withSession";
+import withHandler, { ResponseData } from "libs/server/withHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
   try {

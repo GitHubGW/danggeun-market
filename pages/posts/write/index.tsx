@@ -1,17 +1,17 @@
-import { NextPage } from "next";
-import Button from "components/button";
-import { RiImageAddFill } from "react-icons/ri";
-import MainLayout from "components/layouts/main-layout";
-import FileInput from "components/file-input";
-import { useForm } from "react-hook-form";
-import Textarea from "components/textarea";
-import useMutation from "libs/client/useMutation";
-import { useEffect, useState } from "react";
-import { NextRouter, useRouter } from "next/router";
-import { CommonResult } from "libs/server/withHandler";
-import { Post } from ".prisma/client";
 import Image from "next/image";
 import useMe from "libs/client/useMe";
+import Button from "components/button";
+import Textarea from "components/textarea";
+import FileInput from "components/file-input";
+import useMutation from "libs/client/useMutation";
+import MainLayout from "components/layouts/main-layout";
+import { NextPage } from "next";
+import { Post } from ".prisma/client";
+import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { RiImageAddFill } from "react-icons/ri";
+import { NextRouter, useRouter } from "next/router";
+import { CommonResult } from "libs/server/withHandler";
 
 interface PostWriteFormData {
   file: FileList;

@@ -1,6 +1,6 @@
+import useSWR from "swr";
 import { User } from ".prisma/client";
 import { CommonResult } from "libs/server/withHandler";
-import useSWR from "swr";
 
 interface MeResult extends CommonResult {
   loggedInUser?: User;

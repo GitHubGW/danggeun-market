@@ -1,12 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import sgMail from "@sendgrid/mail";
 import twilio from "twilio";
+import sgMail from "@sendgrid/mail";
 import prisma from "libs/server/prisma";
-import withHandler, { ResponseData } from "libs/server/withHandler";
 import { Token, User } from ".prisma/client";
-import { MessageInstance } from "twilio/lib/rest/api/v2010/account/message";
-import { MailDataRequired } from "@sendgrid/helpers/classes/mail";
 import { withSessionRoute } from "libs/server/withSession";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { MailDataRequired } from "@sendgrid/helpers/classes/mail";
+import withHandler, { ResponseData } from "libs/server/withHandler";
+import { MessageInstance } from "twilio/lib/rest/api/v2010/account/message";
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
 const twilioClient: twilio.Twilio = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
@@ -56,7 +56,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     if (email) {
       // Twilio SendGrid Email API를 이용한 이메일 전송
       const mailData: MailDataRequired | MailDataRequired[] = {
-        to: "kowonp@gmail.com",
+        to: email,
         from: "kowonp@naver.com",
         subject: "당근마켓 이메일 인증",
         text: `본인확인 인증번호 ${foundToken ? foundToken.payload : createdRandomPayload}를 화면에 입력해주세요.`,
@@ -66,15 +66,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     } else if (phone) {
       // Twilio Messaging Service를 이용한 SMS 전송
       const messageInstance: MessageInstance = await twilioClient.messages.create({
+        to: `82${phone}`,
         messagingServiceSid: process.env.MESSAGING_SERVICES_SID,
-        to: process.env.MY_PHONE_NUMBER as string,
         body: `[당근마켓] 본인확인 인증번호 ${foundToken ? foundToken.payload : createdRandomPayload}를 화면에 입력해주세요.`,
       });
     }
 
     return res.status(200).json({ ok: true, message: "인증코드 받기에 성공하였습니다." });
   } catch (error) {
-    console.log("login handler error");
+    console.log("login handler error", error);
     return res.status(400).json({ ok: false, message: "로그인에 실패하였습니다." });
   }
 };

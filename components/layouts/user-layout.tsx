@@ -1,13 +1,13 @@
+import useSWR from "swr";
 import Link from "next/link";
+import useMe from "libs/client/useMe";
 import Avatar from "components/avatar";
 import Region from "components/region";
 import Username from "components/username";
+import { useEffect } from "react";
 import { NextRouter, useRouter } from "next/router";
-import useSWR from "swr";
 import { CommonResult } from "libs/server/withHandler";
 import { Prisma, User } from ".prisma/client";
-import { useEffect } from "react";
-import useMe from "libs/client/useMe";
 
 interface UserLayoutProps {
   children: React.ReactNode;

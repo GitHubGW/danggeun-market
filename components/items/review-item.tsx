@@ -1,11 +1,11 @@
 import Link from "next/link";
-import Avatar from "components/avatar";
-import CreatedAt from "components/created-at";
-import Region from "components/region";
-import Username from "components/username";
-import { AiFillStar } from "react-icons/ai";
-import DeleteButton from "components/delete-button";
 import useMe from "libs/client/useMe";
+import Region from "components/region";
+import Avatar from "components/avatar";
+import Username from "components/username";
+import CreatedAt from "components/created-at";
+import DeleteButton from "components/delete-button";
+import { AiFillStar } from "react-icons/ai";
 
 interface ReviewItemProps {
   id: number;

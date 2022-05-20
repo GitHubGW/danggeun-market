@@ -1,17 +1,17 @@
 import dynamic from "next/dynamic";
-import { NextPage } from "next";
-import { Suspense, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import Button from "components/button";
-import FormError from "components/form-error";
 import Input from "components/input";
-import MainLayout from "components/layouts/main-layout";
+import Button from "components/button";
+import Loading from "components/loading";
+import FormError from "components/form-error";
 import LogoColumn from "components/logo-column";
 import useMutation from "libs/client/useMutation";
-import { CommonResult } from "libs/server/withHandler";
-import { NextRouter, useRouter } from "next/router";
+import MainLayout from "components/layouts/main-layout";
 import useAddress, { Address } from "libs/client/useAddress";
-import Loading from "components/loading";
+import { NextPage } from "next";
+import { useForm } from "react-hook-form";
+import { NextRouter, useRouter } from "next/router";
+import { Suspense, useEffect, useState } from "react";
+import { CommonResult } from "libs/server/withHandler";
 
 const DynamicPhoneInputComponent = dynamic(() => import("components/phone-input"), { suspense: true });
 
@@ -80,7 +80,7 @@ const Login: NextPage = () => {
                   {type === "email" ? (
                     <div>
                       <Input
-                        register={register("email", { required: "현재 사용 중인 이메일을 입력해주세요.", maxLength: 30 })}
+                        register={register("email", { required: "인증코드를 받을 이메일을 입력해주세요.", maxLength: 30 })}
                         type="email"
                         placeholder="이메일을 입력해주세요."
                         required={true}
@@ -96,7 +96,7 @@ const Login: NextPage = () => {
                           </div>
                         }
                       >
-                        <DynamicPhoneInputComponent register={register("phone", { required: "현재 사용 중인 휴대폰 번호를 입력해주세요.", maxLength: 15 })} required={true} />
+                        <DynamicPhoneInputComponent register={register("phone", { required: "인증코드를 받을 휴대폰 번호를 입력해주세요.", maxLength: 15 })} required={true} />
                       </Suspense>
                     </div>
                   )}

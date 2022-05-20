@@ -1,11 +1,11 @@
-import { GetStaticProps, NextPage } from "next";
+import useMe from "libs/client/useMe";
+import prisma from "libs/server/prisma";
 import MainLayout from "components/layouts/main-layout";
 import StreamItem from "components/items/stream-item";
 import FloatingButton from "components/floating-button";
-import { RiVideoAddFill } from "react-icons/ri";
 import { Stream } from ".prisma/client";
-import useMe from "libs/client/useMe";
-import prisma from "libs/server/prisma";
+import { RiVideoAddFill } from "react-icons/ri";
+import { GetStaticProps, NextPage } from "next";
 import { CommonResult } from "libs/server/withHandler";
 
 interface StreamWithUser extends Stream {

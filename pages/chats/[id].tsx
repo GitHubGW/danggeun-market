@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
+import useSWR from "swr";
 import Link from "next/link";
+import useMe from "libs/client/useMe";
 import Avatar from "components/avatar";
-import ChatLayout from "components/layouts/chat-layout";
-import MainLayout from "components/layouts/main-layout";
+import Loading from "components/loading";
 import Message from "components/message";
 import Username from "components/username";
-import useSWR from "swr";
-import useMe from "libs/client/useMe";
+import useMutation from "libs/client/useMutation";
+import DeleteButton from "components/delete-button";
+import ChatLayout from "components/layouts/chat-layout";
+import MainLayout from "components/layouts/main-layout";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { ChatMessage, User } from "@prisma/client";
 import { NextRouter, useRouter } from "next/router";
 import { CommonResult } from "libs/server/withHandler";
-import { ChatMessage, User } from "@prisma/client";
-import DeleteButton from "components/delete-button";
-import useMutation from "libs/client/useMutation";
-import { useForm } from "react-hook-form";
-import Loading from "components/loading";
 
 interface ChatDetailFormData {
   text: string;

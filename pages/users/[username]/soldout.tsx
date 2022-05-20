@@ -1,10 +1,10 @@
+import prisma from "libs/server/prisma";
 import MainLayout from "components/layouts/main-layout";
 import UserLayout from "components/layouts/user-layout";
 import ProductItem from "components/items/product-item";
 import { Product, User } from ".prisma/client";
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
-import prisma from "libs/server/prisma";
 import { CommonResult } from "libs/server/withHandler";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 
 interface ProductWithUserAndCount extends Product {
   user: { address: string | null };

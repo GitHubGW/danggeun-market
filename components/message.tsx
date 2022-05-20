@@ -1,6 +1,6 @@
 import Image from "next/image";
-import basicUser from "public/images/basic_user.png";
 import CreatedAt from "components/created-at";
+import basicUser from "public/images/basic_user.png";
 
 interface MessageProps {
   isMe: boolean;

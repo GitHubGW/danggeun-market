@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { FaCrown } from "react-icons/fa";
 import basicUser from "public/images/basic_user.png";
+import { FaCrown } from "react-icons/fa";
 
 interface StreamMessageProps {
   username: string;

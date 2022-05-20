@@ -1,10 +1,10 @@
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
+import prisma from "libs/server/prisma";
+import PostItem from "components/items/post-item";
 import MainLayout from "components/layouts/main-layout";
 import UserLayout from "components/layouts/user-layout";
 import { Post, Prisma, User } from ".prisma/client";
-import PostItem from "components/items/post-item";
-import prisma from "libs/server/prisma";
 import { CommonResult } from "libs/server/withHandler";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 
 interface PostWithUserAndCount extends Post {
   user: User;

@@ -1,6 +1,6 @@
+import { withSessionRoute } from "libs/server/withSession";
 import type { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseData } from "libs/server/withHandler";
-import { withSessionRoute } from "libs/server/withSession";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
   try {

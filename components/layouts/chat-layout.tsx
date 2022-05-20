@@ -1,14 +1,14 @@
+import useSWR from "swr";
 import React from "react";
 import Link from "next/link";
+import useMe from "libs/client/useMe";
 import Avatar from "components/avatar";
 import Region from "components/region";
-import Username from "components/username";
-import { AiOutlineQuestionCircle } from "react-icons/ai";
-import useSWR from "swr";
-import { Chat, ChatMessage, Prisma, User } from "@prisma/client";
-import useMe from "libs/client/useMe";
-import { CommonResult } from "libs/server/withHandler";
 import Loading from "components/loading";
+import Username from "components/username";
+import { CommonResult } from "libs/server/withHandler";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { Chat, ChatMessage, Prisma, User } from "@prisma/client";
 
 interface ChatLayoutProps {
   children: React.ReactNode;

@@ -1,8 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "libs/server/prisma";
-import withHandler, { ResponseData } from "libs/server/withHandler";
 import { User } from ".prisma/client";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { withSessionRoute } from "libs/server/withSession";
+import withHandler, { ResponseData } from "libs/server/withHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
   try {

@@ -1,6 +1,6 @@
 import Image from "next/image";
-import loadingOrange from "public/images/loading_orange.gif";
 import loadingWhite from "public/images/loading_white.gif";
+import loadingOrange from "public/images/loading_orange.gif";
 
 interface LoadingProps {
   color: string;

@@ -1,7 +1,7 @@
 import prisma from "libs/server/prisma";
-import withHandler, { ResponseData } from "libs/server/withHandler";
-import { withSessionRoute } from "libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
+import { withSessionRoute } from "libs/server/withSession";
+import withHandler, { ResponseData } from "libs/server/withHandler";
 
 interface Response {
   result: {
@@ -64,6 +64,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
         cloudflareStreamKey: response.result.rtmps.streamKey,
       },
     });
+
+    await res.unstable_revalidate("/streams");
 
     return res.status(200).json({ ok: true, message: "스트리밍 생성에 성공하였습니다.", stream: createdStream });
   } catch (error) {

@@ -1,19 +1,19 @@
-import { NextPage } from "next";
-import Button from "components/button";
-import LabelTitle from "components/label-title";
-import MainLayout from "components/layouts/main-layout";
-import PhoneInput from "components/phone-input";
-import FileInput from "components/file-input";
-import { useForm } from "react-hook-form";
+import Image from "next/image";
 import Input from "components/input";
 import useMe from "libs/client/useMe";
-import { useEffect, useState } from "react";
+import Button from "components/button";
 import FormError from "components/form-error";
+import FileInput from "components/file-input";
+import PhoneInput from "components/phone-input";
+import LabelTitle from "components/label-title";
 import useMutation from "libs/client/useMutation";
+import basicUser from "public/images/basic_user.png";
+import MainLayout from "components/layouts/main-layout";
+import { NextPage } from "next";
+import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { CommonResult } from "libs/server/withHandler";
-import Image from "next/image";
-import basicUser from "public/images/basic_user.png";
 
 interface UserEditFormData {
   avatar: FileList;

@@ -1,6 +1,6 @@
-import { GetServerSidePropsContext, GetServerSidePropsResult, NextApiHandler } from "next";
 import { IronSessionOptions } from "iron-session";
 import { withIronSessionApiRoute, withIronSessionSsr } from "iron-session/next";
+import { GetServerSidePropsContext, GetServerSidePropsResult, NextApiHandler } from "next";
 
 declare module "iron-session" {
   interface IronSessionData {

@@ -3,18 +3,18 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  [...Array(15)].forEach(async (item, index) => {
-    const createdStream = await prisma.stream.create({
+  [...Array(10)].forEach(async (item, index) => {
+    const result = await prisma?.product.create({
       data: {
-        title: `[생] 당근마켓 방송${index}`,
-        description: `당근마켓 방송${index}입니다.`,
-        user: {
-          connect: {
-            id: 31,
-          },
-        },
+        name: `${index}번 상품`,
+        price: +index,
+        cloudflareImageId: "",
+        description: `${index}번 상품입니다.`,
+        user: { connect: { id: 5 } },
       },
     });
+
+    console.log("result", result);
   });
 }
 

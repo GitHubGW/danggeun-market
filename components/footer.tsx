@@ -1,7 +1,7 @@
-import { faBlogger, faFacebookSquare, faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import logoWhite from "public/images/logo_white.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBlogger, faFacebookSquare, faInstagram } from "@fortawesome/free-brands-svg-icons";
 
 const Footer = () => {
   return (

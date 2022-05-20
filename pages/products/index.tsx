@@ -1,13 +1,13 @@
-import MainLayout from "components/layouts/main-layout";
-import { Product } from ".prisma/client";
+import useMe from "libs/client/useMe";
+import Loading from "components/loading";
 import ProductItem from "components/items/product-item";
 import FloatingButton from "components/floating-button";
-import { BsBagPlusFill } from "react-icons/bs";
+import MainLayout from "components/layouts/main-layout";
 import useSWRInfiniteClick from "libs/client/useSWRInfiniteClick";
-import { MutableRefObject, useRef } from "react";
-import useMe from "libs/client/useMe";
 import { NextPage } from "next";
-import Loading from "components/loading";
+import { Product } from ".prisma/client";
+import { BsBagPlusFill } from "react-icons/bs";
+import { MutableRefObject, useRef } from "react";
 
 interface ProductWithUserAndCount extends Product {
   user: { id: number; username: string; cloudflareImageId: string | null; address: string | null };

@@ -1,5 +1,5 @@
-import CreatedAt from "components/created-at";
 import Separator from "components/separator";
+import CreatedAt from "components/created-at";
 
 interface RecordedVideoItemProps {
   preview: string;

@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Avatar from "components/avatar";
-import CreatedAt from "components/created-at";
 import Region from "components/region";
+import Avatar from "components/avatar";
 import Username from "components/username";
+import CreatedAt from "components/created-at";
 import DeleteButton from "components/delete-button";
 import { User } from ".prisma/client";
 

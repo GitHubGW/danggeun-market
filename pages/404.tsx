@@ -1,8 +1,8 @@
-import MainLayout from "components/layouts/main-layout";
-import { NextPage } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import MainLayout from "components/layouts/main-layout";
 import background404 from "public/images/background_404.png";
+import { NextPage } from "next";
 
 const NotFound: NextPage = () => {
   return (
