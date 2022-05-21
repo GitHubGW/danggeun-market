@@ -39,7 +39,7 @@ const Posts: NextPage = () => {
               </div>
             )}
             <span ref={moreRef} className="text-center block text-gray-600 mt-6 cursor-pointer">
-              더보기
+              더 보기
             </span>
           </div>
         </div>
