@@ -159,7 +159,7 @@ const ProductDetail: NextPage<ProductDetailResult> = ({ product, similarProducts
                 <Separator />
                 <CreatedAt size="" date={product?.createdAt} />
               </p>
-              <p className="font-bold text-[18px]">{product?.price}원</p>
+              <p className="font-bold text-[18px]">{Number(product?.price).toLocaleString("ko-KR")}원</p>
               <p className="font-normal my-5 leading-7 text-[17px]">{product?.description}</p>
               <p className="text-xs text-gray-400 space-x-1">
                 <span>관심 {data?.product?._count.productLikes}</span>

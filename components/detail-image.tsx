@@ -8,7 +8,7 @@ interface DetailImageProps {
 const DetailImage = ({ cloudflareImageId }: DetailImageProps) => {
   return (
     <div className="relative w-full h-[500px] border rounded-xl">
-      <a href={`https://imagedelivery.net/mrfqMz0r88w_Qqln2FwPhQ/${cloudflareImageId}/public`} rel="noreferrer" target="_blank">
+      <a href={cloudflareImageId ? `https://imagedelivery.net/mrfqMz0r88w_Qqln2FwPhQ/${cloudflareImageId}/public` : ""} rel="noreferrer" target="_blank">
         <Image
           layout="fill"
           objectFit="cover"

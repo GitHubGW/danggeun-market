@@ -27,10 +27,10 @@ const ProductItem = ({ id, name, price, cloudflareImageId, user, _count, isSelli
             className="border border-gray-100 rounded-2xl transition-all hover:scale-[1.02]"
           />
         </div>
-        <h3 className="mt-1 mb-0.5">{name}</h3>
+        <h3 className="mt-2 mb-0.5">{name.length > 18 ? `${name.substring(0, 18)}...` : name}</h3>
         <div className="flex items-center mt-0.5">
           {isSelling === false ? <span className="text-white bg-gray-700 text-xs px-2 py-1.5 rounded-[4px] mr-1.5">거래완료</span> : null}
-          <span className="font-semibold">{price}원</span>
+          <span className="font-semibold">{Number(price).toLocaleString("ko-KR")}원</span>
         </div>
         <div>
           <Region text={user?.address} size="text-[13px]" />
