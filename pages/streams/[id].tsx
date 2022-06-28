@@ -244,7 +244,7 @@ const StreamDetail: NextPage<StreamDetailResult> = ({ stream, recordedVideos }) 
             <div className="mt-12">
               <h2 className="mb-3 font-medium">최근 방송</h2>
               <div className="grid grid-cols-2 gap-x-5 gap-y-14">
-                {recordedVideos?.result.map((recordedVideo: any) => (
+                {recordedVideos?.result.map((recordedVideo) => (
                   <RecordedVideoItem
                     key={recordedVideo.uid}
                     preview={recordedVideo.preview}
